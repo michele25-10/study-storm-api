@@ -42,6 +42,14 @@ const User = {
         const result = await connFunction.query(mysql, { idu });
         return result;
     },
+    selectUserByEmail: async ({ email, alsoDisactive }) => {
+        const mysql = `
+            SELECT id, name, surname, email, tel, prof_img, course_study
+            FROM user
+            WHERE ${alsoDisactive ? " 1=1 " : " status = 1 "} AND email=@email`;
+        const result = await connFunction.query(mysql, { email });
+        return result;
+    },
 }
 
 module.exports = User;

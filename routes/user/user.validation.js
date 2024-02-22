@@ -13,4 +13,11 @@ const getUser = {
     })
 };
 
-module.exports = { getAllUsers, getUser };
+const getUserByEmail = {
+    query: Joi.object().keys({
+        alsoDisactive: Joi.boolean(),
+        email: Joi.string().max(60).required(),
+    })
+};
+
+module.exports = { getAllUsers, getUser, getUserByEmail };

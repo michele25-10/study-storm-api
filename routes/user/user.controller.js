@@ -10,8 +10,8 @@ const getAllUsers = asyncHandler(async (req, res) => {
     res.status(200).send(result);
 });
 
-//@desc get di un utente
-//@route GET /api/user/
+//@desc get di un utente dato l'id
+//@route GET /api/user/getUser
 //@access private
 const getUser = asyncHandler(async (req, res) => {
     const result = await User.selectUser({ idu: req.query.idu, alsoDisactive: req.query.alsoDisactive || false });
@@ -19,4 +19,13 @@ const getUser = asyncHandler(async (req, res) => {
     res.status(200).send(result);
 });
 
-module.exports = { getAllUsers, getUser };
+//@desc get di un utente data la mail
+//@route GET /api/user/getUserByEmail
+//@access private
+const getUserByEmail = asyncHandler(async (req, res) => {
+    const result = await User.selectUserByEmail({ email: req.query.email, alsoDisactive: req.query.alsoDisactive || false });
+
+    res.status(200).send(result);
+});
+
+module.exports = { getAllUsers, getUser, getUserByEmail };
