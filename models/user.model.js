@@ -1,4 +1,7 @@
 const connFunction = require('../utils/executeMySql');
+const moment = require('moment/moment');
+
+const TABLE = "user";
 
 const User = {
     login: async ({ email }) => {
@@ -7,6 +10,20 @@ const User = {
         from user 
         where email like @email and status=1`;
         const result = await connFunction.query(mysql, { email });
+        return result;
+    },
+    registration: async ({ name, surname, email, tel, password, id_student_type, course_study, birth_date, prof_img }) => {
+        const result = await connFunction.insert(TABLE, { 
+            name,
+            surname,
+            email,
+            tel, 
+            password,
+            id_student_type,
+            course_study, 
+            birth_date: moment(birth_date).format("YYYY-MM-DD"),
+            prof_img
+         });
         return result;
     }
 }

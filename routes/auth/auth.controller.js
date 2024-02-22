@@ -16,10 +16,10 @@ const login = asyncHandler(async (req, res) => {
     if (objUser.length != 1) {
         res.status(404);
         throw new Error();
-    } else {
-        objUser = objUser[0];
-    }
+    } 
 
+    objUser = objUser[0];
+    
     if (objUser.password === hashedPassword) {
         const accessToken = jwt.sign({
             user: {
@@ -44,4 +44,21 @@ const login = asyncHandler(async (req, res) => {
 
 });
 
-module.exports = { login };
+//@desc registrare un utente
+//@route POST /api/auth/registration
+//@access public
+const registration = asyncHandler(async (req, res) => {
+    const hashedPassword = hash(req.body.password);
+    req.body.password = hashedPassword;
+
+    let result = await User.registration({...req.body});
+
+    if (result.affectedRows != 1) {
+        res.status(400);
+        throw new Error();
+    }
+
+    res.status(201).send({message: "Utente creato"});
+});
+
+module.exports = { login, registration };
