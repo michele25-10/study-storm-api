@@ -28,4 +28,18 @@ const getUserByEmail = asyncHandler(async (req, res) => {
     res.status(200).send(result);
 });
 
-module.exports = { getAllUsers, getUser, getUserByEmail };
+//@desc update di un utente
+//@route GET /api/user/updateUser
+//@access private
+const updateUser = asyncHandler(async (req, res) => {
+    const result = await User.updateUser({ ...req.body });
+
+    if (result.affectedRows != 1) {
+        res.status(400);
+        throw new Error();
+    }
+
+    res.status(200).send({message: "Utente modificato"});
+});
+
+module.exports = { getAllUsers, getUser, getUserByEmail, updateUser };

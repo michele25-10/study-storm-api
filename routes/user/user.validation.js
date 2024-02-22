@@ -20,4 +20,13 @@ const getUserByEmail = {
     })
 };
 
-module.exports = { getAllUsers, getUser, getUserByEmail };
+const updateUser = {
+    body: Joi.object().keys({
+        tel: Joi.string().max(10).required(),
+        course_study: Joi.string().max(30).required(),
+        birth_date: Joi.date().required(),
+        idu: Joi.string().length(16).required(),
+    })
+};
+
+module.exports = { getAllUsers, getUser, getUserByEmail, updateUser };
