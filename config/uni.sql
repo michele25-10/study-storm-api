@@ -1,43 +1,14 @@
--- phpMyAdmin SQL Dump
--- version 5.2.1
--- https://www.phpmyadmin.net/
---
--- Host: localhost
--- Generation Time: Feb 21, 2024 at 12:08 AM
--- Server version: 8.0.33
--- PHP Version: 8.2.9
 
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-START TRANSACTION;
-SET time_zone = "+00:00";
-
-DROP DATABASE IF EXISTS uni;
 
 CREATE DATABASE uni;
 USE uni;
-
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
-
---
--- Database: `uni`
---
-
--- --------------------------------------------------------
-
---
--- Table structure for table `agenda`
---
 
 CREATE TABLE `agenda` (
   `id` int NOT NULL,
   `date` date NOT NULL,
   `note` tinytext NOT NULL,
   `minutes` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+); 
 
 -- --------------------------------------------------------
 
@@ -51,8 +22,7 @@ CREATE TABLE `answer` (
   `id_question` int NOT NULL,
   `desc` varchar(512) NOT NULL,
   `datetime` datetime DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
+); 
 -- --------------------------------------------------------
 
 --
@@ -69,7 +39,7 @@ CREATE TABLE `goal` (
   `expected_grade` float DEFAULT NULL,
   `grade` float DEFAULT NULL,
   `finished` tinyint(1) DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ; 
 
 -- --------------------------------------------------------
 
@@ -83,7 +53,7 @@ CREATE TABLE `question` (
   `desc` varchar(128) NOT NULL,
   `title` varchar(40) NOT NULL,
   `datetime` datetime DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+); 
 
 -- --------------------------------------------------------
 
@@ -94,7 +64,7 @@ CREATE TABLE `question` (
 CREATE TABLE `report` (
   `id` int NOT NULL,
   `title` varchar(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+); 
 
 -- --------------------------------------------------------
 
@@ -106,7 +76,7 @@ CREATE TABLE `report_answer` (
   `id_answer` int NOT NULL,
   `id_user` varchar(16) NOT NULL,
   `id_report` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+); 
 
 -- --------------------------------------------------------
 
@@ -118,7 +88,7 @@ CREATE TABLE `report_question` (
   `id_question` int NOT NULL,
   `id_user` varchar(16) NOT NULL,
   `id_report` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+); 
 
 -- --------------------------------------------------------
 
@@ -129,7 +99,7 @@ CREATE TABLE `report_question` (
 CREATE TABLE `student_type` (
   `id` int NOT NULL,
   `name` varchar(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+); 
 
 -- --------------------------------------------------------
 
@@ -145,7 +115,7 @@ CREATE TABLE `task` (
   `planned_minutes` int DEFAULT NULL,
   `expiry_date` date DEFAULT NULL,
   `id_goal` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+);
 
 -- --------------------------------------------------------
 
@@ -165,7 +135,7 @@ CREATE TABLE `user` (
   `birth_date` date NOT NULL,
   `prof_img` blob,
   `status` tinyint(1) DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+); 
 
 --
 -- Triggers `user`
@@ -185,7 +155,7 @@ CREATE TABLE `user_goal` (
   `id_user` varchar(16) NOT NULL,
   `id_goal` int NOT NULL,
   `admin` tinyint(1) DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+); 
 
 -- --------------------------------------------------------
 
@@ -197,7 +167,7 @@ CREATE TABLE `user_task_agenda` (
   `id_user` varchar(16) NOT NULL,
   `id_task` int NOT NULL,
   `id_agenda` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+); 
 
 -- --------------------------------------------------------
 
@@ -212,7 +182,7 @@ CREATE TABLE `user_verification` (
   `date_created` datetime DEFAULT CURRENT_TIMESTAMP,
   `date_verified` datetime DEFAULT NULL,
   `verified` tinyint(1) DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+); 
 
 --
 -- Triggers `user_verification`
@@ -429,6 +399,3 @@ ALTER TABLE `user_task_agenda`
   ADD CONSTRAINT `fk_user_t_a` FOREIGN KEY (`id_user`) REFERENCES `user` (`id`);
 COMMIT;
 
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
