@@ -127,7 +127,7 @@ CREATE TABLE `user` (
   `id` varchar(16) NOT NULL,
   `name` varchar(20) NOT NULL,
   `surname` varchar(20) NOT NULL,
-  `email` varchar(60) NOT NULL,
+  `email` varchar(60) NOT NULL unique,
   `tel` varchar(10) NOT NULL,
   `password` varchar(64) NOT NULL,
   `id_student_type` int NOT NULL,

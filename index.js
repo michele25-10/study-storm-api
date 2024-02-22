@@ -14,7 +14,7 @@ app.use(cors({
     allowedHeaders: ['Content-Type', 'Authorization'] // Consenti solo questi header
 }));
 
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 5001;
 
 app.use(express.json());
 
