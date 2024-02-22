@@ -7,4 +7,6 @@ const validate = require('../../middleware/JoiValidation');
 
 router.get("/", validate(userValidation.getAllUsers), userController.getAllUsers);
 
+router.get("/getUser", validate(userValidation.getUser), userController.getUser);
+
 module.exports = router;

@@ -34,6 +34,14 @@ const User = {
         const result = await connFunction.query(mysql);
         return result;
     },
+    selectUser: async ({ idu, alsoDisactive }) => {
+        const mysql = `
+            SELECT id, name, surname, email, tel, prof_img, course_study
+            FROM user
+            WHERE ${alsoDisactive ? " 1=1 " : " status = 1 "} AND id=@idu`;
+        const result = await connFunction.query(mysql, { idu });
+        return result;
+    },
 }
 
 module.exports = User;
