@@ -1,21 +1,13 @@
-const jwt = require('jsonwebtoken');
 const asyncHandler = require('express-async-handler');
 const User = require('../../models/user.model');
 
-//@desc registrare un utente
-//@route POST /api/user/getActiveUsers
+//@desc get di tutti gli utenti
+//@route GET /api/user/
 //@access private
-const getActiveUsers = asyncHandler(async (req, res) => {
-    const objUser = await User.getActiveUsers();
+const getAllUsers = asyncHandler(async (req, res) => {
+    const result = await User.selectAllUsers({ alsoDisactive: req.query.alsoDisactive || false });
 
-    console.log(objUser);
-
-    if (objUser.length == 0){
-        res.status(404);
-        throw new Error();
-    } 
-
-    res.status(200).send(objUser);
+    res.status(200).send(result);
 });
 
-module.exports = { getActiveUsers };
+module.exports = { getAllUsers };

@@ -13,27 +13,25 @@ const User = {
         return result;
     },
     registration: async ({ name, surname, email, tel, password, id_student_type, course_study, birth_date, prof_img }) => {
-        const result = await connFunction.insert(TABLE, { 
+        const result = await connFunction.insert(TABLE, {
             name,
             surname,
             email,
-            tel, 
+            tel,
             password,
             id_student_type,
-            course_study, 
+            course_study,
             birth_date: moment(birth_date).format("YYYY-MM-DD"),
             prof_img
-         });
+        });
         return result;
     },
-    getActiveUsers: async () => {
+    selectAllUsers: async ({ alsoDisactive }) => {
         const mysql = `
-            SELECT id, password, name, surname, email, tel, prof_img, course_study
+            SELECT id, name, surname, email, tel, prof_img, course_study
             FROM user
-            WHERE status = 1`;
-
+            WHERE ${alsoDisactive ? " 1=1 " : " status = 1 "}`;
         const result = await connFunction.query(mysql);
-
         return result;
     },
 }

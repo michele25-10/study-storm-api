@@ -5,6 +5,6 @@ const userController = require('./user.controller');
 const userValidation = require('./user.validation');
 const validate = require('../../middleware/JoiValidation');
 
-router.get("/getActiveUsers", userController.getActiveUsers);
+router.get("/", validate(userValidation.getAllUsers), userController.getAllUsers);
 
 module.exports = router;
