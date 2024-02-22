@@ -25,7 +25,17 @@ const User = {
             prof_img
          });
         return result;
-    }
+    },
+    getActiveUsers: async () => {
+        const mysql = `
+            SELECT id, password, name, surname, email, tel, prof_img, course_study
+            FROM user
+            WHERE status = 1`;
+
+        const result = await connFunction.query(mysql);
+
+        return result;
+    },
 }
 
 module.exports = User;
