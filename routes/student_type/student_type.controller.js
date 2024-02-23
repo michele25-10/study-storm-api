@@ -2,7 +2,7 @@ const asyncHandler = require('express-async-handler');
 const StudentType = require('../../models/student_type.model');
 
 //@desc get di tutti i tipi
-//@route POST /api/student_type/
+//@route GET /api/student_type/
 //@access private
 const getAllTypes = asyncHandler(async (req, res) => {
     const result = await StudentType.selectAllTypes();
@@ -13,10 +13,10 @@ const getAllTypes = asyncHandler(async (req, res) => {
     }
 
     res.status(200).send(result);
-})
+});
 
 //@desc get di un tipo dato l'id
-//@route POST /api/student_type/getType
+//@route GET /api/student_type/getType
 //@access private
 const getType = asyncHandler(async (req, res) => {
     const result = await StudentType.selectType({ id: req.query.id });
@@ -27,6 +27,20 @@ const getType = asyncHandler(async (req, res) => {
     }
 
     res.status(200).send(result);
-})
+});
 
-module.exports = { getAllTypes, getType };
+//@desc crea un tipo
+//@route POST /api/student_type/createType
+//@access private
+const createType = asyncHandler(async (req, res) => {
+    const result = await StudentType.createType({ name: req.body.name });
+
+    if (result.affectedRows != 1){
+        res.status(400);
+        throw new Error();
+    }
+
+    res.status(201).send({message: "Tipo creato"});
+});
+
+module.exports = { getAllTypes, getType, createType };

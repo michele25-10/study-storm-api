@@ -6,4 +6,10 @@ const getType = {
     })
 };
 
-module.exports = { getType };
+const createType = {
+    body: Joi.object().keys({
+        name: Joi.string().max(20).required(),
+    })
+};
+
+module.exports = { getType, createType };
