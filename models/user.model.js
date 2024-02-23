@@ -7,7 +7,7 @@ const User = {
     login: async ({ email }) => {
         const mysql = `
         select id, password, name, surname, email, tel, prof_img, course_study
-        from user 
+        from ${TABLE}
         where email like @email and status=1`;
         const result = await connFunction.query(mysql, { email });
         return result;
@@ -29,7 +29,7 @@ const User = {
     selectAllUsers: async ({ alsoDisactive }) => {
         const mysql = `
             SELECT id, name, surname, email, tel, prof_img, course_study
-            FROM user
+            FROM ${TABLE}
             WHERE ${alsoDisactive ? " 1=1 " : " status = 1 "}`;
         const result = await connFunction.query(mysql);
         return result;
@@ -37,7 +37,7 @@ const User = {
     selectUser: async ({ idu, alsoDisactive }) => {
         const mysql = `
             SELECT id, name, surname, email, tel, prof_img, course_study
-            FROM user
+            FROM ${TABLE}
             WHERE ${alsoDisactive ? " 1=1 " : " status = 1 "} AND id=@idu`;
         const result = await connFunction.query(mysql, { idu });
         return result;
@@ -45,7 +45,7 @@ const User = {
     selectUserByEmail: async ({ email, alsoDisactive }) => {
         const mysql = `
             SELECT id, name, surname, email, tel, prof_img, course_study
-            FROM user
+            FROM ${TABLE}
             WHERE ${alsoDisactive ? " 1=1 " : " status = 1 "} AND email=@email`;
         const result = await connFunction.query(mysql, { email });
         return result;
