@@ -47,7 +47,6 @@ const createType = asyncHandler(async (req, res) => {
 //@route PUT /api/student_type/updateType
 //@access private
 const updateType = asyncHandler(async (req, res) => {
-    console.log("body: ");
     const result = await StudentType.updateType({ name: req.body.name, id: req.body.id });
 
     if (result.affectedRows != 1){
