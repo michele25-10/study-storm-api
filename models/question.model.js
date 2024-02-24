@@ -24,6 +24,14 @@ const Question = {
             datetime: moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
         }, "id=@id", { id });
         return result;
+    },
+    selectSingleQuestion: async ({ id }) => {
+        const mysql = `select q.id, q.\`desc\`, q.title, q.\`datetime\`, u.name, u.surname 
+        from question q 
+        inner join \`user\` u on u.id = q.id_user 
+        where q.id=@id;`;
+        const result = await connFunction.query(mysql, { id });
+        return result;
     }
 };
 

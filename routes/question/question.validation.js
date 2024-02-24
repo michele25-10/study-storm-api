@@ -23,5 +23,10 @@ const putQuestion = {
     })
 };
 
+const getSingleQuestion = {
+    params: Joi.object().keys({
+        id: Joi.number().integer().required(),
+    })
+};
 
-module.exports = { addQuestion, deleteQuestion, putQuestion };
+module.exports = { addQuestion, deleteQuestion, putQuestion, getSingleQuestion };

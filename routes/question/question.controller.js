@@ -29,7 +29,7 @@ const deleteQuestion = asyncHandler(async (req, res) => {
     res.status(200).send({ message: "Domanda eliminata" });
 });
 
-//@desc API per eliminare le question
+//@desc API per modificare le question
 //@route PUT /api/question/:id
 //@access private
 const putQuestion = asyncHandler(async (req, res) => {
@@ -43,4 +43,12 @@ const putQuestion = asyncHandler(async (req, res) => {
     res.status(200).send({ message: "Domanda modificata" });
 });
 
-module.exports = { addQuestion, deleteQuestion, putQuestion };
+//@desc API per ottenere una singola question
+//@route GET /api/question/:id
+//@access private
+const getSingleQuestion = asyncHandler(async (req, res) => {
+    const response = await Question.selectSingleQuestion({ id: req.params.id });
+    res.status(200).send(response[0]);
+});
+
+module.exports = { addQuestion, deleteQuestion, putQuestion, getSingleQuestion };
