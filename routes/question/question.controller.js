@@ -15,5 +15,19 @@ const addQuestion = asyncHandler(async (req, res) => {
     res.status(201).send({ message: "Domanda inserita con successo!" });
 });
 
+//@desc API per eliminare le question
+//@route DELETE /api/question/:id
+//@access private
+const deleteQuestion = asyncHandler(async (req, res) => {
+    const result = await Question.deleteQuestion({ id: req.params.id });
 
-module.exports = { addQuestion };
+    if (result.affectedRows != 1) {
+        res.status(500);
+        throw new Error();
+    }
+
+    res.status(200).send({ message: "Domanda eliminata" });
+});
+
+
+module.exports = { addQuestion, deleteQuestion };

@@ -12,6 +12,10 @@ const Question = {
             datetime: moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
         });
         return result;
+    },
+    deleteQuestion: async ({ id }) => {
+        const result = await connFunction.delete(TABLE, 'id=@id', { id });
+        return result;
     }
 }
 

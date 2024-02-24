@@ -7,4 +7,10 @@ const addQuestion = {
     })
 };
 
-module.exports = { addQuestion };
+const deleteQuestion = {
+    params: Joi.object().keys({
+        id: Joi.number().integer().required(),
+    })
+};
+
+module.exports = { addQuestion, deleteQuestion };
