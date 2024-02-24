@@ -16,7 +16,15 @@ const Question = {
     deleteQuestion: async ({ id }) => {
         const result = await connFunction.delete(TABLE, 'id=@id', { id });
         return result;
+    },
+    updateQuestion: async ({ id, desc, title }) => {
+        const result = await connFunction.update(TABLE, {
+            "`desc`": desc,
+            title,
+            datetime: moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
+        }, "id=@id", { id });
+        return result;
     }
-}
+};
 
 module.exports = Question;
