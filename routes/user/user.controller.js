@@ -44,7 +44,7 @@ const getUserByEmail = asyncHandler(async (req, res) => {
 });
 
 //@desc update di un utente
-//@route GET /api/user/updateUser
+//@route PUT /api/user/updateUser
 //@access private
 const updateUser = asyncHandler(async (req, res) => {
     const result = await User.updateUser({ ...req.body });

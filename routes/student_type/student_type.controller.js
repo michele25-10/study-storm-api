@@ -43,4 +43,19 @@ const createType = asyncHandler(async (req, res) => {
     res.status(201).send({message: "Tipo creato"});
 });
 
-module.exports = { getAllTypes, getType, createType };
+//@desc modifica un tipo
+//@route PUT /api/student_type/updateType
+//@access private
+const updateType = asyncHandler(async (req, res) => {
+    console.log("body: ");
+    const result = await StudentType.updateType({ name: req.body.name, id: req.body.id });
+
+    if (result.affectedRows != 1){
+        res.status(400);
+        throw new Error();
+    }
+
+    res.status(201).send({message: "Tipo modificato"});
+});
+
+module.exports = { getAllTypes, getType, createType, updateType };

@@ -12,4 +12,11 @@ const createType = {
     })
 };
 
-module.exports = { getType, createType };
+const updateType = {
+    body: Joi.object().keys({
+        name: Joi.string().max(20).required(),
+        id: Joi.number().integer().required(),
+    })
+};
+
+module.exports = { getType, createType, updateType };
