@@ -57,4 +57,18 @@ const getUserGoalByUser = asyncHandler(async (req, res) => {
     res.status(200).send(result);
 });
 
-module.exports = { getAllUserGoal, createUserGoal, getUserGoalByGoal, getUserGoalByUser };
+//@desc ottiene l'associazione in base all'obiettivio e all'utente
+//@route GET /api/user_goal/getUserGoal
+//@access private
+const getUserGoal = asyncHandler(async (req, res) => {
+    const result = await UserGoal.selectUserGoal({ id_user: req.query.id_user, id_goal: req.query.id_goal });
+
+    if (result.length == 0){
+        res.status(404);
+        throw new Error();
+    }
+
+    res.status(200).send(result);
+});
+
+module.exports = { getAllUserGoal, createUserGoal, getUserGoalByGoal, getUserGoalByUser, getUserGoal };

@@ -20,4 +20,11 @@ const getUserGoalByUser = {
     })
 };
 
-module.exports = { createUserGoal, getUserGoalByGoal, getUserGoalByUser };
+const getUserGoal = {
+    query: Joi.object().keys({
+        id_goal: Joi.number().integer().required(),
+        id_user: Joi.string().length(16).required(),
+    })
+};
+
+module.exports = { createUserGoal, getUserGoalByGoal, getUserGoalByUser, getUserGoal };
