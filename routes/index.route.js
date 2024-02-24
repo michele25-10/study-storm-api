@@ -8,5 +8,6 @@ router.all('*', validateToken);
 router.use("/user", require("./user/user.route"));
 router.use("/student_type", require("./student_type/student_type.route"));
 router.use("/goal", require("./goal/goal.route"));
+router.use("/question", require("./question/question.route"));
 
 module.exports = router;
