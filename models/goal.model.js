@@ -40,6 +40,29 @@ const Goal = {
         const result = await connFunction.query(mysql, { id });
         return result;
     },
+    updateGoal: async ({
+        name, 
+        desc, 
+        expiry_date, 
+        planned_minutes, 
+        minutes, 
+        expected_grade, 
+        grade, 
+        id
+    }) => {
+        const result = await connFunction.update(TABLE, {
+            name, 
+            "`desc`": desc, 
+            expiry_date: moment(expiry_date).format("YYYY-MM-DD"), 
+            planned_minutes, 
+            minutes, 
+            expected_grade,
+            grade
+        },
+        "id=@id",
+        { id });
+        return result;
+    },
 }
 
 module.exports = Goal;

@@ -48,4 +48,23 @@ const getGoal = asyncHandler(async (req, res) => {
     res.status(200).send(result);
 });
 
-module.exports = { getAllGoals, createGoal, getGoal };
+//@desc modifica di un obiettivo
+//@route PUT /api/goal/updateGoal
+//@access private
+const updateGoal = asyncHandler(async (req, res) => {
+    if (req.body.expiry_date < new Date()){
+        res.status(400);
+        throw new Error();
+    }
+
+    const result = await Goal.updateGoal({...req.body});
+
+    if (result.affectedRows != 1){
+        res.status(400);
+        throw new Error();
+    }
+
+    res.status(201).send({ message: "Obiettivo modificato" });
+});
+
+module.exports = { getAllGoals, createGoal, getGoal, updateGoal };
