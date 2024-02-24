@@ -47,6 +47,10 @@ const UserGoal = {
         const result = await connFunction.query(mysql, { id_user, id_goal });
         return result;
     },
+    updateAdmin: async ({ id_user, id_goal, admin }) => {
+        const result = await connFunction.update(TABLE, { admin }, "id_goal=@id_goal AND id_user=@id_user", { id_goal, id_user });
+        return result;
+    },
 }
 
 module.exports = UserGoal;

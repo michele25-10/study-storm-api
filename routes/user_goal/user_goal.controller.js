@@ -71,4 +71,18 @@ const getUserGoal = asyncHandler(async (req, res) => {
     res.status(200).send(result);
 });
 
-module.exports = { getAllUserGoal, createUserGoal, getUserGoalByGoal, getUserGoalByUser, getUserGoal };
+//@desc ottiene l'associazione in base all'obiettivio e all'utente
+//@route PUT /api/user_goal/updateAdmin
+//@access private
+const updateAdmin = asyncHandler(async (req, res) => {
+    const result = await UserGoal.updateAdmin({ ...req.body });
+
+    if (result.affectedRows != 1){
+        res.status(404);
+        throw new Error();
+    }
+
+    res.status(200).send({ message: "Admin aggiornato"});
+});
+
+module.exports = { getAllUserGoal, createUserGoal, getUserGoalByGoal, getUserGoalByUser, getUserGoal, updateAdmin };
