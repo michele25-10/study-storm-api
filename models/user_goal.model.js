@@ -31,6 +31,14 @@ const UserGoal = {
         const result = await connFunction.query(mysql, { id_goal });
         return result;
     },
+    selectUserGoalByUser: async ({ id_user }) => {
+        const mysql = `
+            SELECT id_user, id_goal, admin
+            FROM ${TABLE}
+            WHERE  id_user=@id_user`;
+        const result = await connFunction.query(mysql, { id_user });
+        return result;
+    },
 }
 
 module.exports = UserGoal;
