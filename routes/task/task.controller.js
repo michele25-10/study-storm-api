@@ -5,7 +5,7 @@ const Goal = require('../../models/goal.model');
 //@route GET /api/goal/
 //@access private
 const getAllGoals = asyncHandler(async (req, res) => {
-    const result = await Goal.selectAllGoals({ alsoFinished: req.query.alsoFinished || false });
+    const result = await Goal.selectAllGoals({ alsoDisactive: req.query.alsoDisactive || false });
 
     if (result.length == 0){
         res.status(404);
@@ -67,18 +67,4 @@ const updateGoal = asyncHandler(async (req, res) => {
     res.status(201).send({ message: "Obiettivo modificato" });
 });
 
-//@desc ottiene l'associazione in base all'obiettivio e all'utente
-//@route PUT /api/user_goal/updateAdmin
-//@access private
-const updateFinished = asyncHandler(async (req, res) => {
-    const result = await Goal.updateFinished({ ...req.body });
-
-    if (result.affectedRows != 1){
-        res.status(404);
-        throw new Error();
-    }
-
-    res.status(200).send({ message: "Obiettivo aggiornato"});
-});
-
-module.exports = { getAllGoals, createGoal, getGoal, updateGoal, updateFinished };
+module.exports = { getAllGoals, createGoal, getGoal, updateGoal };

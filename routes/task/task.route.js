@@ -9,6 +9,5 @@ router.get("/", validate(goalValidation.getAllGoals), goalController.getAllGoals
 router.post("/createGoal", validate(goalValidation.createGoal), goalController.createGoal);
 router.get("/getGoal", validate(goalValidation.getGoal), goalController.getGoal);
 router.put("/updateGoal", validate(goalValidation.updateGoal), goalController.updateGoal);
-router.put("/updateFinished", validate(goalValidation.updateFinished), goalController.updateFinished);
 
 module.exports = router;

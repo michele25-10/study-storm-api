@@ -38,11 +38,4 @@ const updateGoal = {
     })
 };
 
-const updateFinished = {
-    body: Joi.object().keys({
-        finished: Joi.number().allow(0,1).required(),
-        id: Joi.number().integer().required(),
-    })
-};
-
-module.exports = { getAllGoals, createGoal, getGoal, updateGoal, updateFinished };
+module.exports = { getAllGoals, createGoal, getGoal, updateGoal };

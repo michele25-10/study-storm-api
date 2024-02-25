@@ -63,6 +63,17 @@ const Goal = {
         { id });
         return result;
     },
+    updateFinished: async ({
+        finished,
+        id
+    }) => {
+        const result = await connFunction.update(TABLE, {
+            finished
+        },
+        "id=@id",
+        { id });
+        return result;
+    },
 }
 
 module.exports = Goal;
