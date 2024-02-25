@@ -20,14 +20,14 @@ const StudentType = {
         const result = await connFunction.query(mysql, { id });
         return result;
     },
-    createType: async ({ name }) => {
-        const result = await connFunction.insert(TABLE, { name });
-        return result;
-    },
-    updateType: async ({ name, id }) => {
-        const result = await connFunction.update(TABLE, { name }, "id=@id", { id });
-        return result;
-    },
+    // createType: async ({ name }) => {
+    //     const result = await connFunction.insert(TABLE, { name });
+    //     return result;
+    // },
+    // updateType: async ({ name, id }) => {
+    //     const result = await connFunction.update(TABLE, { name }, "id=@id", { id });
+    //     return result;
+    // },
 }
 
 module.exports = StudentType;
