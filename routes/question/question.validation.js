@@ -34,6 +34,8 @@ const getFeedQuestion = {
         min: Joi.date(),
         max: Joi.date().max('now'),
         search: Joi.string(),
+        limit: Joi.number().integer(),
+        id_student_type: Joi.number().integer(),
     })
 };
 

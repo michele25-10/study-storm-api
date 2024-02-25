@@ -1,5 +1,5 @@
-const moment = require('moment/moment');
 const connFunction = require('../utils/executeMySql');
+const moment = require('moment/moment');
 
 const TABLE = "question";
 
@@ -33,23 +33,23 @@ const Question = {
         const result = await connFunction.query(mysql, { id });
         return result;
     },
-    selectFeed: async ({ max, min, search }) => {
+    selectFeed: async ({ max, min, ist, limit }) => {
         const mysql = `
-        select q.id, q.\`desc\`, q.title, u.name, u.surname, q.\`datetime\`, count(rq.id_question)
+        select q.id, q.\`desc\`, q.title, u.name, u.surname, q.\`datetime\`, count(rq.id_question), u.id_student_type, u.course_study
         from question q 
         inner join \`user\` u on u.id like q.id_user 
         left join report_question rq on rq.id_question = q.id
-        ${max || min || search ?
-                `where ${min && max ? "q.\`datetime\` between @min and @max" : ""} 
-                ${search ? `and (q.title like @search or q.\`desc\` like @search)` : ""}`
-                :
-                ""}
+        ${max && min ? `where q.\`datetime\` between @min and @max` : ""}
+        ${ist ? (!max && !min ? " where u.id_student_type=@ist " : " and u.id_student_type=@ist ") : ""}
         group by q.id 
-        having count(rq.id_question) < 3; `;
+        having count(rq.id_question) < 3
+        order by q.\`datetime\` asc
+        ${limit ? `limit @limit` : ""}`;
         const result = await connFunction.query(mysql, {
-            max: moment(max).format('YYYY-MM-DD HH:mm:ss'),
-            min: moment(min).format('YYYY-MM-DD HH:mm:ss'),
-            search: search.toString()
+            max: max ? moment(max).format('YYYY-MM-DD HH:mm:ss') : null,
+            min: min ? moment(min).format('YYYY-MM-DD HH:mm:ss') : null,
+            ist,
+            limit
         });
         return result;
     }

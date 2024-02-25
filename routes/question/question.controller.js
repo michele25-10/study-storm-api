@@ -1,5 +1,6 @@
 const asyncHandler = require('express-async-handler');
 const Question = require('../../models/question.model');
+const { jaccardSimilarity } = require('../../utils/isSimilString');
 
 //@desc API inserimento question utente
 //@route POST /api/question/
@@ -110,12 +111,78 @@ const postTest = asyncHandler(async (req, res) => {
 //@route GET /api/question/test
 //@access private
 const getFeedQuestion = asyncHandler(async (req, res) => {
+    const response = [];
+    let min, max;
 
-    const search = req.query.search ? "%" + req.query.search + "%" : false;
+    min = req.query.min || false;
+    if (min) {
+        max = req.query.max ? req.query.max : new Date();
+    }
 
-    const response = await Question.selectFeed({ min: req.query.min, max: req.query.max, search })
+    const result = await Question.selectFeed({ min, max, ist: req.query.id_student_type, limit: 1000 })
+
+    //limite massimo di righe restituite
+    const limit = req.query.limit || 100;
+    const semiLength = result.length * 0.9;
+    let i = 0;
+
+    //Dati dell'utente che effettua richiesta
+    const ist = req.user.ist;
+    const courseStudy = req.user.courseStudy;
+
+    //Distinguo la procedura se ho o meno un campo di ricerca
+    if (req.query.search) {
+        const search = req.query.search;
+        for (const row of result) {
+            if (i < limit) {
+                if (row.desc.includes(search) || row.title.includes(search)) {
+                    //se la descrizione o il titolo contengono il campo di ricerca le inserisco
+                    response.push(row);
+                } else if (row.id_student_type === ist) {
+                    //Gli utenti sono del medesimo tipo
+                    if (jaccardSimilarity(row.course_study, courseStudy) > 60) {
+                        //Il grado di somiglianza tra i corsi di studio è maggiore del 60% allora inserisco anche questa riga
+                        response.push(row);
+                    } else if (i > semiLength) {
+                        //Se il grado di somiglianza è inferiore ma ormai ho già passato il 90% delle question allora inserisco lo stesso la riga
+                        response.push(row);
+                    }
+                } else if (i > semiLength) {
+                    //Se l'utente non è dello stesso tipo ma ho superato il 90% delle question allora inserisco lo stesso la riga
+                    response.push(row);
+                }
+                i++;
+            } else {
+                //Quando supero il numero di righe ricchieste esco dai cicli
+                break;
+            }
+        }
+    } else {
+        for (const row of result) {
+            if (i < limit) {
+                if (row.id_student_type === ist) {
+                    //Gli utenti sono del medesimo tipo
+                    if (jaccardSimilarity(row.course_study, courseStudy) > 60) {
+                        //Il grado di somiglianza tra i corsi di studio è maggiore del 60% allora inserisco anche questa riga
+                        response.push(row);
+                    } else if (i > semiLength) {
+                        //Se il grado di somiglianza è inferiore ma ormai ho già passato il 90% delle question allora inserisco lo stesso la riga
+                        response.push(row);
+                    }
+                } else if (i > semiLength) {
+                    //Se l'utente non è dello stesso tipo ma ho superato il 90% delle question allora inserisco lo stesso la riga
+                    response.push(row);
+                }
+                i++;
+            } else {
+                //Quando supero il numero di righe ricchieste esco dai cicli
+                break;
+            }
+        }
+    }
 
     res.status(200).send(response);
+
 });
 
 module.exports = { addQuestion, deleteQuestion, putQuestion, getSingleQuestion, postTest, getFeedQuestion };

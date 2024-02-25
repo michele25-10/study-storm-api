@@ -25,7 +25,7 @@ const login = asyncHandler(async (req, res) => {
             user: {
                 idu: objUser.id,
                 ist: objUser.id_student_type,
-                course_study: objUser.course_study,
+                courseStudy: objUser.course_study,
             }
         }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: mobile ? "4320h" : "1h" });
 
