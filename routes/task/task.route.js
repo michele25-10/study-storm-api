@@ -1,13 +1,13 @@
 const express = require('express');
 const router = express.Router();
 
-const goalController = require('./goal.controller');
-const goalValidation = require('./goal.validation');
+const taskController = require('./task.controller');
+const taskValidation = require('./task.validation');
 const validate = require('../../middleware/JoiValidation');
 
-router.get("/", validate(goalValidation.getAllGoals), goalController.getAllGoals);
-router.post("/createGoal", validate(goalValidation.createGoal), goalController.createGoal);
-router.get("/getGoal", validate(goalValidation.getGoal), goalController.getGoal);
-router.put("/updateGoal", validate(goalValidation.updateGoal), goalController.updateGoal);
+router.get("/", taskController.getAllTasks);
+router.post("/createTask", validate(taskValidation.createTask), taskController.createTask);
+router.get("/getTask", validate(taskValidation.getTask), taskController.getTask);
+router.put("/updateTask", validate(taskValidation.updateTask), taskController.updateTask);
 
 module.exports = router;

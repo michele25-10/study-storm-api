@@ -1,11 +1,11 @@
 const asyncHandler = require('express-async-handler');
-const Goal = require('../../models/goal.model');
+const Task = require('../../models/task.model');
 
-//@desc get di tutti gli obiettivi
-//@route GET /api/goal/
+//@desc get di tutti le task
+//@route GET /api/task/
 //@access private
-const getAllGoals = asyncHandler(async (req, res) => {
-    const result = await Goal.selectAllGoals({ alsoDisactive: req.query.alsoDisactive || false });
+const getAllTasks = asyncHandler(async (req, res) => {
+    const result = await Task.selectAllTasks();
 
     if (result.length == 0){
         res.status(404);
@@ -15,16 +15,16 @@ const getAllGoals = asyncHandler(async (req, res) => {
     res.status(200).send(result);
 });
 
-//@desc creazione di un obiettivo
-//@route POST /api/goal/createGoal
+//@desc creazione di una task
+//@route POST /api/task/createTask
 //@access private
-const createGoal = asyncHandler(async (req, res) => {
+const createTask = asyncHandler(async (req, res) => {
     if (req.body.expiry_date < new Date()){
         res.status(400);
         throw new Error();
     }
 
-    const result = await Goal.createGoal({...req.body});
+    const result = await Task.createTask({...req.body});
 
     if (result.affectedRows != 1){
         res.status(400);
@@ -34,11 +34,11 @@ const createGoal = asyncHandler(async (req, res) => {
     res.status(201).send({ message: "Obiettivo creato" });
 });
 
-//@desc get un obiettivo dato un id
-//@route GET /api/goal/getGoal
+//@desc get una task dato un id
+//@route GET /api/task/getTask
 //@access private
-const getGoal = asyncHandler(async (req, res) => {
-    const result = await Goal.selectGoal({ alsoDisactive: req.query.alsoDisactive || false, id:req.query.id });
+const getTask = asyncHandler(async (req, res) => {
+    const result = await Task.selectTask({ id:req.query.id });
 
     if (result.length == 0){
         res.status(404);
@@ -48,23 +48,23 @@ const getGoal = asyncHandler(async (req, res) => {
     res.status(200).send(result);
 });
 
-//@desc modifica di un obiettivo
-//@route PUT /api/goal/updateGoal
+//@desc modifica di una task
+//@route PUT /api/task/updateTask
 //@access private
-const updateGoal = asyncHandler(async (req, res) => {
+const updateTask = asyncHandler(async (req, res) => {
     if (req.body.expiry_date < new Date()){
         res.status(400);
         throw new Error();
     }
 
-    const result = await Goal.updateGoal({...req.body});
+    const result = await Task.updateTask({...req.body});
 
     if (result.affectedRows != 1){
         res.status(400);
         throw new Error();
     }
 
-    res.status(201).send({ message: "Obiettivo modificato" });
+    res.status(201).send({ message: "Task modificata" });
 });
 
-module.exports = { getAllGoals, createGoal, getGoal, updateGoal };
+module.exports = { getAllTasks, createTask, getTask, updateTask };

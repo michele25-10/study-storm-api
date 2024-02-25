@@ -1,41 +1,32 @@
 const Joi = require('joi');
 
-const getAllGoals = {
-    query: Joi.object().keys({
-        alsoFinished: Joi.boolean(),
-    })
-};
-
-const createGoal = {
+const createTask = {
     body: Joi.object().keys({
         name: Joi.string().max(40).required(),
         desc: Joi.string().max(64).required(),
         expiry_date: Joi.date().allow(null, ""),
         planned_minutes: Joi.number().integer().allow(null, ""),
         minutes: Joi.number().integer().allow(null, ""),
-        expected_grade: Joi.number().allow(null, ""),
-        grade: Joi.number().allow(null, ""),
+        id_goal: Joi.number().integer().required()
     })
 };
 
-const getGoal = {
+const getTask = {
     query: Joi.object().keys({
-        alsoFinished: Joi.boolean(),
         id: Joi.number().integer().required(),
     })
 };
 
-const updateGoal = {
+const updateTask = {
     body: Joi.object().keys({
         name: Joi.string().max(40).required(),
         desc: Joi.string().max(64).required(),
         expiry_date: Joi.date().allow(null, ""),
         planned_minutes: Joi.number().integer().allow(null, ""),
         minutes: Joi.number().integer().allow(null, ""),
-        expected_grade: Joi.number().allow(null, ""),
-        grade: Joi.number().allow(null, ""),
         id: Joi.number().integer().required(),
+        id_goal: Joi.number().integer().required()
     })
 };
 
-module.exports = { getAllGoals, createGoal, getGoal, updateGoal };
+module.exports = { createTask, getTask, updateTask };
