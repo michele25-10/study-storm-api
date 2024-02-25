@@ -106,4 +106,16 @@ const postTest = asyncHandler(async (req, res) => {
     res.status(200).send("OK");
 });
 
-module.exports = { addQuestion, deleteQuestion, putQuestion, getSingleQuestion, postTest };
+//@desc API per prendere le question più adeguate per l'utente
+//@route GET /api/question/test
+//@access private
+const getFeedQuestion = asyncHandler(async (req, res) => {
+
+    const search = req.query.search ? "%" + req.query.search + "%" : false;
+
+    const response = await Question.selectFeed({ min: req.query.min, max: req.query.max, search })
+
+    res.status(200).send(response);
+});
+
+module.exports = { addQuestion, deleteQuestion, putQuestion, getSingleQuestion, postTest, getFeedQuestion };

@@ -32,6 +32,26 @@ const Question = {
         where q.id=@id;`;
         const result = await connFunction.query(mysql, { id });
         return result;
+    },
+    selectFeed: async ({ max, min, search }) => {
+        const mysql = `
+        select q.id, q.\`desc\`, q.title, u.name, u.surname, q.\`datetime\`, count(rq.id_question)
+        from question q 
+        inner join \`user\` u on u.id like q.id_user 
+        left join report_question rq on rq.id_question = q.id
+        ${max || min || search ?
+                `where ${min && max ? "q.\`datetime\` between @min and @max" : ""} 
+                ${search ? `and (q.title like @search or q.\`desc\` like @search)` : ""}`
+                :
+                ""}
+        group by q.id 
+        having count(rq.id_question) < 3; `;
+        const result = await connFunction.query(mysql, {
+            max: moment(max).format('YYYY-MM-DD HH:mm:ss'),
+            min: moment(min).format('YYYY-MM-DD HH:mm:ss'),
+            search: search.toString()
+        });
+        return result;
     }
 };
 

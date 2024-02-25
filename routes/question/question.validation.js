@@ -29,4 +29,12 @@ const getSingleQuestion = {
     })
 };
 
-module.exports = { addQuestion, deleteQuestion, putQuestion, getSingleQuestion };
+const getFeedQuestion = {
+    query: Joi.object().keys({
+        min: Joi.date(),
+        max: Joi.date().max('now'),
+        search: Joi.string(),
+    })
+};
+
+module.exports = { addQuestion, deleteQuestion, putQuestion, getSingleQuestion, getFeedQuestion };
