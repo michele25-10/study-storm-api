@@ -51,4 +51,59 @@ const getSingleQuestion = asyncHandler(async (req, res) => {
     res.status(200).send(response[0]);
 });
 
-module.exports = { addQuestion, deleteQuestion, putQuestion, getSingleQuestion };
+
+const vowels = ['a', 'e', 'i', 'o', 'u'];
+const consonants = ['b', 'c', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'p', 'q', 'r', 's', 't', 'v', 'w', 'x', 'y', 'z'];
+
+function generateRandomSyllable() {
+    const length = Math.floor(Math.random() * 2) + 1; // lunghezza casuale della sillaba (1 o 2)
+    let syllable = '';
+    for (let i = 0; i < length; i++) {
+        if (i === 0) {
+            syllable += consonants[Math.floor(Math.random() * consonants.length)];
+        } else {
+            syllable += vowels[Math.floor(Math.random() * vowels.length)];
+        }
+    }
+    return syllable;
+}
+
+function generateRandomWord(length) {
+    let word = '';
+    for (let i = 0; i < length; i++) {
+        word += generateRandomSyllable();
+    }
+    return word;
+}
+
+//@desc API per inserire dati di test per debug ed analisi algoritmo
+//@route POST /api/question/test
+//@access private
+const postTest = asyncHandler(async (req, res) => {
+
+    const id = ['a9985ac8-d187-11', 'a9986e10-d187-11'];
+    for (const row of id) {
+        for (let i = 0; i < 100; i++) {
+            let desc = "";
+            let title = "";
+
+            for (let i = 0; i < 8; i++) {
+                desc += generateRandomWord(12) + " ";
+            }
+
+            for (let i = 0; i < 4; i++) {
+                title += generateRandomWord(7) + " ";
+            }
+
+            const result = await Question.insertQuestion({ desc, title, idu: row });
+            if (result.affectedRows != 1) {
+                res.status(500);
+                throw new Error();
+            }
+        }
+    }
+
+    res.status(200).send("OK");
+});
+
+module.exports = { addQuestion, deleteQuestion, putQuestion, getSingleQuestion, postTest };

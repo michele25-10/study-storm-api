@@ -10,4 +10,8 @@ router.delete("/:id", validate(questionValidation.deleteQuestion), questionContr
 router.put("/:id", validate(questionValidation.putQuestion), questionController.putQuestion)
 router.get("/:id", validate(questionValidation.getSingleQuestion), questionController.getSingleQuestion)
 
+
+//Rotta di test, per creare algoritmo di estrapolazione feed question utente
+router.post("/test", questionController.postTest);
+
 module.exports = router;
