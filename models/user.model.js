@@ -6,7 +6,7 @@ const TABLE = "user";
 const User = {
     login: async ({ email }) => {
         const mysql = `
-        select id, password, name, surname, email, tel, prof_img, course_study
+        select id, password, name, surname, email, tel, prof_img, course_study, id_student_type
         from ${TABLE}
         where email like @email and status=1`;
         const result = await connFunction.query(mysql, { email });
@@ -56,8 +56,8 @@ const User = {
             course_study,
             birth_date: moment(birth_date).format("YYYY-MM-DD"),
         },
-        "id=@idu",
-        { idu } );
+            "id=@idu",
+            { idu });
 
         return result;
     },
