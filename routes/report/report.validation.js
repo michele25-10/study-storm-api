@@ -6,5 +6,13 @@ const getSingleReport = {
     })
 };
 
+const addReportUser = {
+    body: Joi.object().keys({
+        id: Joi.number().integer().required(),
+        id_report: Joi.number().integer().required(),
+        question: Joi.boolean().required(),
+    })
+};
 
-module.exports = { getSingleReport };
+
+module.exports = { getSingleReport, addReportUser };
