@@ -120,8 +120,18 @@ CREATE TABLE `task` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `user`
+-- Table structure for table `feedback`
 --
+
+CREATE TABLE `feedback` (
+  `id` int NOT NULL primary key,
+  `id_user` varchar(16) NOT NULL,
+  `description` tinytext NOT NULL,
+  `title` varchar(30) not null,
+  `date` date not null
+);
+
+-- --------------------------------------------------------
 
 CREATE TABLE `user` (
   `id` varchar(16) NOT NULL,
@@ -330,6 +340,12 @@ ALTER TABLE `student_type`
 -- AUTO_INCREMENT for table `task`
 --
 ALTER TABLE `task`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `feedback`
+--
+ALTER TABLE `feedback`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
