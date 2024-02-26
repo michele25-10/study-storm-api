@@ -7,5 +7,6 @@ const validate = require('../../middleware/JoiValidation');
 
 router.post("/", validate(agendaValidation.addAgenda), agendaController.addAgenda);
 router.put("/:id", validate(agendaValidation.putAgenda), agendaController.putAgenda);
+router.delete("/:id", validate(agendaValidation.deleteAgenda), agendaController.deleteAgenda);
 
 module.exports = router;

@@ -39,6 +39,10 @@ const Agenda = {
         }, " id=@id ", { id });
         return result;
     },
+    deleteAgenda: async ({ id }) => {
+        const result = await connFunction.delete(TABLE, " id=@id ", { id });
+        return result;
+    }
 };
 
 module.exports = Agenda;

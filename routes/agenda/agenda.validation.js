@@ -20,5 +20,10 @@ const putAgenda = {
     })
 };
 
+const deleteAgenda = {
+    params: Joi.object().keys({
+        id: Joi.number().integer().required(),
+    })
+};
 
-module.exports = { addAgenda, putAgenda };
+module.exports = { addAgenda, putAgenda, deleteAgenda };
