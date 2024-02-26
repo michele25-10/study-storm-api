@@ -81,4 +81,18 @@ const addMinutes = asyncHandler(async (req, res) => {
     res.status(200).send({ message: "Tempo aggiornato"});
 });
 
-module.exports = { getAllTasks, createTask, getTask, updateTask, addMinutes };
+//@desc modifica i minuti
+//@route DELETE /api/task/deleteTask
+//@access private
+const deleteTask = asyncHandler(async (req, res) => {
+    const result = await Task.deleteTask({ ...req.body });
+
+    if (result.affectedRows != 1){
+        res.status(404);
+        throw new Error();
+    }
+
+    res.status(200).send({ message: "Task eliminata"});
+});
+
+module.exports = { getAllTasks, createTask, getTask, updateTask, addMinutes, deleteTask };
