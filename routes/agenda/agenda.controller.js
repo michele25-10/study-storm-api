@@ -4,7 +4,7 @@ const Agenda = require('../../models/agenda.model');
 const UserTaskAgenda = require('../../models/user-task-agenda.model');
 
 //@desc API inserimento agenda di una task da parte di un utente
-//@route POST /api/feedback/
+//@route POST /api/agenda/
 //@access private
 const addAgenda = asyncHandler(async (req, res) => {
     const check = await Agenda.isExistedAgenda({ idu: req.user.idu, id_task: req.body.id_task, date: req.body.date });
@@ -35,6 +35,36 @@ const addAgenda = asyncHandler(async (req, res) => {
     res.status(201).send({ message: "Agenda inserita con successo!" });
 });
 
+//@desc API modifica di una agenda 
+//@route PUT /api/feedback/:id
+//@access private
+const putAgenda = asyncHandler(async (req, res) => {
+    const check = await Agenda.isExistedAgenda({ idu: req.user.idu, id_task: req.body.id_task, date: req.body.date, id_agenda: req.params.id });
+    if (check.length != 0) {
+        res.status(200).send({ message: "Data occupata da un'altra agenda" });
+        return;
+    }
 
+    const result = await Agenda.updateAgenda({ ...req.body, id: req.params.id });
+    if (result.affectedRows != 1) {
+        res.status(500);
+        throw new Error();
+    }
 
-module.exports = { addAgenda };
+    res.status(200).send({ message: "Agenda modificata con successo!" });
+});
+
+//@desc API eliminazione di una agenda 
+//@route DELETE /api/feedback/:id
+//@access private
+const deleteAgenda = asyncHandler(async (req, res) => {
+    const result = await Agenda.deleteAgenda({ id: req.params.id });
+    if (result.affectedRows != 1) {
+        res.status(500);
+        throw new Error("Agenda non trovata");
+    }
+
+    res.status(200).send({ message: "Agenda eliminata!" });
+});
+
+module.exports = { addAgenda, putAgenda, deleteAgenda };
