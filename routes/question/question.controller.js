@@ -185,4 +185,15 @@ const getFeedQuestion = asyncHandler(async (req, res) => {
 
 });
 
-module.exports = { addQuestion, deleteQuestion, putQuestion, getSingleQuestion, postTest, getFeedQuestion };
+//@desc API per ottenere tutte le risposte ad una domanda
+//@route GET /api/question/answer/:idQuestion
+//@access private
+const getAnswerQuestion = asyncHandler(async (req, res) => {
+    const response = {};
+    response.question = await Question.selectSingleQuestion({ id: req.params.idQuestion });
+    response.answer = await Question.selectAnswerQuestion({ id: req.params.idQuestion });
+
+    res.status(200).send(response);
+});
+
+module.exports = { addQuestion, deleteQuestion, putQuestion, getSingleQuestion, postTest, getFeedQuestion, getAnswerQuestion };

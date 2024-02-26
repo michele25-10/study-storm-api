@@ -39,4 +39,10 @@ const getFeedQuestion = {
     })
 };
 
-module.exports = { addQuestion, deleteQuestion, putQuestion, getSingleQuestion, getFeedQuestion };
+const getAnswerQuestion = {
+    params: Joi.object().keys({
+        idQuestion: Joi.number().integer().required()
+    })
+};
+
+module.exports = { addQuestion, deleteQuestion, putQuestion, getSingleQuestion, getFeedQuestion, getAnswerQuestion };

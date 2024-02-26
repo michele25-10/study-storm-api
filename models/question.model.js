@@ -52,6 +52,18 @@ const Question = {
             limit
         });
         return result;
+    },
+    selectAnswerQuestion: async ({ id }) => {
+        const mysql = `
+        select a.id, u.name, u.surname, a.desc, a.\`datetime\`
+        from answer a 
+        inner join \`user\` u ON u.id like a.id_user 
+        left join report_answer ra on ra.id_answer = a.id 
+        where id_question = @id
+        group by a.id
+        having count(ra.id_answer) < 3;`;
+        const result = await connFunction.query(mysql, { id });
+        return result;
     }
 };
 

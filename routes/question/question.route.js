@@ -7,9 +7,12 @@ const validate = require('../../middleware/JoiValidation');
 
 router.post("/", validate(questionValidation.addQuestion), questionController.addQuestion);
 router.delete("/:id", validate(questionValidation.deleteQuestion), questionController.deleteQuestion);
-router.put("/:id", validate(questionValidation.putQuestion), questionController.putQuestion)
-router.get("/:id", validate(questionValidation.getSingleQuestion), questionController.getSingleQuestion)
-router.get("/", validate(questionValidation.getFeedQuestion), questionController.getFeedQuestion)
+router.put("/:id", validate(questionValidation.putQuestion), questionController.putQuestion);
+router.get("/:id", validate(questionValidation.getSingleQuestion), questionController.getSingleQuestion);
+router.get("/", validate(questionValidation.getFeedQuestion), questionController.getFeedQuestion);
+
+//Risposte a domande
+router.get("/answer/:idQuestion", validate(questionValidation.getAnswerQuestion), questionController.getAnswerQuestion);
 
 //Rotta di test, per creare algoritmo di estrapolazione feed question utente
 router.post("/test", questionController.postTest);
