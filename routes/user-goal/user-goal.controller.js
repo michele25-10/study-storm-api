@@ -1,8 +1,8 @@
 const asyncHandler = require('express-async-handler');
-const UserGoal = require('../../models/user_goal.model');
+const UserGoal = require('../../models/user-goal.model');
 
 //@desc get di tutti le associazioni utente-obiettivo
-//@route GET /api/user_goal/
+//@route GET /api/user-goal/
 //@access private
 const getAllUserGoal = asyncHandler(async (req, res) => {
     const result = await UserGoal.selectAllUserGoal();
@@ -16,7 +16,7 @@ const getAllUserGoal = asyncHandler(async (req, res) => {
 });
 
 //@desc creazione di un'associazione utente-obiettivo
-//@route POST /api/user_goal/createUserGoal
+//@route POST /api/user-goal/createUserGoal
 //@access private
 const createUserGoal = asyncHandler(async (req, res) => {
     const result = await UserGoal.createUserGoal({ ...req.body });
@@ -30,7 +30,7 @@ const createUserGoal = asyncHandler(async (req, res) => {
 });
 
 //@desc ottiene l'associazione in base all'obiettivio
-//@route GET /api/user_goal/getUserGoalByGoal
+//@route GET /api/user-goal/getUserGoalByGoal
 //@access private
 const getUserGoalByGoal = asyncHandler(async (req, res) => {
     const result = await UserGoal.selectUserGoalByGoal({ id_goal: req.query.id_goal });
@@ -44,7 +44,7 @@ const getUserGoalByGoal = asyncHandler(async (req, res) => {
 });
 
 //@desc ottiene l'associazione in base all'obiettivio
-//@route GET /api/user_goal/getUserGoalByGoal
+//@route GET /api/user-goal/getUserGoalByGoal
 //@access private
 const getUserGoalByUser = asyncHandler(async (req, res) => {
     const result = await UserGoal.selectUserGoalByUser({ id_user: req.query.id_user });
@@ -58,7 +58,7 @@ const getUserGoalByUser = asyncHandler(async (req, res) => {
 });
 
 //@desc ottiene l'associazione in base all'obiettivio e all'utente
-//@route GET /api/user_goal/getUserGoal
+//@route GET /api/user-goal/getUserGoal
 //@access private
 const getUserGoal = asyncHandler(async (req, res) => {
     const result = await UserGoal.selectUserGoal({ id_user: req.query.id_user, id_goal: req.query.id_goal });
@@ -72,7 +72,7 @@ const getUserGoal = asyncHandler(async (req, res) => {
 });
 
 //@desc ottiene l'associazione in base all'obiettivio e all'utente
-//@route PUT /api/user_goal/updateAdmin
+//@route PUT /api/user-goal/updateAdmin
 //@access private
 const updateAdmin = asyncHandler(async (req, res) => {
     const result = await UserGoal.updateAdmin({ ...req.body });

@@ -68,7 +68,7 @@ const updateGoal = asyncHandler(async (req, res) => {
 });
 
 //@desc ottiene l'associazione in base all'obiettivio e all'utente
-//@route PUT /api/user_goal/updateAdmin
+//@route PUT /api/user-goal/updateAdmin
 //@access private
 const updateFinished = asyncHandler(async (req, res) => {
     const result = await Goal.updateFinished({ ...req.body });
@@ -80,5 +80,7 @@ const updateFinished = asyncHandler(async (req, res) => {
 
     res.status(200).send({ message: "Obiettivo aggiornato"});
 });
+
+// AGGIUNGERE addMinutes
 
 module.exports = { getAllGoals, createGoal, getGoal, updateGoal, updateFinished };
