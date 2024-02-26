@@ -32,4 +32,13 @@ const getSingleAgenda = {
     })
 };
 
-module.exports = { addAgenda, putAgenda, deleteAgenda, getSingleAgenda };
+const getAllAgenda = {
+    query: Joi.object().keys({
+        admin: Joi.boolean(),
+        id_task: Joi.number().integer().required(),
+        date: Joi.date(),
+    })
+};
+
+
+module.exports = { addAgenda, putAgenda, deleteAgenda, getSingleAgenda, getAllAgenda };

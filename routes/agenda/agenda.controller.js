@@ -76,4 +76,19 @@ const getSingleAgenda = asyncHandler(async (req, res) => {
     res.status(200).send(response);
 });
 
-module.exports = { addAgenda, putAgenda, deleteAgenda, getSingleAgenda };
+//@desc API get di agenda con filtro per utente o per task 
+//@route GET /api/feedback/
+//@access private
+const getAllAgenda = asyncHandler(async (req, res) => {
+    const response = await Agenda.selectAllAgenda({
+        admin: req.query.admin || false,
+        idu: req.user.idu,
+        date: req.query.date,
+        id_task: req.query.id_task
+    });
+
+    res.status(200).send(response);
+});
+
+
+module.exports = { addAgenda, putAgenda, deleteAgenda, getSingleAgenda, getAllAgenda };

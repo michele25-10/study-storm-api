@@ -47,7 +47,20 @@ const Agenda = {
         const mysql = "select id, date, note, minutes from agenda where id=@id";
         const result = await connFunction.query(mysql, { id });
         return result;
-    }
+    },
+    selectAllAgenda: async ({ idu, admin, id_task, date }) => {
+        const mysql = `
+        select a.id, a.date, a.note, a.minutes 
+        from agenda a
+        inner join user_task_agenda uta on uta.id_agenda=a.id
+        where uta.id_task=@id_task ${date ? " and a.date=@date " : ""} ${admin ? "" : " and uta.id_user=@idu"} `;
+        const result = await connFunction.query(mysql, {
+            idu,
+            id_task,
+            date: date ? moment(date).format('YYYY-MM-DD') : false
+        });
+        return result;
+    },
 };
 
 module.exports = Agenda;

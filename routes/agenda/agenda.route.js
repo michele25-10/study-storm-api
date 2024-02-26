@@ -9,5 +9,6 @@ router.post("/", validate(agendaValidation.addAgenda), agendaController.addAgend
 router.put("/:id", validate(agendaValidation.putAgenda), agendaController.putAgenda);
 router.delete("/:id", validate(agendaValidation.deleteAgenda), agendaController.deleteAgenda);
 router.get("/:id", validate(agendaValidation.getSingleAgenda), agendaController.getSingleAgenda);
+router.get("/", validate(agendaValidation.getAllAgenda), agendaController.getAllAgenda);
 
 module.exports = router;
