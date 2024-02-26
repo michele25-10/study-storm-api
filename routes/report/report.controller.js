@@ -28,12 +28,33 @@ const addReportUser = asyncHandler(async (req, res) => {
     const question = req.body.question;
     if (question) {
         //Faccio le api ed i controlli sulla tabella report_question
+        const check = await ReportQuestion.selectReportQuestion({ idu: req.user.idu, id_question: req.body.id });
+        if (check.length > 0) {
+            res.status(200).send({ message: "La segnalazione è già stata fatta" });
+            return;
+        }
 
+        const result = await ReportQuestion.insertReportQuestion({ idu: req.user.idu, id_question: req.body.id, id_report: req.body.id_report })
+        if (result.affectedRows != 1) {
+            res.status(500);
+            throw new Error();
+        }
     } else {
         //Faccio le api ed i controlli sulla tabella report_answer
+        const check = await ReportAnswer.selectReportAnswer({ idu: req.user.idu, id_answer: req.body.id });
+        if (check.length > 0) {
+            res.status(200).send({ message: "La segnalazione è già stata fatta" });
+            return;
+        }
+
+        const result = await ReportAnswer.insertReportAnswer({ idu: req.user.idu, id_answer: req.body.id, id_report: req.body.id_report })
+        if (result.affectedRows != 1) {
+            res.status(500);
+            throw new Error();
+        }
     }
 
-    res.status(200).send("");
+    res.status(201).send({ message: "Segnalazione effettuata!" });
 });
 
 
