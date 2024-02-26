@@ -81,7 +81,7 @@ const addMinutes = asyncHandler(async (req, res) => {
     res.status(200).send({ message: "Tempo aggiornato"});
 });
 
-//@desc modifica i minuti
+//@desc elimina una task
 //@route DELETE /api/task/deleteTask
 //@access private
 const deleteTask = asyncHandler(async (req, res) => {

@@ -11,5 +11,6 @@ router.get("/getGoal", validate(goalValidation.getGoal), goalController.getGoal)
 router.put("/updateGoal", validate(goalValidation.updateGoal), goalController.updateGoal);
 router.put("/updateFinished", validate(goalValidation.updateFinished), goalController.updateFinished);
 router.put("/addMinutes", validate(goalValidation.addMinutes), goalController.addMinutes);
+router.delete("/deleteGoal", validate(goalValidation.deleteGoal), goalController.deleteGoal);
 
 module.exports = router;

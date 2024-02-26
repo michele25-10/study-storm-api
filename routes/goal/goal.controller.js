@@ -95,6 +95,20 @@ const addMinutes = asyncHandler(async (req, res) => {
     res.status(200).send({ message: "Tempo aggiornato"});
 });
 
+//@desc elimina un obiettivo
+//@route PUT /api/goal/deleteGoal
+//@access private
+const deleteGoal = asyncHandler(async (req, res) => {
+    const result = await Goal.deleteGoal({ ...req.body });
+
+    if (result.affectedRows != 1){
+        res.status(404);
+        throw new Error();
+    }
+
+    res.status(200).send({ message: "Obiettivo eliminato"});
+});
 
 
-module.exports = { getAllGoals, createGoal, getGoal, updateGoal, updateFinished, addMinutes };
+
+module.exports = { getAllGoals, createGoal, getGoal, updateGoal, updateFinished, addMinutes, deleteGoal };

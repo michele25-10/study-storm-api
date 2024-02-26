@@ -52,4 +52,10 @@ const addMinutes = {
     })
 };
 
-module.exports = { getAllGoals, createGoal, getGoal, updateGoal, updateFinished, addMinutes };
+const deleteGoal = {
+    body: Joi.object().keys({
+        id: Joi.number().integer().required(),
+    })
+};
+
+module.exports = { getAllGoals, createGoal, getGoal, updateGoal, updateFinished, addMinutes, deleteGoal };
