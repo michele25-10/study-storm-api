@@ -13,5 +13,6 @@ router.use("/user-goal", require("./user-goal/user-goal.route"));
 router.use("/task", require("./task/task.route"));
 router.use("/report", require("./report/report.route"));
 router.use("/answer", require("./answer/answer.route"));
+router.use("/feedback", require("./feedback/feedback.route"));
 
 module.exports = router;
