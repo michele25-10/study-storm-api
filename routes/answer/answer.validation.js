@@ -6,6 +6,7 @@ const addAnswer = {
         desc: Joi.string().max(512).required(),
     })
 };
+
 const putAnswer = {
     params: Joi.object().keys({
         id: Joi.number().integer().required(),
@@ -15,4 +16,10 @@ const putAnswer = {
     })
 };
 
-module.exports = { addAnswer, putAnswer };
+const deleteAnswer = {
+    params: Joi.object().keys({
+        id: Joi.number().integer().required(),
+    })
+};
+
+module.exports = { addAnswer, putAnswer, deleteAnswer };

@@ -19,7 +19,11 @@ const Answer = {
             datetime: moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
         }, " id=@id ", { id });
         return result;
-    }
+    },
+    deleteAnswer: async ({ id }) => {
+        const result = await connFunction.delete(TABLE, " id=@id ", { id });
+        return result;
+    },
 };
 
 module.exports = Answer;

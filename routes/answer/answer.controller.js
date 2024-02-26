@@ -29,5 +29,18 @@ const putAnswer = asyncHandler(async (req, res) => {
     res.status(200).send({ message: "Risposta modificata con successo!" });
 });
 
+//@desc API eliminare risposta
+//@route DELETE /api/answer/:id
+//@access private
+const deleteAnswer = asyncHandler(async (req, res) => {
+    const result = await Answer.deleteAnswer({ id: req.params.id });
 
-module.exports = { addAnswer, putAnswer };
+    if (result.affectedRows != 1) {
+        res.status(404);
+        throw new Error();
+    }
+
+    res.status(200).send({ message: "Risposta eliminata con successo!" });
+});
+
+module.exports = { addAnswer, putAnswer, deleteAnswer };
