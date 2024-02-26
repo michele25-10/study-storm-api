@@ -68,6 +68,12 @@ const Task = {
         const result = await connFunction.query(mysql, { id, minutes, id });
         return result;
     },
+    deleteTask: async ({
+        id
+    }) => {
+        const result = await connFunction.delete(TABLE, "id=@id", { id });
+        return result;
+    },
 }
 
 module.exports = Task;
