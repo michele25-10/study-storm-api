@@ -40,9 +40,12 @@ const addAgenda = asyncHandler(async (req, res) => {
 //@access private
 const putAgenda = asyncHandler(async (req, res) => {
     const check = await Agenda.isExistedAgenda({ idu: req.user.idu, id_task: req.body.id_task, date: req.body.date, id_agenda: req.params.id });
-    if (check.length != 0) {
-        res.status(200).send({ message: "Data occupata da un'altra agenda" });
-        return;
+
+    for (const row of check) {
+        if (row.id != req.params.id) {
+            res.status(200).send({ message: "Data occupata da un'altra agenda" });
+            return;
+        }
     }
 
     const result = await Agenda.updateAgenda({ ...req.body, id: req.params.id });
