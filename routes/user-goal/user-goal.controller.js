@@ -47,7 +47,7 @@ const getUserGoalByGoal = asyncHandler(async (req, res) => {
 //@route GET /api/user-goal/getUserGoalByGoal
 //@access private
 const getUserGoalByUser = asyncHandler(async (req, res) => {
-    const result = await UserGoal.selectUserGoalByUser({ id_user: req.query.id_user });
+    const result = await UserGoal.selectUserGoalByUser({ id_user: req.query.id_user, order: req.query.order || false });
 
     if (result.length == 0){
         res.status(404);
