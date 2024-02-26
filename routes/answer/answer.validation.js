@@ -22,4 +22,10 @@ const deleteAnswer = {
     })
 };
 
-module.exports = { addAnswer, putAnswer, deleteAnswer };
+const getSingleAnswer = {
+    params: Joi.object().keys({
+        id: Joi.number().integer().required(),
+    })
+};
+
+module.exports = { addAnswer, putAnswer, deleteAnswer, getSingleAnswer };

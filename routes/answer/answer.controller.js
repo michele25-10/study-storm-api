@@ -43,4 +43,12 @@ const deleteAnswer = asyncHandler(async (req, res) => {
     res.status(200).send({ message: "Risposta eliminata con successo!" });
 });
 
-module.exports = { addAnswer, putAnswer, deleteAnswer };
+//@desc API get di una singola answer
+//@route GET /api/answer/:id
+//@access private
+const getSingleAnswer = asyncHandler(async (req, res) => {
+    const response = await Answer.selectSingleAnswer({ id: req.params.id });
+    res.status(200).send(response);
+});
+
+module.exports = { addAnswer, putAnswer, deleteAnswer, getSingleAnswer };

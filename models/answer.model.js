@@ -24,6 +24,15 @@ const Answer = {
         const result = await connFunction.delete(TABLE, " id=@id ", { id });
         return result;
     },
+    selectSingleAnswer: async ({ id }) => {
+        const mysql = `
+        select a.id, u.name, u.surname, a.id_question, a.\`datetime\`, a.desc
+        from answer a 
+        inner join \`user\` u on u.id like a.id_user
+        where a.id=@id;`
+        const result = await connFunction.query(mysql, { id });
+        return result;
+    },
 };
 
 module.exports = Answer;

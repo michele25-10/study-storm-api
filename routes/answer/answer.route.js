@@ -8,5 +8,6 @@ const validate = require('../../middleware/JoiValidation');
 router.post("/", validate(answerValidation.addAnswer), answerController.addAnswer);
 router.put("/:id", validate(answerValidation.putAnswer), answerController.putAnswer);
 router.delete("/:id", validate(answerValidation.deleteAnswer), answerController.deleteAnswer);
+router.get("/:id", validate(answerValidation.getSingleAnswer), answerController.getSingleAnswer);
 
 module.exports = router;
