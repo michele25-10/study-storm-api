@@ -6,5 +6,6 @@ const feedbackValidation = require('./feedback.validation');
 const validate = require('../../middleware/JoiValidation');
 
 router.post("/", validate(feedbackValidation.addFeedback), feedbackController.addFeedback);
+router.put("/:id", validate(feedbackValidation.putFeedback), feedbackController.putFeedback);
 
 module.exports = router;

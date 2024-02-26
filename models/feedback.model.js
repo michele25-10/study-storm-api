@@ -13,6 +13,15 @@ const Feedback = {
         });
         return result;
     },
+    putFeedback: async ({ idu, description, title, id }) => {
+        const result = await connFunction.update(TABLE, {
+            id_user: idu,
+            description,
+            title,
+            date: moment().format('YYYY-MM-DD')
+        }, "id=@id", { id });
+        return result;
+    }
 };
 
 module.exports = Feedback;

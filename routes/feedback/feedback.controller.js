@@ -16,4 +16,18 @@ const addFeedback = asyncHandler(async (req, res) => {
     res.status(201).send({ message: "Feedback inserito con successo!" });
 });
 
-module.exports = { addFeedback };
+//@desc API modifica feedback dell'utente
+//@route PUT /api/feedback/:id
+//@access private
+const putFeedback = asyncHandler(async (req, res) => {
+    const result = await Feedback.putFeedback({ ...req.body, idu: req.user.idu, id: req.params.id });
+
+    if (result.affectedRows != 1) {
+        res.status(500);
+        throw new Error();
+    }
+
+    res.status(200).send({ message: "Feedback modificata con successo!" });
+});
+
+module.exports = { addFeedback, putFeedback };
