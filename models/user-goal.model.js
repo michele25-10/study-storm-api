@@ -32,7 +32,7 @@ const UserGoal = {
         const result = await connFunction.query(mysql, { id_goal });
         return result;
     },
-    selectUserGoalByUser: async ({ id_user }) => {
+    selectUserGoalByUser: async ({ id_user, order }) => {
         const mysql = `
             SELECT id_user, id_goal, admin, g.name, g.\`desc\`, g.expiry_date, g.planned_minutes, g.minutes, g.expected_grade, g.grade
             FROM ${TABLE} ug
