@@ -23,5 +23,19 @@ const deleteFeedback = {
     })
 };
 
+const getSingleFeedback = {
+    params: Joi.object().keys({
+        id: Joi.number().integer().required(),
+    })
+};
 
-module.exports = { addFeedback, putFeedback, deleteFeedback };
+const getAllFeedback = {
+    query: Joi.object().keys({
+        idu: Joi.string().allow(null, ""),
+        max: Joi.date(),
+        min: Joi.date()
+    })
+};
+
+
+module.exports = { addFeedback, putFeedback, deleteFeedback, getSingleFeedback, getAllFeedback };

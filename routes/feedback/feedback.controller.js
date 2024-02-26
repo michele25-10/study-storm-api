@@ -44,5 +44,23 @@ const deleteFeedback = asyncHandler(async (req, res) => {
     res.status(200).send({ message: "Feedback eliminato!" });
 });
 
+//@desc API select feedback single feedback
+//@route GET /api/feedback/:id
+//@access private
+const getSingleFeedback = asyncHandler(async (req, res) => {
+    const response = await Feedback.selectSingleFeedback({ id: req.params.id });
 
-module.exports = { addFeedback, putFeedback, deleteFeedback };
+    res.status(200).send(response);
+});
+
+//@desc API select di tutti i feedback filtrabili per data min e max o per idu
+//@route GET /api/feedback/:id
+//@access private
+const getAllFeedback = asyncHandler(async (req, res) => {
+    const response = await Feedback.selectAllFeedback({ min: req.query.min, max: req.query.max, idu: req.query.idu });
+
+    res.status(200).send(response);
+});
+
+
+module.exports = { addFeedback, putFeedback, deleteFeedback, getSingleFeedback, getAllFeedback };
