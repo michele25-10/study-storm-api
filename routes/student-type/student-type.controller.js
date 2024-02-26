@@ -1,8 +1,8 @@
 const asyncHandler = require('express-async-handler');
-const StudentType = require('../../models/student_type.model');
+const StudentType = require('../../models/student-type.model');
 
 //@desc get di tutti i tipi
-//@route GET /api/student_type/
+//@route GET /api/student-type/
 //@access private
 const getAllTypes = asyncHandler(async (req, res) => {
     const result = await StudentType.selectAllTypes();
@@ -16,7 +16,7 @@ const getAllTypes = asyncHandler(async (req, res) => {
 });
 
 //@desc get di un tipo dato l'id
-//@route GET /api/student_type/getType
+//@route GET /api/student-type/getType
 //@access private
 const getType = asyncHandler(async (req, res) => {
     const result = await StudentType.selectType({ id: req.query.id });
@@ -30,7 +30,7 @@ const getType = asyncHandler(async (req, res) => {
 });
 
 //@desc crea un tipo
-//@route POST /api/student_type/createType
+//@route POST /api/student-type/createType
 //@access private
 // const createType = asyncHandler(async (req, res) => {
 //     const result = await StudentType.createType({ name: req.body.name });
@@ -44,7 +44,7 @@ const getType = asyncHandler(async (req, res) => {
 // });
 
 //@desc modifica un tipo
-//@route PUT /api/student_type/updateType
+//@route PUT /api/student-type/updateType
 //@access private
 // const updateType = asyncHandler(async (req, res) => {
 //     const result = await StudentType.updateType({ name: req.body.name, id: req.body.id });

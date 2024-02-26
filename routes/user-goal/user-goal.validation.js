@@ -17,6 +17,7 @@ const getUserGoalByGoal = {
 const getUserGoalByUser = {
     query: Joi.object().keys({
         id_user: Joi.string().length(16).required(),
+        order: Joi.boolean()
     })
 };
 

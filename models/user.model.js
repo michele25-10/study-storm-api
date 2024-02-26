@@ -61,6 +61,14 @@ const User = {
 
         return result;
     },
+    deleteUser: async ({ idu }) => {
+        const mysql = `
+            UPDATE ${TABLE}
+                SET status = 0
+            WHERE id=@idu`;
+        const result = await connFunction.query(mysql, { idu });
+        return result;
+    },
 }
 
 module.exports = User;

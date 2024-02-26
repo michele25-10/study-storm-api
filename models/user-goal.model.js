@@ -32,12 +32,14 @@ const UserGoal = {
         const result = await connFunction.query(mysql, { id_goal });
         return result;
     },
-    selectUserGoalByUser: async ({ id_user }) => {
+    selectUserGoalByUser: async ({ id_user, order }) => {
         const mysql = `
             SELECT id_user, id_goal, admin, g.name, g.\`desc\`, g.expiry_date, g.planned_minutes, g.minutes, g.expected_grade, g.grade
             FROM ${TABLE} ug
             INNER JOIN goal g ON g.id = ug.id_goal
-            WHERE  id_user=@id_user`;
+            WHERE  id_user=@id_user
+            ${order ? "ORDER BY ( grade )" : ""}`;
+
         const result = await connFunction.query(mysql, { id_user });
         return result;
     },

@@ -57,4 +57,18 @@ const updateUser = asyncHandler(async (req, res) => {
     res.status(200).send({message: "Utente modificato"});
 });
 
-module.exports = { getAllUsers, getUser, getUserByEmail, updateUser };
+//@desc eliminazione di un utente
+//@route DELETE /api/user/deleteUser
+//@access private
+const deleteUser = asyncHandler(async (req, res) => {
+    const result = await User.deleteUser({ ...req.body });
+
+    if (result.affectedRows != 1) {
+        res.status(400);
+        throw new Error();
+    }
+
+    res.status(200).send({message: "Utente eliminato"});
+});
+
+module.exports = { getAllUsers, getUser, getUserByEmail, updateUser, deleteUser };

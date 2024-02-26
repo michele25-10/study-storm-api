@@ -45,4 +45,11 @@ const updateFinished = {
     })
 };
 
-module.exports = { getAllGoals, createGoal, getGoal, updateGoal, updateFinished };
+const addMinutes = {
+    body: Joi.object().keys({
+        minutes: Joi.number().integer().required(),
+        id: Joi.number().integer().required(),
+    })
+};
+
+module.exports = { getAllGoals, createGoal, getGoal, updateGoal, updateFinished, addMinutes };

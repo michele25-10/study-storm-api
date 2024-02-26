@@ -10,5 +10,6 @@ router.post("/createGoal", validate(goalValidation.createGoal), goalController.c
 router.get("/getGoal", validate(goalValidation.getGoal), goalController.getGoal);
 router.put("/updateGoal", validate(goalValidation.updateGoal), goalController.updateGoal);
 router.put("/updateFinished", validate(goalValidation.updateFinished), goalController.updateFinished);
+router.put("/addMinutes", validate(goalValidation.addMinutes), goalController.addMinutes);
 
 module.exports = router;

@@ -29,4 +29,10 @@ const updateUser = {
     })
 };
 
-module.exports = { getAllUsers, getUser, getUserByEmail, updateUser };
+const deleteUser = {
+    body: Joi.object().keys({
+        idu: Joi.string().length(16).required(),
+    })
+};
+
+module.exports = { getAllUsers, getUser, getUserByEmail, updateUser, deleteUser };
