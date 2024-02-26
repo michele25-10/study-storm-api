@@ -42,6 +42,11 @@ const Agenda = {
     deleteAgenda: async ({ id }) => {
         const result = await connFunction.delete(TABLE, " id=@id ", { id });
         return result;
+    },
+    selectSingleAgenda: async ({ id }) => {
+        const mysql = "select id, date, note, minutes from agenda where id=@id";
+        const result = await connFunction.query(mysql, { id });
+        return result;
     }
 };
 

@@ -67,4 +67,13 @@ const deleteAgenda = asyncHandler(async (req, res) => {
     res.status(200).send({ message: "Agenda eliminata!" });
 });
 
-module.exports = { addAgenda, putAgenda, deleteAgenda };
+//@desc API get di una singola agenda 
+//@route GET /api/feedback/:id
+//@access private
+const getSingleAgenda = asyncHandler(async (req, res) => {
+    const response = await Agenda.selectSingleAgenda({ id: req.params.id });
+
+    res.status(200).send(response);
+});
+
+module.exports = { addAgenda, putAgenda, deleteAgenda, getSingleAgenda };
