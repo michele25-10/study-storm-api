@@ -11,5 +11,6 @@ router.use("/goal", require("./goal/goal.route"));
 router.use("/question", require("./question/question.route"));
 router.use("/user_goal", require("./user_goal/user_goal.route"));
 router.use("/task", require("./task/task.route"));
+router.use("/report", require("./report/report.route"));
 
 module.exports = router;
