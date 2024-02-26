@@ -67,6 +67,18 @@ const updateTask = asyncHandler(async (req, res) => {
     res.status(201).send({ message: "Task modificata" });
 });
 
-// AGGIUNGERE addMinutes
+//@desc modifica i minuti
+//@route PUT /api/task/addMinutes
+//@access private
+const addMinutes = asyncHandler(async (req, res) => {
+    const result = await Task.addMinutes({ ...req.body });
 
-module.exports = { getAllTasks, createTask, getTask, updateTask };
+    if (result.affectedRows != 1){
+        res.status(404);
+        throw new Error();
+    }
+
+    res.status(200).send({ message: "Tempo aggiornato"});
+});
+
+module.exports = { getAllTasks, createTask, getTask, updateTask, addMinutes };

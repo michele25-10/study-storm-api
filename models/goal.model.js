@@ -74,6 +74,17 @@ const Goal = {
         { id });
         return result;
     },
+    addMinutes: async ({
+        minutes,
+        id
+    }) => {
+        const mysql = `UPDATE ${TABLE} g
+                        SET 
+                            minutes = (SELECT IFNULL(minutes, 0) WHERE id=@id) + @minutes
+                        WHERE id=@id;`;
+        const result = await connFunction.query(mysql, { id, minutes, id });
+        return result;
+    },
 }
 
 module.exports = Goal;

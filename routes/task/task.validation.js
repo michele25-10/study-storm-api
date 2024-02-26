@@ -29,4 +29,11 @@ const updateTask = {
     })
 };
 
-module.exports = { createTask, getTask, updateTask };
+const addMinutes = {
+    body: Joi.object().keys({
+        minutes: Joi.number().integer().required(),
+        id: Joi.number().integer().required(),
+    })
+};
+
+module.exports = { createTask, getTask, updateTask, addMinutes };

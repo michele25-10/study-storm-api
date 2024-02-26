@@ -9,5 +9,6 @@ router.get("/", taskController.getAllTasks);
 router.post("/createTask", validate(taskValidation.createTask), taskController.createTask);
 router.get("/getTask", validate(taskValidation.getTask), taskController.getTask);
 router.put("/updateTask", validate(taskValidation.updateTask), taskController.updateTask);
+router.put("/addMinutes", validate(taskValidation.addMinutes), taskController.addMinutes);
 
 module.exports = router;
