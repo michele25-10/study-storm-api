@@ -21,6 +21,10 @@ const Feedback = {
             date: moment().format('YYYY-MM-DD')
         }, "id=@id", { id });
         return result;
+    },
+    deleteFeedback: async ({ id }) => {
+        const result = await connFunction.delete(TABLE, " id=@id", { id });
+        return result;
     }
 };
 

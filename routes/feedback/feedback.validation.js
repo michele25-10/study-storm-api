@@ -17,4 +17,11 @@ const putFeedback = {
     })
 };
 
-module.exports = { addFeedback, putFeedback };
+const deleteFeedback = {
+    params: Joi.object().keys({
+        id: Joi.number().integer().required(),
+    })
+};
+
+
+module.exports = { addFeedback, putFeedback, deleteFeedback };

@@ -30,4 +30,19 @@ const putFeedback = asyncHandler(async (req, res) => {
     res.status(200).send({ message: "Feedback modificata con successo!" });
 });
 
-module.exports = { addFeedback, putFeedback };
+//@desc API eliminazione feedback dell'utente
+//@route DELETE /api/feedback/:id
+//@access private
+const deleteFeedback = asyncHandler(async (req, res) => {
+    const result = await Feedback.deleteFeedback({ id: req.params.id });
+
+    if (result.affectedRows != 1) {
+        res.status(500);
+        throw new Error();
+    }
+
+    res.status(200).send({ message: "Feedback eliminato!" });
+});
+
+
+module.exports = { addFeedback, putFeedback, deleteFeedback };
