@@ -6,5 +6,6 @@ const answerValidation = require('./answer.validation');
 const validate = require('../../middleware/JoiValidation');
 
 router.post("/", validate(answerValidation.addAnswer), answerController.addAnswer);
+router.put("/:id", validate(answerValidation.putAnswer), answerController.putAnswer);
 
 module.exports = router;

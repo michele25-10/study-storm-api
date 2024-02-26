@@ -12,6 +12,13 @@ const Answer = {
             datetime: moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
         });
         return result;
+    },
+    updateAnswer: async ({ id, desc }) => {
+        const result = await connFunction.update(TABLE, {
+            "`desc`": desc,
+            datetime: moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
+        }, " id=@id ", { id });
+        return result;
     }
 };
 

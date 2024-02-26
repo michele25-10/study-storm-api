@@ -6,5 +6,13 @@ const addAnswer = {
         desc: Joi.string().max(512).required(),
     })
 };
+const putAnswer = {
+    params: Joi.object().keys({
+        id: Joi.number().integer().required(),
+    }),
+    body: Joi.object().keys({
+        desc: Joi.string().max(512).required(),
+    })
+};
 
-module.exports = { addAnswer };
+module.exports = { addAnswer, putAnswer };
