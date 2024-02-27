@@ -9,7 +9,7 @@ const Question = {
             "`desc`": desc,
             title,
             id_user: idu,
-            datetime: moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
+            datetime: moment().format('YYYY-MM-DD HH:mm:ss')
         });
         return result;
     },
@@ -21,7 +21,7 @@ const Question = {
         const result = await connFunction.update(TABLE, {
             "`desc`": desc,
             title,
-            datetime: moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
+            datetime: moment().format('YYYY-MM-DD HH:mm:ss')
         }, "id=@id", { id });
         return result;
     },

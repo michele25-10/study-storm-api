@@ -26,4 +26,19 @@ const deleteAgenda = {
     })
 };
 
-module.exports = { addAgenda, putAgenda, deleteAgenda };
+const getSingleAgenda = {
+    params: Joi.object().keys({
+        id: Joi.number().integer().required(),
+    })
+};
+
+const getAllAgenda = {
+    query: Joi.object().keys({
+        admin: Joi.boolean(),
+        id_task: Joi.number().integer().required(),
+        date: Joi.date(),
+    })
+};
+
+
+module.exports = { addAgenda, putAgenda, deleteAgenda, getSingleAgenda, getAllAgenda };

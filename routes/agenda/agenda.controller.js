@@ -40,9 +40,12 @@ const addAgenda = asyncHandler(async (req, res) => {
 //@access private
 const putAgenda = asyncHandler(async (req, res) => {
     const check = await Agenda.isExistedAgenda({ idu: req.user.idu, id_task: req.body.id_task, date: req.body.date, id_agenda: req.params.id });
-    if (check.length != 0) {
-        res.status(200).send({ message: "Data occupata da un'altra agenda" });
-        return;
+
+    for (const row of check) {
+        if (row.id != req.params.id) {
+            res.status(200).send({ message: "Data occupata da un'altra agenda" });
+            return;
+        }
     }
 
     const result = await Agenda.updateAgenda({ ...req.body, id: req.params.id });
@@ -67,4 +70,28 @@ const deleteAgenda = asyncHandler(async (req, res) => {
     res.status(200).send({ message: "Agenda eliminata!" });
 });
 
-module.exports = { addAgenda, putAgenda, deleteAgenda };
+//@desc API get di una singola agenda 
+//@route GET /api/feedback/:id
+//@access private
+const getSingleAgenda = asyncHandler(async (req, res) => {
+    const response = await Agenda.selectSingleAgenda({ id: req.params.id });
+
+    res.status(200).send(response);
+});
+
+//@desc API get di agenda con filtro per utente o per task 
+//@route GET /api/feedback/
+//@access private
+const getAllAgenda = asyncHandler(async (req, res) => {
+    const response = await Agenda.selectAllAgenda({
+        admin: req.query.admin || false,
+        idu: req.user.idu,
+        date: req.query.date,
+        id_task: req.query.id_task
+    });
+
+    res.status(200).send(response);
+});
+
+
+module.exports = { addAgenda, putAgenda, deleteAgenda, getSingleAgenda, getAllAgenda };
