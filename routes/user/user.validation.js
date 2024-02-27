@@ -8,8 +8,8 @@ const getAllUsers = {
 
 const getUser = {
     query: Joi.object().keys({
+        idu: Joi.string().length(36).required(),
         alsoDisactive: Joi.boolean(),
-        idu: Joi.string().length(16).required(),
     })
 };
 
@@ -25,13 +25,13 @@ const updateUser = {
         tel: Joi.string().max(10).required(),
         course_study: Joi.string().max(30).required(),
         birth_date: Joi.date().required(),
-        idu: Joi.string().length(16).required(),
+        idu: Joi.string().length(36).required(),
     })
 };
 
 const deleteUser = {
     body: Joi.object().keys({
-        idu: Joi.string().length(16).required(),
+        idu: Joi.string().length(36).required(),
     })
 };
 

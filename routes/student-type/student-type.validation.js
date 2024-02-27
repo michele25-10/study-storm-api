@@ -1,7 +1,7 @@
 const Joi = require('joi');
 
 const getType = {
-    query: Joi.object().keys({
+    params: Joi.object().keys({
         id: Joi.number().integer().required(),
     })
 };

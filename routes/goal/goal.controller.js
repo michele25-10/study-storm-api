@@ -16,7 +16,7 @@ const getAllGoals = asyncHandler(async (req, res) => {
 });
 
 //@desc creazione di un obiettivo
-//@route POST /api/goal/createGoal
+//@route POST /api/goal
 //@access private
 const createGoal = asyncHandler(async (req, res) => {
     if (req.body.expiry_date < new Date()){
@@ -35,10 +35,10 @@ const createGoal = asyncHandler(async (req, res) => {
 });
 
 //@desc get un obiettivo dato un id
-//@route GET /api/goal/getGoal
+//@route GET /api/goal/:id
 //@access private
 const getGoal = asyncHandler(async (req, res) => {
-    const result = await Goal.selectGoal({ alsoDisactive: req.query.alsoDisactive || false, id:req.query.id });
+    const result = await Goal.selectGoal({ alsoDisactive: req.query.alsoDisactive || false, id:req.params.id });
 
     if (result.length == 0){
         res.status(404);
@@ -96,7 +96,7 @@ const addMinutes = asyncHandler(async (req, res) => {
 });
 
 //@desc elimina un obiettivo
-//@route PUT /api/goal/deleteGoal
+//@route PUT /api/goal/
 //@access private
 const deleteGoal = asyncHandler(async (req, res) => {
     const result = await Goal.deleteGoal({ ...req.body });

@@ -16,10 +16,10 @@ const getAllTypes = asyncHandler(async (req, res) => {
 });
 
 //@desc get di un tipo dato l'id
-//@route GET /api/student-type/getType
+//@route GET /api/student-type/:id
 //@access private
 const getType = asyncHandler(async (req, res) => {
-    const result = await StudentType.selectType({ id: req.query.id });
+    const result = await StudentType.selectType({ id: req.params.id });
 
     if (result.length == 0){
         res.status(404);

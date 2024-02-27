@@ -12,7 +12,7 @@ const createTask = {
 };
 
 const getTask = {
-    query: Joi.object().keys({
+    params: Joi.object().keys({
         id: Joi.number().integer().required(),
     })
 };

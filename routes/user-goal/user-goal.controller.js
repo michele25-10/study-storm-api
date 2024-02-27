@@ -72,7 +72,7 @@ const getUserGoal = asyncHandler(async (req, res) => {
 });
 
 //@desc ottiene l'associazione in base all'obiettivio e all'utente
-//@route PUT /api/user-goal/updateAdmin
+//@route PUT /api/user-goal/
 //@access private
 const updateAdmin = asyncHandler(async (req, res) => {
     const result = await UserGoal.updateAdmin({ ...req.body });
@@ -85,4 +85,18 @@ const updateAdmin = asyncHandler(async (req, res) => {
     res.status(200).send({ message: "Admin aggiornato"});
 });
 
-module.exports = { getAllUserGoal, createUserGoal, getUserGoalByGoal, getUserGoalByUser, getUserGoal, updateAdmin };
+//@desc ottiene l'associazione in base all'obiettivio e all'utente
+//@route DELETE /api/user-goal/
+//@access private
+const deleteUserGoal = asyncHandler(async (req, res) => {
+    const result = await UserGoal.deleteUserGoal({ ...req.body });
+
+    if (result.affectedRows != 1){
+        res.status(404);
+        throw new Error();
+    }
+
+    res.status(200).send({ message: "Eliminato"});
+});
+
+module.exports = { getAllUserGoal, createUserGoal, getUserGoalByGoal, getUserGoalByUser, getUserGoal, updateAdmin, deleteUserGoal };

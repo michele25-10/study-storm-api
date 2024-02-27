@@ -44,7 +44,7 @@ const getUserByEmail = asyncHandler(async (req, res) => {
 });
 
 //@desc update di un utente
-//@route PUT /api/user/updateUser
+//@route PUT /api/user/
 //@access private
 const updateUser = asyncHandler(async (req, res) => {
     const result = await User.updateUser({ ...req.body });
@@ -58,7 +58,7 @@ const updateUser = asyncHandler(async (req, res) => {
 });
 
 //@desc eliminazione di un utente
-//@route DELETE /api/user/deleteUser
+//@route DELETE /api/user/
 //@access private
 const deleteUser = asyncHandler(async (req, res) => {
     const result = await User.deleteUser({ ...req.body });

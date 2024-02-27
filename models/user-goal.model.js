@@ -55,6 +55,10 @@ const UserGoal = {
         const result = await connFunction.update(TABLE, { admin }, "id_goal=@id_goal AND id_user=@id_user", { id_goal, id_user });
         return result;
     },
+    deleteUserGoal: async ({ id_user, id_goal }) => {
+        const result = await connFunction.delete(TABLE, "id_goal=@id_goal AND id_user=@id_user", { id_goal, id_user });
+        return result;
+    },
 }
 
 module.exports = UserGoal;

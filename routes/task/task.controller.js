@@ -16,7 +16,7 @@ const getAllTasks = asyncHandler(async (req, res) => {
 });
 
 //@desc creazione di una task
-//@route POST /api/task/createTask
+//@route POST /api/task/
 //@access private
 const createTask = asyncHandler(async (req, res) => {
     if (req.body.expiry_date < new Date()){
@@ -35,10 +35,10 @@ const createTask = asyncHandler(async (req, res) => {
 });
 
 //@desc get una task dato un id
-//@route GET /api/task/getTask
+//@route GET /api/task/:id
 //@access private
 const getTask = asyncHandler(async (req, res) => {
-    const result = await Task.selectTask({ id:req.query.id });
+    const result = await Task.selectTask({ id:req.params.id });
 
     if (result.length == 0){
         res.status(404);
@@ -82,7 +82,7 @@ const addMinutes = asyncHandler(async (req, res) => {
 });
 
 //@desc elimina una task
-//@route DELETE /api/task/deleteTask
+//@route DELETE /api/task/
 //@access private
 const deleteTask = asyncHandler(async (req, res) => {
     const result = await Task.deleteTask({ ...req.body });

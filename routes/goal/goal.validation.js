@@ -21,8 +21,10 @@ const createGoal = {
 const getGoal = {
     query: Joi.object().keys({
         alsoFinished: Joi.boolean(),
+    }),
+    params: Joi.object().keys({
         id: Joi.number().integer().required(),
-    })
+    }),
 };
 
 const updateGoal = {
