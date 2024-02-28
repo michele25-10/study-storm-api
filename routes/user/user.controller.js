@@ -16,10 +16,10 @@ const getAllUsers = asyncHandler(async (req, res) => {
 });
 
 //@desc get di un utente dato l'id
-//@route GET /api/user/getUser
+//@route GET /api/user/:id
 //@access private
 const getUser = asyncHandler(async (req, res) => {
-    const result = await User.selectUser({ idu: req.query.idu, alsoDisactive: req.query.alsoDisactive || false });
+    const result = await User.selectUser({ idu: req.params.idu, alsoDisactive: req.query.alsoDisactive || false });
 
     if (result.length == 0){
         res.status(404);

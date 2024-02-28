@@ -8,9 +8,11 @@ const getAllUsers = {
 
 const getUser = {
     query: Joi.object().keys({
-        idu: Joi.string().length(36).required(),
         alsoDisactive: Joi.boolean(),
-    })
+    }),
+    params: Joi.object().keys({
+        idu: Joi.string().length(36).required(),
+    }),
 };
 
 const getUserByEmail = {
