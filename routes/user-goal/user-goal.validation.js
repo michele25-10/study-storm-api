@@ -8,23 +8,10 @@ const createUserGoal = {
     })
 };
 
-const getUserGoalByGoal = {
+const filter = {
     query: Joi.object().keys({
-        id_goal: Joi.number().integer().required(),
-    })
-};
-
-const getUserGoalByUser = {
-    query: Joi.object().keys({
-        id_user: Joi.string().length(36).required(),
-        order: Joi.boolean()
-    })
-};
-
-const getUserGoal = {
-    query: Joi.object().keys({
-        id_goal: Joi.number().integer().required(),
-        id_user: Joi.string().length(36).required(),
+        id_goal: Joi.number().integer(),
+        id_user: Joi.string().length(36),
     })
 };
 
@@ -45,9 +32,7 @@ const deleteUserGoal = {
 
 module.exports = { 
     createUserGoal, 
-    getUserGoalByGoal, 
-    getUserGoalByUser, 
-    getUserGoal, 
     updateAdmin,
-    deleteUserGoal
+    deleteUserGoal,
+    filter
 };

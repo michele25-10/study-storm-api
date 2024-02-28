@@ -23,31 +23,11 @@ const UserGoal = {
         });
         return result;
     },
-    selectUserGoalByGoal: async ({ id_goal }) => {
-        const mysql = `
-            SELECT id_user, id_goal, admin, u.name, u.surname
-            FROM ${TABLE} ug
-            INNER JOIN user u ON u.id = ug.id_user
-            WHERE  id_goal=@id_goal`;
-        const result = await connFunction.query(mysql, { id_goal });
-        return result;
-    },
-    selectUserGoalByUser: async ({ id_user, order }) => {
-        const mysql = `
-            SELECT id_user, id_goal, admin, g.name, g.\`desc\`, g.expiry_date, g.planned_minutes, g.minutes, g.expected_grade, g.grade
-            FROM ${TABLE} ug
-            INNER JOIN goal g ON g.id = ug.id_goal
-            WHERE  id_user=@id_user
-            ${order ? "ORDER BY ( grade )" : ""}`;
-
-        const result = await connFunction.query(mysql, { id_user });
-        return result;
-    },
-    selectUserGoal: async ({ id_user, id_goal }) => {
+    filter: async ({ id_user, id_goal }) => {
         const mysql = `
             SELECT id_user, id_goal, admin
             FROM ${TABLE}
-            WHERE  id_user=@id_user AND id_goal=@id_goal`;
+            WHERE ${id_user ? " id_user=" + "'" + id_user + "'" : " 1=1 " } AND ${id_goal ? " id_goal=" + id_goal : "1=1" }`;
         const result = await connFunction.query(mysql, { id_user, id_goal });
         return result;
     },

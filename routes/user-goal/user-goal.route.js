@@ -7,9 +7,7 @@ const validate = require('../../middleware/JoiValidation');
 
 router.get("/", userGoalController.getAllUserGoal);
 router.post("/", validate(userGoalValidation.createUserGoal), userGoalController.createUserGoal);
-router.get("/getUserGoalByGoal", validate(userGoalValidation.getUserGoalByGoal), userGoalController.getUserGoalByGoal);
-router.get("/getUserGoalByUser", validate(userGoalValidation.getUserGoalByUser), userGoalController.getUserGoalByUser);
-router.get("/getUserGoal", validate(userGoalValidation.getUserGoal), userGoalController.getUserGoal);
+router.get("/filter", validate(userGoalValidation.filter), userGoalController.filter);
 router.put("/", validate(userGoalValidation.updateAdmin), userGoalController.updateAdmin);
 router.delete("/", validate(userGoalValidation.deleteUserGoal), userGoalController.deleteUserGoal)
 
