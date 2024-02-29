@@ -41,7 +41,7 @@ const Question = {
         left join report_question rq on rq.id_question = q.id
         ${max && min ? `where q.\`datetime\` between @min and @max` : ""}
         ${ist ? (!max && !min ? " where u.id_student_type=@ist " : " and u.id_student_type=@ist ") : ""}
-        group by q.id 
+        group by q.id, u.id 
         having count(rq.id_question) < 3
         order by q.\`datetime\` asc
         ${limit ? `limit @limit` : ""}`;
@@ -51,6 +51,7 @@ const Question = {
             ist,
             limit
         });
+        
         return result;
     },
     selectAnswerQuestion: async ({ id }) => {
