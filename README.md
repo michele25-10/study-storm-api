@@ -21,6 +21,7 @@ Sono state installate le seguenti librerie pubbliche:
 - mysql
 - nodemon
 - crypto-js
+- nodemailer
 
 Documentazione librerie private e middleware:
 
