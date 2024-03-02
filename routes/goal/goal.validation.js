@@ -15,6 +15,7 @@ const createGoal = {
         minutes: Joi.number().integer().allow(null, ""),
         expected_grade: Joi.number().allow(null, ""),
         grade: Joi.number().allow(null, ""),
+        admin: Joi.number().integer()
     })
 };
 

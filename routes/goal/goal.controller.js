@@ -1,5 +1,6 @@
 const asyncHandler = require('express-async-handler');
 const Goal = require('../../models/goal.model');
+const UserGoal = require('../../models/user-goal.model');
 
 //@desc get di tutti gli obiettivi
 //@route GET /api/goal/
@@ -25,6 +26,15 @@ const createGoal = asyncHandler(async (req, res) => {
     }
 
     const result = await Goal.createGoal({ ...req.body });
+
+    if (result.affectedRows != 1) {
+        res.status(400);
+        throw new Error();
+    }
+
+    const goalId = result.insertId;
+
+    result = UserGoal.createUserGoal({ id_user: req.user.idu, id_goal: goalId, admin: req.body.admin || 0});
 
     if (result.affectedRows != 1) {
         res.status(400);
