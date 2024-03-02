@@ -27,7 +27,7 @@ const UserGoal = {
         const mysql = `
             SELECT id_user, id_goal, admin
             FROM ${TABLE}
-            WHERE ${id_user ? " id_user=" + "'" + id_user + "'" : " 1=1 " } AND ${id_goal ? " id_goal=" + id_goal : "1=1" }`;
+            WHERE ${id_user ? " id_user LIKE @id_user " : " 1=1 "} AND ${id_goal ? " id_goal=@id_goal " : "1=1"}`;
         const result = await connFunction.query(mysql, { id_user, id_goal });
         return result;
     },

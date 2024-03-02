@@ -7,7 +7,7 @@ const UserGoal = require('../../models/user-goal.model');
 const getAllUserGoal = asyncHandler(async (req, res) => {
     const result = await UserGoal.selectAllUserGoal();
 
-    if (result.length == 0){
+    if (result.length == 0) {
         res.status(404);
         throw new Error();
     }
@@ -21,7 +21,7 @@ const getAllUserGoal = asyncHandler(async (req, res) => {
 const createUserGoal = asyncHandler(async (req, res) => {
     const result = await UserGoal.createUserGoal({ ...req.body });
 
-    if (result.affectedRows != 1){
+    if (result.affectedRows != 1) {
         res.status(404);
         throw new Error();
     }
@@ -35,12 +35,12 @@ const createUserGoal = asyncHandler(async (req, res) => {
 const updateAdmin = asyncHandler(async (req, res) => {
     const result = await UserGoal.updateAdmin({ ...req.body });
 
-    if (result.affectedRows != 1){
+    if (result.affectedRows != 1) {
         res.status(404);
         throw new Error();
     }
 
-    res.status(200).send({ message: "Admin aggiornato"});
+    res.status(200).send({ message: "Admin aggiornato" });
 });
 
 //@desc ottiene l'associazione in base all'obiettivio e all'utente
@@ -49,21 +49,21 @@ const updateAdmin = asyncHandler(async (req, res) => {
 const deleteUserGoal = asyncHandler(async (req, res) => {
     const result = await UserGoal.deleteUserGoal({ ...req.body });
 
-    if (result.affectedRows != 1){
+    if (result.affectedRows != 1) {
         res.status(404);
         throw new Error();
     }
 
-    res.status(200).send({ message: "Eliminato"});
+    res.status(200).send({ message: "Eliminato" });
 });
 
 //@desc ottiene l'associazione in base all'obiettivio
 //@route GET /api/user-goal/filter
 //@access private
 const filter = asyncHandler(async (req, res) => {
-    const result = await UserGoal.filter({ id_goal: req.query.id_goal || false, id_user: req.query.id_user || false});
+    const result = await UserGoal.filter({ id_goal: req.query.id_goal || false, id_user: req.query.id_user || false });
 
-    if (result.length == 0){
+    if (result.length == 0) {
         res.status(404);
         throw new Error();
     }

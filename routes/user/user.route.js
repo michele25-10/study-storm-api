@@ -11,5 +11,4 @@ router.get("/filter/:idu", validate(userValidation.getUser), userController.getU
 router.put("/:idu", validate(userValidation.updateUser), userController.updateUser);
 router.delete("/:idu", validate(userValidation.deleteUser), userController.deleteUser);
 
-
 module.exports = router;

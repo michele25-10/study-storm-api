@@ -7,7 +7,7 @@ const StudentType = require('../../models/student-type.model');
 const getAllTypes = asyncHandler(async (req, res) => {
     const result = await StudentType.selectAllTypes();
 
-    if (result.length == 0){
+    if (result.length == 0) {
         res.status(404);
         throw new Error();
     }
@@ -21,7 +21,7 @@ const getAllTypes = asyncHandler(async (req, res) => {
 const getType = asyncHandler(async (req, res) => {
     const result = await StudentType.selectType({ id: req.params.id });
 
-    if (result.length == 0){
+    if (result.length == 0) {
         res.status(404);
         throw new Error();
     }

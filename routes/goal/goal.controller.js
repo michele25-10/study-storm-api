@@ -7,7 +7,7 @@ const Goal = require('../../models/goal.model');
 const getAllGoals = asyncHandler(async (req, res) => {
     const result = await Goal.selectAllGoals({ alsoFinished: req.query.alsoFinished || false });
 
-    if (result.length == 0){
+    if (result.length == 0) {
         res.status(404);
         throw new Error();
     }
@@ -19,14 +19,14 @@ const getAllGoals = asyncHandler(async (req, res) => {
 //@route POST /api/goal
 //@access private
 const createGoal = asyncHandler(async (req, res) => {
-    if (req.body.expiry_date < new Date()){
+    if (req.body.expiry_date < new Date()) {
         res.status(400);
         throw new Error();
     }
 
-    const result = await Goal.createGoal({...req.body});
+    const result = await Goal.createGoal({ ...req.body });
 
-    if (result.affectedRows != 1){
+    if (result.affectedRows != 1) {
         res.status(400);
         throw new Error();
     }
@@ -38,9 +38,9 @@ const createGoal = asyncHandler(async (req, res) => {
 //@route GET /api/goal/:id
 //@access private
 const getGoal = asyncHandler(async (req, res) => {
-    const result = await Goal.selectGoal({ alsoDisactive: req.query.alsoDisactive || false, id:req.params.id });
+    const result = await Goal.selectGoal({ alsoDisactive: req.query.alsoDisactive || false, id: req.params.id });
 
-    if (result.length == 0){
+    if (result.length == 0) {
         res.status(404);
         throw new Error();
     }
@@ -52,14 +52,14 @@ const getGoal = asyncHandler(async (req, res) => {
 //@route PUT /api/goal/updateGoal
 //@access private
 const updateGoal = asyncHandler(async (req, res) => {
-    if (req.body.expiry_date < new Date()){
+    if (req.body.expiry_date < new Date()) {
         res.status(400);
         throw new Error();
     }
 
-    const result = await Goal.updateGoal({...req.body});
+    const result = await Goal.updateGoal({ ...req.body });
 
-    if (result.affectedRows != 1){
+    if (result.affectedRows != 1) {
         res.status(400);
         throw new Error();
     }
@@ -73,12 +73,12 @@ const updateGoal = asyncHandler(async (req, res) => {
 const updateFinished = asyncHandler(async (req, res) => {
     const result = await Goal.updateFinished({ ...req.body });
 
-    if (result.affectedRows != 1){
+    if (result.affectedRows != 1) {
         res.status(404);
         throw new Error();
     }
 
-    res.status(200).send({ message: "Obiettivo aggiornato"});
+    res.status(200).send({ message: "Obiettivo aggiornato" });
 });
 
 //@desc modifica i minuti
@@ -87,26 +87,26 @@ const updateFinished = asyncHandler(async (req, res) => {
 const addMinutes = asyncHandler(async (req, res) => {
     const result = await Goal.addMinutes({ ...req.body });
 
-    if (result.affectedRows != 1){
+    if (result.affectedRows != 1) {
         res.status(404);
         throw new Error();
     }
 
-    res.status(200).send({ message: "Tempo aggiornato"});
+    res.status(200).send({ message: "Tempo aggiornato" });
 });
 
 //@desc elimina un obiettivo
 //@route PUT /api/goal/
 //@access private
 const deleteGoal = asyncHandler(async (req, res) => {
-    const result = await Goal.deleteGoal({ ...req.body });
+    const result = await Goal.deleteGoal({ ...req.params });
 
-    if (result.affectedRows != 1){
+    if (result.affectedRows != 1) {
         res.status(404);
         throw new Error();
     }
 
-    res.status(200).send({ message: "Obiettivo eliminato"});
+    res.status(200).send({ message: "Obiettivo eliminato" });
 });
 
 

@@ -42,7 +42,7 @@ const updateGoal = {
 
 const updateFinished = {
     body: Joi.object().keys({
-        finished: Joi.number().allow(0,1).required(),
+        finished: Joi.number().allow(0, 1).required(),
         id: Joi.number().integer().required(),
     })
 };
@@ -55,7 +55,7 @@ const addMinutes = {
 };
 
 const deleteGoal = {
-    body: Joi.object().keys({
+    params: Joi.object().keys({
         id: Joi.number().integer().required(),
     })
 };
