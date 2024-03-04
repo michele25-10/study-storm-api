@@ -210,7 +210,7 @@ CREATE TABLE `user_task_agenda` (
 CREATE TABLE `user_verification` (
   `id` int NOT NULL,
   `verification_key` char(36) NOT NULL,
-  `user_credentails` json NOT NULL,
+  `user_credentials` json NOT NULL,
   `date_created` datetime DEFAULT CURRENT_TIMESTAMP,
   `date_verified` datetime DEFAULT NULL,
   `verified` tinyint(1) DEFAULT '0'

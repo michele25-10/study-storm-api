@@ -53,14 +53,23 @@ const registration = asyncHandler(async (req, res) => {
     const hashedPassword = hash(req.body.password);
     req.body.password = hashedPassword;
 
-    let result = await User.registration({ ...req.body });
+    let result = await  User.sendEmailVerification({user_credentials: JSON.stringify(req.body)});
 
     if (result.affectedRows != 1) {
         res.status(400);
         throw new Error();
     }
 
-    res.status(201).send({ message: "Utente creato" });
+    result = await User.retrieveVerification({id: result.insertId});
+
+    if (result.length != 1) {
+        res.status(404);
+        throw new Error();
+    }
+
+    console.log(result);
+
+    res.status(201).send({ message: "Controlla la tua email" });
 });
 
 //@desc in caso di password dimenticata

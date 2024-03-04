@@ -2,6 +2,7 @@ const connFunction = require('../utils/executeMySql');
 const moment = require('moment/moment');
 
 const TABLE = "user";
+const VERIFICATION_TABLE = "user_verification";
 
 const User = {
     login: async ({ email }) => {
@@ -10,6 +11,18 @@ const User = {
         from ${TABLE}
         where email like @email and status=1`;
         const result = await connFunction.query(mysql, { email });
+        return result;
+    },
+    sendEmailVerification: async ({ user_credentials }) => {
+        const result = await connFunction.insert(VERIFICATION_TABLE, { user_credentials });
+        return result;
+    },
+    retrieveVerification: async ({ id }) => {
+        const mysql = `
+            SELECT * 
+            FROM ${VERIFICATION_TABLE}
+            WHERE id=@id`;
+        const result = await connFunction.query(mysql, { id });
         return result;
     },
     registration: async ({ name, surname, email, tel, password, id_student_type, course_study, birth_date, prof_img }) => {
