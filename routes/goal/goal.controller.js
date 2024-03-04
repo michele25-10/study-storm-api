@@ -1,12 +1,17 @@
 const asyncHandler = require('express-async-handler');
 const Goal = require('../../models/goal.model');
+const Task = require('../../models/task.model');
 const UserGoal = require('../../models/user-goal.model');
 
 //@desc get di tutti gli obiettivi
 //@route GET /api/goal/
 //@access private
 const getAllGoals = asyncHandler(async (req, res) => {
-    const response = await Goal.selectAllGoals({ alsoFinished: req.query.alsoFinished || false, idu: req.user.idu });
+    const response = await Goal.selectAllGoals({ alsoFinished: req.query.alsoFinished || false, idu: req.user.idu, tasks: req.query.tasks });
+
+    if (req.query.tasks){
+        const tasks = "";
+    }
 
     res.status(200).send(response);
 });

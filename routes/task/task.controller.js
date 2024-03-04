@@ -5,7 +5,7 @@ const Task = require('../../models/task.model');
 //@route GET /api/task/
 //@access private
 const getAllTasks = asyncHandler(async (req, res) => {
-    const result = await Task.selectAllTasks();
+    const result = await Task.selectAllTasks({id_goal: req.query.id_goal || false});
 
     if (result.length == 0) {
         res.status(404);

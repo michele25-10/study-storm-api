@@ -4,12 +4,13 @@ const connFunction = require('../utils/executeMySql');
 const TABLE = "task";
 
 const Task = {
-    selectAllTasks: async () => {
+    selectAllTasks: async ({ id_goal }) => {
+        console.log(id_goal);
         const mysql = `
             SELECT id, name, \`desc\`, expiry_date, planned_minutes, minutes, id_goal
             FROM ${TABLE}
-            WHERE 1=1`;
-        const result = await connFunction.query(mysql);
+            WHERE 1=1 ${id_goal ? " AND id_goal=@id_goal": ""}`;
+        const result = await connFunction.query(mysql, { id_goal });
         return result;
     },
     createTask: async ({

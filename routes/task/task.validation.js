@@ -13,7 +13,13 @@ const createTask = {
 
 const getTask = {
     params: Joi.object().keys({
-        id: Joi.number().integer().required(),
+        id: Joi.number().integer().required,
+    })
+};
+
+const getAllTasks = {
+    params: Joi.object().keys({
+        id_goal: Joi.number().integer(),
     })
 };
 
@@ -44,4 +50,4 @@ const deleteTask = {
     })
 };
 
-module.exports = { createTask, getTask, updateTask, addMinutes, deleteTask };
+module.exports = { createTask, getTask, getAllTasks, updateTask, addMinutes, deleteTask };

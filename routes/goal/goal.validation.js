@@ -3,6 +3,7 @@ const Joi = require('joi');
 const getAllGoals = {
     query: Joi.object().keys({
         alsoFinished: Joi.boolean(),
+        tasks: Joi.boolean()
     })
 };
 

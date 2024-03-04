@@ -5,7 +5,7 @@ const taskController = require('./task.controller');
 const taskValidation = require('./task.validation');
 const validate = require('../../middleware/JoiValidation');
 
-router.get("/", taskController.getAllTasks);
+router.get("/", validate(taskValidation.getAllTasks), taskController.getAllTasks);
 router.post("/", validate(taskValidation.createTask), taskController.createTask);
 router.get("/:id", validate(taskValidation.getTask), taskController.getTask);
 router.put("/:id", validate(taskValidation.updateTask), taskController.updateTask);
