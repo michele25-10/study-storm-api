@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 const asyncHandler = require('express-async-handler');
 const User = require('../../models/user.model');
 const { hash } = require('../../utils/crypto');
+const sendMailer = require('../../utils/mail');
 
 //@desc accedere con un utente
 //@route POST /api/auth/login
@@ -62,4 +63,45 @@ const registration = asyncHandler(async (req, res) => {
     res.status(201).send({ message: "Utente creato" });
 });
 
-module.exports = { login, registration };
+//@desc in caso di password dimenticata
+//@route POST /api/auth/forgot-password
+//@access public
+const forgotPassword = asyncHandler(async (req, res) => {
+    const mailExists = await User.selectUserByEmail({ email: req.body.email, alsoDisactive: false });
+    if (mailExists.length === 0) {
+        res.status(404);
+        throw new Error("Email inesistente");
+    }
+
+    await sendMailer({
+        from: process.env.MAIL,
+        to: req.body.email,
+        subject: "PASSWORD DIMENTICATA STUDENTIME",
+        text: "",
+        html: `
+        <!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Email con Bottone Invia</title>
+            </head>
+            <body>
+                <h1>Password Dimenticata!</h1>
+                <p>Gentile utente, qualora avessi dimenticato la password premi il bottone conferma!</br>
+                Qualora invece non fossi stato tu a richiedere il cambio password, assicurati che la tua password sia sicura:</br>
+                ${req.headers['user-agent']}</p>
+                
+                <!-- Bottone Invia -->
+                <form action="http://localhost:5010/reset-password/confirm" method="post">
+                    <button type="submit">Confermo!</button>
+                </form>
+            </body>
+            </html>
+        `
+    });
+
+    res.status(200).send({ message: "Controlla le tue mail!" });
+});
+
+module.exports = { login, registration, forgotPassword };

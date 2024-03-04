@@ -22,4 +22,10 @@ const registration = {
     })
 };
 
-module.exports = { login, registration };
+const forgotPassword = {
+    body: Joi.object().keys({
+        email: Joi.string().max(60).required(),
+    })
+};
+
+module.exports = { login, registration, forgotPassword };
