@@ -13,19 +13,19 @@ const Task = {
         return result;
     },
     createTask: async ({
-        name, 
-        desc, 
-        expiry_date, 
-        planned_minutes, 
-        minutes, 
+        name,
+        desc,
+        expiry_date,
+        planned_minutes,
+        minutes,
         id_goal
     }) => {
         const result = await connFunction.insert(TABLE, {
-            name, 
-            "`desc`": desc, 
-            expiry_date: moment(expiry_date).format("YYYY-MM-DD"), 
-            planned_minutes, 
-            minutes, 
+            name,
+            "`desc`": desc,
+            expiry_date: expiry_date ? moment(expiry_date).format("YYYY-MM-DD") : null,
+            planned_minutes,
+            minutes,
             id_goal
         });
         return result;
@@ -39,22 +39,22 @@ const Task = {
         return result;
     },
     updateTask: async ({
-        name, 
-        desc, 
-        expiry_date, 
-        planned_minutes, 
-        minutes, 
+        name,
+        desc,
+        expiry_date,
+        planned_minutes,
+        minutes,
         id
     }) => {
         const result = await connFunction.update(TABLE, {
-            name, 
-            "`desc`": desc, 
-            expiry_date: moment(expiry_date).format("YYYY-MM-DD"), 
-            planned_minutes, 
-            minutes, 
+            name,
+            "`desc`": desc,
+            expiry_date: moment(expiry_date).format("YYYY-MM-DD"),
+            planned_minutes,
+            minutes,
         },
-        "id=@id",
-        { id });
+            "id=@id",
+            { id });
         return result;
     },
     addMinutes: async ({

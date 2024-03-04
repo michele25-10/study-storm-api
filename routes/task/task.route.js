@@ -8,8 +8,10 @@ const validate = require('../../middleware/JoiValidation');
 router.get("/", taskController.getAllTasks);
 router.post("/", validate(taskValidation.createTask), taskController.createTask);
 router.get("/:id", validate(taskValidation.getTask), taskController.getTask);
-router.put("/updateTask", validate(taskValidation.updateTask), taskController.updateTask);
+router.put("/:id", validate(taskValidation.updateTask), taskController.updateTask);
+router.delete("/:id", validate(taskValidation.deleteTask), taskController.deleteTask);
+
+//Questa rotta può essere sostituita da una procedura all'interno della rotta POST e PUT di agenda
 router.put("/addMinutes", validate(taskValidation.addMinutes), taskController.addMinutes);
-router.delete("/", validate(taskValidation.deleteTask), taskController.deleteTask);
 
 module.exports = router;
