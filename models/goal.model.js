@@ -5,7 +5,6 @@ const TABLE = "goal";
 
 const Goal = {
     selectAllGoals: async ({ alsoFinished, idu }) => {
-        console.log(idu)
         const mysql = `
             SELECT id, name, \`desc\`, expiry_date, planned_minutes, minutes, expected_grade, grade, finished
             FROM ${TABLE} g

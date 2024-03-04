@@ -5,7 +5,6 @@ const TABLE = "task";
 
 const Task = {
     selectAllTasks: async ({ id_goal }) => {
-        console.log(id_goal);
         const mysql = `
             SELECT id, name, \`desc\`, expiry_date, planned_minutes, minutes, id_goal
             FROM ${TABLE}
