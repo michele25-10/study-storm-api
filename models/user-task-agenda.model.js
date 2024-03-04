@@ -11,6 +11,12 @@ const UserTaskAgenda = {
         });
         return result;
     },
+    selectIdTaskByAgenda: async ({ id_agenda }) => {
+        const mysql = `
+        select uta.id_task from user_task_agenda uta where uta.id_agenda = @id_agenda LIMIT 1`;
+        const result = await connFunction.query(mysql, { id_agenda });
+        return result[0].id_task;
+    }
 };
 
 module.exports = UserTaskAgenda;

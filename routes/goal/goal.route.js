@@ -15,6 +15,6 @@ router.delete("/:id", validate(goalValidation.deleteGoal), goalController.delete
 router.patch("/:id", validate(goalValidation.updateFinished), goalController.updateFinished);
 
 //Questa rotta può essere risparmiata rendendo automatica la procedura dalla POST e PUT di agenda
-router.put("/addMinutes", validate(goalValidation.addMinutes), goalController.addMinutes);
+//router.put("/addMinutes", validate(goalValidation.addMinutes), goalController.addMinutes);
 
 module.exports = router;

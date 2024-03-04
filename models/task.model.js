@@ -8,7 +8,7 @@ const Task = {
         const mysql = `
             SELECT id, name, \`desc\`, expiry_date, planned_minutes, minutes, id_goal
             FROM ${TABLE}
-            WHERE 1=1 ${id_goal ? " AND id_goal=@id_goal": ""}`;
+            WHERE 1=1 ${id_goal ? " AND id_goal=@id_goal" : ""}`;
         const result = await connFunction.query(mysql, { id_goal });
         return result;
     },
@@ -57,15 +57,19 @@ const Task = {
             { id });
         return result;
     },
-    addMinutes: async ({
-        minutes,
-        id
+    updateMinutes: async ({
+        id_task
     }) => {
-        const mysql = `UPDATE ${TABLE} t
-                        SET 
-                            minutes = (SELECT IFNULL(minutes, 0) WHERE id=@id) + @minutes
-                        WHERE id=@id;`;
-        const result = await connFunction.query(mysql, { id, minutes, id });
+        const mysql = `
+        UPDATE task t
+	    SET minutes = (
+    	    select sum(a.minutes)
+    	    from agenda a
+    	    inner join user_task_agenda uta on uta.id_agenda = a.id and uta.id_task=@id_task
+    	    )    	
+        WHERE id=@id_task;
+        `;
+        const result = await connFunction.query(mysql, { id_task });
         return result;
     },
     deleteTask: async ({
@@ -74,6 +78,11 @@ const Task = {
         const result = await connFunction.delete(TABLE, "id=@id", { id });
         return result;
     },
+    selectIdGoalByTask: async ({ id }) => {
+        const mysql = "select id_goal from task where id=@id limit 1";
+        const result = await connFunction.query(mysql, { id });
+        return result[0].id_goal;
+    }
 }
 
 module.exports = Task;

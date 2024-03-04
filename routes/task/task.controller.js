@@ -5,7 +5,7 @@ const Task = require('../../models/task.model');
 //@route GET /api/task/
 //@access private
 const getAllTasks = asyncHandler(async (req, res) => {
-    const result = await Task.selectAllTasks({id_goal: req.query.id_goal || false});
+    const result = await Task.selectAllTasks({ id_goal: req.query.id_goal || false });
 
     if (result.length == 0) {
         res.status(404);
@@ -70,8 +70,8 @@ const updateTask = asyncHandler(async (req, res) => {
 //@desc modifica i minuti
 //@route PUT /api/task/addMinutes
 //@access private
-const addMinutes = asyncHandler(async (req, res) => {
-    const result = await Task.addMinutes({ ...req.body });
+/*const addMinutes = asyncHandler(async (req, res) => {
+    const result = await Task.updateMinutes({ ...req.body });
 
     if (result.affectedRows != 1) {
         res.status(404);
@@ -79,7 +79,7 @@ const addMinutes = asyncHandler(async (req, res) => {
     }
 
     res.status(200).send({ message: "Tempo aggiornato" });
-});
+});*/
 
 //@desc elimina una task
 //@route DELETE /api/task/
@@ -95,4 +95,4 @@ const deleteTask = asyncHandler(async (req, res) => {
     res.status(200).send({ message: "Task eliminata" });
 });
 
-module.exports = { getAllTasks, createTask, getTask, updateTask, addMinutes, deleteTask };
+module.exports = { getAllTasks, createTask, getTask, updateTask, deleteTask /*, addMinutes */ };

@@ -12,6 +12,6 @@ router.put("/:id", validate(taskValidation.updateTask), taskController.updateTas
 router.delete("/:id", validate(taskValidation.deleteTask), taskController.deleteTask);
 
 //Questa rotta può essere sostituita da una procedura all'interno della rotta POST e PUT di agenda
-router.put("/addMinutes", validate(taskValidation.addMinutes), taskController.addMinutes);
+//router.put("/addMinutes", validate(taskValidation.addMinutes), taskController.addMinutes);
 
 module.exports = router;

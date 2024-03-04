@@ -1,6 +1,8 @@
 
 const asyncHandler = require('express-async-handler');
 const Agenda = require('../../models/agenda.model');
+const Task = require('../../models/task.model');
+const Goal = require('../../models/goal.model');
 const UserTaskAgenda = require('../../models/user-task-agenda.model');
 
 //@desc API inserimento agenda di una task da parte di un utente
@@ -32,6 +34,20 @@ const addAgenda = asyncHandler(async (req, res) => {
         res.status(500);
         throw new Error();
     }
+
+    // aggiornamento minuti totali sulle task e sui goal
+    result = await Task.updateMinutes({ id_task: req.body.id_task });
+    if (result.affectedRows != 1) {
+        res.status(500);
+        throw new Error();
+    }
+    const idGoal = await Task.selectIdGoalByTask({ id: req.body.id_task });
+    result = await Goal.updateMinutes({ id_goal: idGoal });
+    if (result.affectedRows != 1) {
+        res.status(500);
+        throw new Error();
+    }
+
     res.status(201).send({ message: "Agenda inserita con successo!" });
 });
 
@@ -48,7 +64,21 @@ const putAgenda = asyncHandler(async (req, res) => {
         }
     }
 
-    const result = await Agenda.updateAgenda({ ...req.body, id: req.params.id });
+    let result = await Agenda.updateAgenda({ ...req.body, id: req.params.id });
+    if (result.affectedRows != 1) {
+        res.status(500);
+        throw new Error();
+    }
+
+    // aggiornamento minuti totali sulle task e sui goal
+    const idTask = await UserTaskAgenda.selectIdTaskByAgenda({ id_agenda: req.params.id })
+    result = await Task.updateMinutes({ id_task: idTask });
+    if (result.affectedRows != 1) {
+        res.status(500);
+        throw new Error();
+    }
+    const idGoal = await Task.selectIdGoalByTask({ id: idTask });
+    result = await Goal.updateMinutes({ id_goal: idGoal });
     if (result.affectedRows != 1) {
         res.status(500);
         throw new Error();

@@ -9,9 +9,9 @@ const UserGoal = require('../../models/user-goal.model');
 const getAllGoals = asyncHandler(async (req, res) => {
     const response = await Goal.selectAllGoals({ alsoFinished: req.query.alsoFinished || false, idu: req.user.idu, tasks: req.query.tasks });
 
-    if (req.query.tasks){ 
+    if (req.query.tasks) {
         for (let i = 0; i < response.length; i++) {
-            const task = await Task.selectAllTasks({id_goal: response[i]["id"]});
+            const task = await Task.selectAllTasks({ id_goal: response[i]["id"] });
             response[i]["task"] = task;
         }
     }
@@ -97,8 +97,8 @@ const updateFinished = asyncHandler(async (req, res) => {
 //@desc modifica i minuti
 //@route PUT /api/goal/addMinutes
 //@access private
-const addMinutes = asyncHandler(async (req, res) => {
-    const result = await Goal.addMinutes({ ...req.body });
+/*const addMinutes = asyncHandler(async (req, res) => {
+    const result = await Goal.updateMinutes({ ...req.body });
 
     if (result.affectedRows != 1) {
         res.status(404);
@@ -106,7 +106,7 @@ const addMinutes = asyncHandler(async (req, res) => {
     }
 
     res.status(200).send({ message: "Tempo aggiornato" });
-});
+});*/
 
 //@desc elimina un obiettivo
 //@route PUT /api/goal/
@@ -124,4 +124,4 @@ const deleteGoal = asyncHandler(async (req, res) => {
 
 
 
-module.exports = { getAllGoals, createGoal, getGoal, updateGoal, updateFinished, addMinutes, deleteGoal };
+module.exports = { getAllGoals, createGoal, getGoal, updateGoal, updateFinished, deleteGoal /*, addMinutes,*/ };
