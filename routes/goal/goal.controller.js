@@ -62,7 +62,7 @@ const updateGoal = asyncHandler(async (req, res) => {
         throw new Error();
     }
 
-    const result = await Goal.updateGoal({ ...req.body });
+    const result = await Goal.updateGoal({ ...req.body, id: req.params.id });
 
     if (result.affectedRows != 1) {
         res.status(400);
