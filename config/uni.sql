@@ -156,6 +156,25 @@ FOR EACH ROW
 SET NEW.id = UUID(); 
 $$
 DELIMITER ;
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `invite_team`
+--
+
+CREATE TABLE `invite_team` (
+  `id` int unsigned not null auto_increment primary key,
+  `id_user` char(36) NOT NULL,
+  `date_created` datetime NOT NULL,
+  `verified` bit NOT NULL default 0,
+  `id_goal` INT NOT NULL,
+  FOREIGN KEY (`id_user`)
+  REFERENCES user(`id`)
+  on delete cascade, 
+  FOREIGN KEY (`id_goal`)
+  REFERENCES goal(`id`)
+  on delete cascade, 
+); 
 
 -- --------------------------------------------------------
 
@@ -166,7 +185,8 @@ DELIMITER ;
 CREATE TABLE `user_goal` (
   `id_user` char(36) NOT NULL,
   `id_goal` int NOT NULL,
-  `admin` tinyint(1) DEFAULT '0'
+  `admin` tinyint(1) DEFAULT '0',
+  `active` bit NOT NULL DEFAULT '1'
 ); 
 
 -- --------------------------------------------------------
@@ -208,8 +228,20 @@ $$
 DELIMITER ;
 
 --
--- Indexes for dumped tables
+-- Table structure for table `reset_password`
 --
+
+CREATE TABLE `reset_password` (
+  `id` int unsigned not null auto_increment primary key,
+  `id_user` char(36) NOT NULL,
+  `date_created` datetime NOT NULL,
+  `verified` bit NOT NULL default 0,
+  FOREIGN KEY (`id_user`)
+  REFERENCES user(`id`)
+  on delete cascade
+); 
+
+-- --------------------------------------------------------
 
 --
 -- Indexes for table `agenda`
