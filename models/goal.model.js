@@ -9,8 +9,8 @@ const Goal = {
             SELECT id, name, \`desc\`, expiry_date, planned_minutes, minutes, expected_grade, grade, finished
             FROM ${TABLE} g
             INNER JOIN user_goal ug ON ug.id_goal = g.id
-            WHERE ${alsoFinished ? " 1=1 " : " finished = 0"} AND ug.id_user='${idu}'`;
-        const result = await connFunction.query(mysql);
+            WHERE ${alsoFinished ? " 1=1 " : " finished = 0"} AND ug.id_user=@idu`;
+        const result = await connFunction.query(mysql, { idu });
         return result;
     },
     createGoal: async ({

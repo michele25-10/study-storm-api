@@ -10,9 +10,9 @@ const getAllGoals = asyncHandler(async (req, res) => {
     const response = await Goal.selectAllGoals({ alsoFinished: req.query.alsoFinished || false, idu: req.user.idu, tasks: req.query.tasks });
 
     if (req.query.tasks) {
-        for (let i = 0; i < response.length; i++) {
-            const task = await Task.selectAllTasks({ id_goal: response[i]["id"] });
-            response[i]["task"] = task;
+        for (const row of response) {
+            const task = await Task.selectAllTasks({ id_goal: row.id });
+            row.tasks = task;
         }
     }
 
