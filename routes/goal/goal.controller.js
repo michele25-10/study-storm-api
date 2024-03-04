@@ -6,14 +6,9 @@ const UserGoal = require('../../models/user-goal.model');
 //@route GET /api/goal/
 //@access private
 const getAllGoals = asyncHandler(async (req, res) => {
-    const result = await Goal.selectAllGoals({ alsoFinished: req.query.alsoFinished || false });
+    const response = await Goal.selectAllGoals({ alsoFinished: req.query.alsoFinished || false });
 
-    if (result.length == 0) {
-        res.status(404);
-        throw new Error();
-    }
-
-    res.status(200).send(result);
+    res.status(200).send(response);
 });
 
 //@desc creazione di un obiettivo
@@ -34,7 +29,7 @@ const createGoal = asyncHandler(async (req, res) => {
 
     const goalId = result.insertId;
 
-    result = UserGoal.createUserGoal({ id_user: req.user.idu, id_goal: goalId, admin: req.body.admin || 0});
+    result = UserGoal.createUserGoal({ id_user: req.user.idu, id_goal: goalId, admin: req.body.admin || 0 });
 
     if (result.affectedRows != 1) {
         res.status(400);
@@ -81,7 +76,7 @@ const updateGoal = asyncHandler(async (req, res) => {
 //@route PUT /api/user-goal/updateAdmin
 //@access private
 const updateFinished = asyncHandler(async (req, res) => {
-    const result = await Goal.updateFinished({ ...req.body });
+    const result = await Goal.updateFinished({ ...req.body, id: req.params.id });
 
     if (result.affectedRows != 1) {
         res.status(404);

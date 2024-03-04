@@ -42,9 +42,11 @@ const updateGoal = {
 };
 
 const updateFinished = {
+    parmas: Joi.object().keys({
+        id: Joi.number().integer().required(),
+    }),
     body: Joi.object().keys({
         finished: Joi.number().allow(0, 1).required(),
-        id: Joi.number().integer().required(),
     })
 };
 
