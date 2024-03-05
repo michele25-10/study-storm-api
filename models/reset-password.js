@@ -16,7 +16,7 @@ const ResetPassword = {
         select rp.id
         from reset_password rp 
         inner join user u on u.id = rp.id_user
-        where rp.date_created >= NOW() - INTERVAL 1 DAY and rp.idu like @idu and rp.verifaied = '0'`;
+        where rp.date_created >= NOW() - INTERVAL 1 DAY and rp.id_user like @idu and rp.verified = '0'`;
         const result = await connFunction.query(mysql, { idu });
         return result;
     }
