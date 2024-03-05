@@ -13,7 +13,7 @@ const User = {
         const result = await connFunction.query(mysql, { email });
         return result;
     },
-    sendEmailVerification: async ({ user_credentials }) => {
+    insertVerification: async ({ user_credentials }) => {
         const result = await connFunction.insert(VERIFICATION_TABLE, { user_credentials });
         return result;
     },

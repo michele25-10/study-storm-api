@@ -53,7 +53,14 @@ const registration = asyncHandler(async (req, res) => {
     const hashedPassword = hash(req.body.password);
     req.body.password = hashedPassword;
 
-    let result = await  User.sendEmailVerification({user_credentials: JSON.stringify(req.body)});
+    let result = await User.selectUserByEmail({email: req.body.email});
+
+    if (result.length > 0){ // utente già registrato
+        res.status(400);
+        throw new Error();
+    }
+
+    result = await  User.insertVerification({user_credentials: JSON.stringify(req.body)});
 
     if (result.affectedRows != 1) {
         res.status(400);
@@ -68,6 +75,32 @@ const registration = asyncHandler(async (req, res) => {
     }
 
     console.log(result);
+
+    await sendMailer({
+        from: process.env.MAIL,
+        to: req.body.email,
+        subject: "VERFICA ACCOUNT STUDENTIME",
+        text: "",
+        html: `
+        <!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Email con Bottone Invia</title>
+            </head>
+            <body>
+                <h1>Verifica account!</h1>
+                <p>Verifica il tuo account premendo il bottone</p>
+                
+                <!-- Bottone Invia -->
+                <form action="http://localhost:5010/" method="post">
+                    <button type="submit">Confermo!</button>
+                </form>
+            </body>
+            </html>
+        `
+    });
 
     res.status(201).send({ message: "Controlla la tua email" });
 });
