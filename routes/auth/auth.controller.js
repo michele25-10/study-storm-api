@@ -4,6 +4,9 @@ const User = require('../../models/user.model');
 const ResetPassword = require('../../models/reset-password');
 const { hash } = require('../../utils/crypto');
 const sendMailer = require('../../utils/mail');
+const fs = require('fs');
+const handlebars = require('handlebars');
+const path = require('path')
 
 //@desc accedere con un utente
 //@route POST /api/auth/login
@@ -75,63 +78,26 @@ const registration = asyncHandler(async (req, res) => {
         throw new Error();
     }
 
-    console.log(result);
-
+    const template = handlebars.compile(fs.readFileSync(path.join(__dirname, "../../templates/verify.html")).toString());
+    const replacements = {
+        verification_key: result[0].verification_key
+      };
     await sendMailer({
         from: process.env.MAIL,
         to: req.body.email,
         subject: "VERFICA ACCOUNT STUDENTIME",
         text: "",
-        html: `
-        <!DOCTYPE html>
-            <html lang="en">
-            <head>
-                <meta charset="UTF-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>Email con Bottone Invia</title>
-            </head>
-            <body>
-            <script>
-                const body = {verificationKey: ${result.verification_key}, id: ${result.id}, user_credentials: ${result.user_credentials}};
-                async function verify() {
-                    fetch("https://localhost:5010/api/auth/verify",
-                    {
-                        headers: {
-                          'Accept': 'application/json',
-                          'Content-Type': 'application/json'
-                        },
-                        method: "POST",
-                        body: JSON.stringify(body)
-                    })
-                    .then((res) => {
-                        console.log("mail inviata"); 
-                        alert("Mail con nuova password inviata");
-                    }).catch((err) => {
-                        console.log("Errore"); 
-                        alert("Errore"); 
-                    }); 
-                }
-            </script>
-                <h1>Verifica account!</h1>
-                <p>Verifica il tuo account premendo il bottone</p>
-                
-                <!-- Bottone Invia -->
-                <form onclick="verify()">
-                    <button type="">Verifica!</button>
-                </form>
-            </body>
-            </html>
-        `
+        html: template(replacements)
     });
 
     res.status(201).send({ message: "Controlla la tua email" });
 });
 
 //@desc verifica un utente
-//@route POST /api/auth/verify
+//@route GET /api/auth/verify
 //@access public
 const verify = asyncHandler(async (req, res) => {
-    console.log(req.body);
+    console.log(req.query);
 
     res.status(201).send({ message: "Controlla la tua email" });
 })
