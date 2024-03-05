@@ -82,6 +82,10 @@ const User = {
         const result = await connFunction.query(mysql, { idu });
         return result;
     },
+    changePassword: async ({ idu, password }) => {
+        const result = await connFunction.update(TABLE, { password }, " id=@idu", { idu });
+        return result;
+    }
 }
 
 module.exports = User;

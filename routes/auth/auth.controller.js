@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const asyncHandler = require('express-async-handler');
 const User = require('../../models/user.model');
-const ResetPassword = require('../../models/reset-password');
+const ResetPassword = require('../../models/reset-password.model');
 const { hash } = require('../../utils/crypto');
 const sendMailer = require('../../utils/mail');
 
@@ -150,7 +150,7 @@ const forgotPassword = asyncHandler(async (req, res) => {
     const idu = mailExists[0].id;
 
     // Controllo se è già stata inviata una mail di password dimenticata nelle ultime 24 ore ancora attiva
-    const existResetPassword = await ResetPassword.checkResetPassword({ idu });
+    const existResetPassword = await ResetPassword.checkResetPassword({ idu, verified: 0 });
     if (existResetPassword.length > 0) {
         res.status(404);
         throw new Error('La mail è già stata inviata');

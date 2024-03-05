@@ -5,6 +5,6 @@ const resetPasswordController = require('./reset-password.controller');
 const resetPasswordValidation = require('./reset-password.validation');
 const validate = require('../../middleware/JoiValidation');
 
-router.post("/confirm/:id", validate(resetPasswordValidation.confirm), resetPasswordController.confirm);
+router.patch("/confirm/:id", validate(resetPasswordValidation.confirm), resetPasswordController.confirm);
 
 module.exports = router;
