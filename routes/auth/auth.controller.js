@@ -91,12 +91,33 @@ const registration = asyncHandler(async (req, res) => {
                 <title>Email con Bottone Invia</title>
             </head>
             <body>
+            <script>
+                const body = {verificationKey: ${result.verification_key}, id: ${result.id}, user_credentials: ${result.user_credentials}};
+                async function verify() {
+                    fetch("https://localhost:5010/api/auth/verify",
+                    {
+                        headers: {
+                          'Accept': 'application/json',
+                          'Content-Type': 'application/json'
+                        },
+                        method: "POST",
+                        body: JSON.stringify(body)
+                    })
+                    .then((res) => {
+                        console.log("mail inviata"); 
+                        alert("Mail con nuova password inviata");
+                    }).catch((err) => {
+                        console.log("Errore"); 
+                        alert("Errore"); 
+                    }); 
+                }
+            </script>
                 <h1>Verifica account!</h1>
                 <p>Verifica il tuo account premendo il bottone</p>
                 
                 <!-- Bottone Invia -->
-                <form action="http://localhost:5010/" method="post">
-                    <button type="submit">Confermo!</button>
+                <form onclick="verify()">
+                    <button type="">Verifica!</button>
                 </form>
             </body>
             </html>
@@ -105,6 +126,15 @@ const registration = asyncHandler(async (req, res) => {
 
     res.status(201).send({ message: "Controlla la tua email" });
 });
+
+//@desc verifica un utente
+//@route POST /api/auth/verify
+//@access public
+const verify = asyncHandler(async (req, res) => {
+    console.log(req.body);
+
+    res.status(201).send({ message: "Controlla la tua email" });
+})
 
 //@desc in caso di password dimenticata
 //@route POST /api/auth/forgot-password
@@ -168,4 +198,4 @@ const forgotPassword = asyncHandler(async (req, res) => {
     res.status(200).send({ message: "Controlla le tue mail!" });
 });
 
-module.exports = { login, registration, forgotPassword };
+module.exports = { login, registration, forgotPassword, verify };
