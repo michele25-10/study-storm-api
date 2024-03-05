@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const asyncHandler = require('express-async-handler');
 const User = require('../../models/user.model');
-const ResetPassword = require('../../models/reset-password');
+const ResetPassword = require('../../models/reset-password.model');
 const { hash } = require('../../utils/crypto');
 const sendMailer = require('../../utils/mail');
 const fs = require('fs');
@@ -116,7 +116,7 @@ const forgotPassword = asyncHandler(async (req, res) => {
     const idu = mailExists[0].id;
 
     // Controllo se è già stata inviata una mail di password dimenticata nelle ultime 24 ore ancora attiva
-    const existResetPassword = await ResetPassword.checkResetPassword({ idu });
+    const existResetPassword = await ResetPassword.checkResetPassword({ idu, verified: 0 });
     if (existResetPassword.length > 0) {
         res.status(404);
         throw new Error('La mail è già stata inviata');
@@ -133,40 +133,26 @@ const forgotPassword = asyncHandler(async (req, res) => {
             <head>
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>Email con Bottone Invia</title>
-                <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+                <title>Password Dimenticata</title>
             </head>
             <body>
-            <script type="text/javascript">
-                async function confirm() {
-                    fetch("http://localhost:5010/api/reset-password/confirm")
-                    .then((res) => {
-                        console.log("mail inviata"); 
-                        alert("Mail con nuova password inviata");
-                    }).catch((err) => {
-                        console.log("Errore"); 
-                        alert("Errore"); 
-                    }); 
-                }
-            </script>
 
-            <h1>Password Dimenticata!</h1>
-
-                <p class="container mt-2">Gentile utente, qualora avessi dimenticato la password premi il bottone conferma!<br></p>
-
-                <p class="container mt-2">Qualora invece non fossi stato tu a richiedere il cambio password, assicurati che la tua password sia sicura:<br>
-                <i>${req.headers['user-agent']}</i></p>
+                <h1 class="title" style="color: orange; font-size: 32px; font-weight: bold;">Password Dimenticata!</h1>
                 
-                <p class="container mt-2">Se non sei tu che stai cercando di recuperare la tua password inviaci una mail all'indirizzo:<br>
-                studentime@gmail.com</p>
+                <div class="paragraph" style="margin-top: 20px; margin-bottom: 20px; color: black; ">
+                    <p>Gentile utente, qualora avessi dimenticato la password premi il bottone conferma!<br></p>
 
-                <!-- Bottone Invia -->
-                <button class="btn btn-success" onclick="confirm()">Confermo!</button>
+                    <p>Qualora invece non fossi stato tu a richiedere il cambio password, assicurati che la tua password sia sicura:<br>
+                    <i>${req.headers['user-agent']}</i></p>
+                
+                    <p>Se non sei tu che stai cercando di recuperare la tua password inviaci una mail all'indirizzo:<br>
+                    studentime@gmail.com</p>
 
-                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+                    <!-- Bottone Invia -->
+                    <button style="background-color: green;border-radius: 5px; color: white; font-weight: bold;width: maxcontent; border-color:green; ">Confermo!</button>
+                </div>
             </body>
-            </html>
-        `
+        </html>`
     });
 
     const result = await ResetPassword.insertResetPassword({ idu });

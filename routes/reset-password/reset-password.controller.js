@@ -1,0 +1,94 @@
+const asyncHandler = require('express-async-handler');
+const ResetPassword = require('../../models/reset-password.model');
+const User = require('../../models/user.model');
+const sendMailer = require('../../utils/mail');
+const { hash } = require("../../utils/crypto");
+
+const generatePassword = () => {
+    const charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+{}[]|:;"<>,.?/~';
+    const uppercaseCharset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const numbersCharset = '0123456789';
+    const specialCharset = '!@#$%^&*()_+{}[]|:;"<>,.?/~';
+
+    let password = '';
+
+    // Genera almeno un carattere maiuscolo, un numero e un carattere speciale
+    password += uppercaseCharset[Math.floor(Math.random() * uppercaseCharset.length)];
+    password += numbersCharset[Math.floor(Math.random() * numbersCharset.length)];
+    password += specialCharset[Math.floor(Math.random() * specialCharset.length)];
+
+    // Genera il resto della password con caratteri casuali
+    for (let i = 0; i < 7; i++) { // aggiungi 5 caratteri casuali
+        const randomIndex = Math.floor(Math.random() * charset.length);
+        password += charset[randomIndex];
+    }
+
+    // Mescola la password per rendere l'ordine casuale
+    password = password.split('').sort(() => Math.random() - 0.5).join('');
+
+    return password;
+}
+
+//@desc get di tutti gli obiettivi
+//@route GET /api/goal/
+//@access private
+const confirm = asyncHandler(async (req, res) => {
+    let result = await ResetPassword.checkResetPasswordById({ id: req.params.id });
+    if (result.length != 1) {
+        res.status(200).send("Hai già confermato, controlla le mail");
+        return;
+    }
+
+    const email = result[0].email;
+    const idu = result[0].idu;
+    const password = generatePassword();
+    const hashedPassword = hash(password);
+
+    result = await User.changePassword({ idu, password: hashedPassword });
+    if (result.affectedRows != 1) {
+        res.status(500);
+        throw new Error();
+    }
+
+    await sendMailer({
+        from: process.env.MAIL,
+        to: email,
+        subject: "STUDENTIME: Generazione password dimenticata",
+        body: "",
+        html: `
+        <!DOCTYPE html>
+            <html lang="it">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Password Dimenticata</title>
+            </head>
+            <body>
+                <h1 class="title" style="color: orange; font-size: 32px; font-weight: bold;">Nuove Credenziali!</h1>
+                
+                <div class="paragraph" style="margin-top: 20px; margin-bottom: 20px; color: black; ">
+                    <p>Gentile utente, poco fa hai confermato il cambio password e noi abbiamo generato le tue nuove credenziali!<br></p>
+
+                    <ul>
+                        <li><b>Email: </b><i>${email}</i></li>
+                        <li><b>Password:</b><i>${password}</i></li>
+                    </ul>
+                
+                    <p>Ti suggeriamo cortesemente di modificare ulteriormente le password dopo il tuo accesso, così da poter rendere il più sicuro possibile il tuo account.<br></p>
+
+                    <p>Il nostro team ti saluta e ti augura un buono studio!</p>
+                </div>
+            </body>
+        </html>`
+    });
+
+    result = await ResetPassword.confirmResetPassword({ id: req.params.id });
+    if (result.affectedRows != 1) {
+        res.status(500);
+        throw new Error();
+    }
+
+    res.status(200).send("Controlla le mail");
+});
+
+module.exports = { confirm }; 
