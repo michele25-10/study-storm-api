@@ -17,5 +17,6 @@ router.use("/report", require("./report/report.route"));
 router.use("/answer", require("./answer/answer.route"));
 router.use("/feedback", require("./feedback/feedback.route"));
 router.use("/agenda", require("./agenda/agenda.route"));
+router.use("/stats", require("./stats/stats.route"));
 
 module.exports = router;
