@@ -107,6 +107,12 @@ const putAgenda = asyncHandler(async (req, res) => {
 //@route DELETE /api/feedback/:id
 //@access private
 const deleteAgenda = asyncHandler(async (req, res) => {
+    response = await Agenda.selectSingleAgenda({ id: req.params.id, user: req.user.idu });
+    if (response.length != 1) {
+        res.status(403);
+        throw new Error("Non hai i permessi");
+    }
+
     const result = await Agenda.deleteAgenda({ id: req.params.id });
     if (result.affectedRows != 1) {
         res.status(500);
@@ -120,20 +126,24 @@ const deleteAgenda = asyncHandler(async (req, res) => {
 //@route GET /api/feedback/:id
 //@access private
 const getSingleAgenda = asyncHandler(async (req, res) => {
-    let response = await Agenda.selectSingleAgenda({ id: req.params.id });
-    const idTask = response[0].id_task;
-
-    //Controllo se l'utente è associato all'obiettivo al quale cerca di aggiungere una agenda
-    let check = await Agenda.isAuthorizedUserAddAgenda({ idu: req.user.idu, id_task: idTask });
-    if (check.length != 1) {
-        res.status(403);
-        throw new Error("Non hai i permessi per visualizzare questa agenda");
-    }
-
-    //Se non sei admin dell'obiettivo rifai la query aggiungendo il filtro utente
-    if (!check[0].admin) {
-        response = await Agenda.selectSingleAgenda({ id: req.params.id, user: req.user.idu });
+    let response = await Agenda.selectSingleAgenda({ id: req.params.id, user: req.user.idu });
+    if (response.length === 0) {
+        response = await Agenda.selectSingleAgenda({ id: req.params.id });
         if (response.length != 1) {
+            res.status(404);
+            throw new Error();
+        }
+        const idTask = response[0].id_task;
+
+        //Controllo se l'utente è associato all'obiettivo al quale cerca di aggiungere una agenda
+        let check = await Agenda.isAuthorizedUserAddAgenda({ idu: req.user.idu, id_task: idTask });
+        if (check.length != 1) {
+            res.status(403);
+            throw new Error("Non hai i permessi per visualizzare questa agenda");
+        }
+
+        //Se non sei admin dell'obiettivo rifai la query aggiungendo il filtro utente
+        if (!check[0].admin) {
             res.status(403);
             throw new Error("Non hai i permessi");
         }
