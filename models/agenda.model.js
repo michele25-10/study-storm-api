@@ -54,9 +54,10 @@ const Agenda = {
     },
     selectAllAgenda: async ({ idu, admin, id_task, date }) => {
         const mysql = `
-        select a.id, a.date, a.note, a.minutes 
+        select a.id, a.date, a.note, a.minutes, u.name, u.surname
         from agenda a
         inner join user_task_agenda uta on uta.id_agenda=a.id
+        inner join user u on u.id = uta.id_user
         where uta.id_task=@id_task ${date ? " and a.date=@date " : ""} ${admin ? "" : " and uta.id_user=@idu"} `;
         const result = await connFunction.query(mysql, {
             idu,

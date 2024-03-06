@@ -156,12 +156,28 @@ const getSingleAgenda = asyncHandler(async (req, res) => {
 //@route GET /api/feedback/
 //@access private
 const getAllAgenda = asyncHandler(async (req, res) => {
-    const response = await Agenda.selectAllAgenda({
-        admin: req.query.admin || false,
-        idu: req.user.idu,
-        date: req.query.date,
-        id_task: req.query.id_task
-    });
+    let response = {};
+    let check = await Agenda.isAuthorizedUserAddAgenda({ idu: req.user.idu, id_task: req.query.id_task });
+    if (check.length != 1) {
+        res.status(403);
+        throw new Error("Non hai i permessi per visualizzare questa agenda");
+    }
+
+    if (check[0].admin) {
+        response = await Agenda.selectAllAgenda({
+            admin: true,
+            idu: req.user.idu,
+            date: req.query.date,
+            id_task: req.query.id_task
+        });
+    } else {
+        response = await Agenda.selectAllAgenda({
+            admin: false,
+            idu: req.user.idu,
+            date: req.query.date,
+            id_task: req.query.id_task
+        });
+    }
 
     res.status(200).send(response);
 });
