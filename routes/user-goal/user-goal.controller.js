@@ -71,4 +71,4 @@ const deleteUserGoal = asyncHandler(async (req, res) => {
 //     res.status(200).send(result);
 // });
 
-module.exports = { /* getAllUserGoal, */ createUserGoal, updateAdmin, deleteUserGoal, /* filter */};
+module.exports = { /* getAllUserGoal, */ createUserGoal, updateAdmin, deleteUserGoal, /* filter */ };

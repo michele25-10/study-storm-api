@@ -51,7 +51,14 @@ const createGoal = asyncHandler(async (req, res) => {
 //@route GET /api/goal/:id
 //@access private
 const getGoal = asyncHandler(async (req, res) => {
-    const result = await Goal.selectGoal({ alsoDisactive: req.query.alsoDisactive || false, id: req.params.id });
+    let result = await UserGoal.filter({ id_user: req.user.idu, id_goal: req.params.id });
+
+    if (result.length != 1){
+        res.status(403);
+        throw new Error();
+    }
+
+    result = await Goal.selectGoal({ alsoDisactive: req.query.alsoDisactive || false, id: req.params.id });
 
     if (result.length == 0) {
         res.status(404);
@@ -65,12 +72,19 @@ const getGoal = asyncHandler(async (req, res) => {
 //@route PUT /api/goal/updateGoal
 //@access private
 const updateGoal = asyncHandler(async (req, res) => {
+    let result = await UserGoal.filter({ id_user: req.user.idu, id_goal: req.params.id });
+
+    if (result.length != 1){
+        res.status(403);
+        throw new Error();
+    }
+
     if (req.body.expiry_date < new Date()) {
         res.status(400);
         throw new Error();
     }
 
-    const result = await Goal.updateGoal({ ...req.body, id: req.params.id });
+    result = await Goal.updateGoal({ ...req.body, id: req.params.id });
 
     if (result.affectedRows != 1) {
         res.status(500);
@@ -84,7 +98,14 @@ const updateGoal = asyncHandler(async (req, res) => {
 //@route PUT /api/user-goal/updateAdmin
 //@access private
 const updateFinished = asyncHandler(async (req, res) => {
-    const result = await Goal.updateFinished({ ...req.body, id: req.params.id });
+    let result = await UserGoal.filter({ id_user: req.user.idu, id_goal: req.params.id });
+
+    if (result.length != 1){
+        res.status(403);
+        throw new Error();
+    }
+
+    result = await Goal.updateFinished({ ...req.body, id: req.params.id });
 
     if (result.affectedRows != 1) {
         res.status(404);
@@ -112,7 +133,14 @@ const updateFinished = asyncHandler(async (req, res) => {
 //@route PUT /api/goal/
 //@access private
 const deleteGoal = asyncHandler(async (req, res) => {
-    const result = await Goal.deleteGoal({ ...req.params });
+    let result = await UserGoal.filter({ id_user: req.user.idu, id_goal: req.params.id });
+
+    if (result.length != 1){
+        res.status(403);
+        throw new Error();
+    }
+
+    result = await Goal.deleteGoal({ ...req.params });
 
     if (result.affectedRows != 1) {
         res.status(404);

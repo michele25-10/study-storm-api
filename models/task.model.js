@@ -30,12 +30,13 @@ const Task = {
         });
         return result;
     },
-    selectTask: async ({ id }) => {
+    selectTask: async ({ id, user_idu }) => {
         const mysql = `
-            SELECT id, name, \`desc\`, expiry_date, planned_minutes, minutes
-            FROM ${TABLE}
-            WHERE id=@id`;
-        const result = await connFunction.query(mysql, { id });
+            SELECT t.id, t.name, t.\`desc\`, t.expiry_date, t.planned_minutes, t.minutes, t.id_goal
+            FROM ${TABLE} t
+            INNER JOIN user_goal ug ON ug.id_goal = t.id_goal
+            WHERE t.id=@id AND ug.id_user=@user_idu`;
+        const result = await connFunction.query(mysql, { id, user_idu });
         return result;
     },
     updateTask: async ({
@@ -82,7 +83,7 @@ const Task = {
         const mysql = "select id_goal from task where id=@id limit 1";
         const result = await connFunction.query(mysql, { id });
         return result[0].id_goal;
-    }
+    },
 }
 
 module.exports = Task;

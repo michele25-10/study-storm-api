@@ -26,7 +26,6 @@ const User = {
         return result;
     },
     setVerified: async ({ verification_key }) => {
-        console.log(verification_key);
         const result = await connFunction.update(VERIFICATION_TABLE, 
             { date_verified: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"), verified: 1 },
             "verification_key=@verification_key",

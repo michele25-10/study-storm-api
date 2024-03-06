@@ -1,5 +1,6 @@
 const asyncHandler = require('express-async-handler');
 const Task = require('../../models/task.model');
+const UserGoal = require('../../models/user-goal.model');
 
 //@desc get di tutti le task
 //@route GET /api/task/
@@ -19,12 +20,19 @@ const getAllTasks = asyncHandler(async (req, res) => {
 //@route POST /api/task/
 //@access private
 const createTask = asyncHandler(async (req, res) => {
+    let result = await UserGoal.filter({ id_user: req.user.idu, id_goal: req.params.id });
+
+    if (result.length != 1){
+        res.status(403);
+        throw new Error();
+    }
+
     if (req.body.expiry_date < new Date()) {
         res.status(400);
         throw new Error();
     }
 
-    const result = await Task.createTask({ ...req.body });
+    result = await Task.createTask({ ...req.body });
 
     if (result.affectedRows != 1) {
         res.status(500);
@@ -38,7 +46,7 @@ const createTask = asyncHandler(async (req, res) => {
 //@route GET /api/task/:id
 //@access private
 const getTask = asyncHandler(async (req, res) => {
-    const result = await Task.selectTask({ id: req.params.id });
+    const result = await Task.selectTask({ id: req.params.id, user_idu: req.user.idu });
 
     if (result.length == 0) {
         res.status(404);
@@ -52,12 +60,19 @@ const getTask = asyncHandler(async (req, res) => {
 //@route PUT /api/task/updateTask
 //@access private
 const updateTask = asyncHandler(async (req, res) => {
+    let result = await UserGoal.filter({ id_user: req.user.idu, id_goal: req.body.id_goal });
+
+    if (result.length != 1){
+        res.status(403);
+        throw new Error();
+    }
+
     if (req.body.expiry_date < new Date()) {
         res.status(400);
         throw new Error();
     }
 
-    const result = await Task.updateTask({ ...req.body, id: req.params.id });
+    result = await Task.updateTask({ ...req.body, id: req.params.id });
 
     if (result.affectedRows != 1) {
         res.status(500);
@@ -85,7 +100,14 @@ const updateTask = asyncHandler(async (req, res) => {
 //@route DELETE /api/task/
 //@access private
 const deleteTask = asyncHandler(async (req, res) => {
-    const result = await Task.deleteTask({ id: req.params.id });
+    let result = await UserGoal.filter({ id_user: req.user.idu, id_goal: req.body.id_goal });
+
+    if (result.length != 1){
+        res.status(403);
+        throw new Error();
+    }
+
+    result = await Task.deleteTask({ id: req.params.id });
 
     if (result.affectedRows != 1) {
         res.status(500);

@@ -13,7 +13,7 @@ const createTask = {
 
 const getTask = {
     params: Joi.object().keys({
-        id: Joi.number().integer().required,
+        id: Joi.number().integer().required(),
     })
 };
 
@@ -47,6 +47,9 @@ const addMinutes = {
 const deleteTask = {
     params: Joi.object().keys({
         id: Joi.number().integer().required(),
+    }),
+    body: Joi.object().keys({
+        id_goal: Joi.number().integer().required()
     })
 };
 

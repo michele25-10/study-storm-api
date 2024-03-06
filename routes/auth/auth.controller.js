@@ -112,7 +112,7 @@ const verify = asyncHandler(async (req, res) => {
         res.status(500);
         throw new Error();
     }
-    console.log(user_credentials)
+
     result = await User.registration({ 
         name: user_credentials.name,
         surname: user_credentials.surname,
@@ -124,7 +124,6 @@ const verify = asyncHandler(async (req, res) => {
         birth_date: user_credentials.birth_date,
         prof_img: user_credentials.prof_img || ""
      });
-    console.log(result);
 
     if (result.affectedRows != 1){
         res.status(500);
