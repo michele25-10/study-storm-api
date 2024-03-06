@@ -17,12 +17,19 @@ const User = {
         const result = await connFunction.insert(VERIFICATION_TABLE, { user_credentials });
         return result;
     },
-    retrieveVerification: async ({ id }) => {
+    retrieveVerification: async ({ id, key }) => {
         const mysql = `
             SELECT * 
             FROM ${VERIFICATION_TABLE}
-            WHERE id=@id`;
-        const result = await connFunction.query(mysql, { id });
+            WHERE ${id ? "id=@id":"1=1" } ${key ? "AND verification_key=@key" : "1=1"}`;
+        const result = await connFunction.query(mysql, { id, key });
+        return result;
+    },
+    setVerified: async ({ verification_key }) => {
+        const result = await connFunction.update(VERIFICATION_TABLE, 
+            { date_verified: "now()", verified },
+            "verification_key=@verification_key",
+            { verification_key } );
         return result;
     },
     registration: async ({ name, surname, email, tel, password, id_student_type, course_study, birth_date, prof_img }) => {

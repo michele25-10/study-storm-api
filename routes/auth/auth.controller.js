@@ -71,7 +71,7 @@ const registration = asyncHandler(async (req, res) => {
         throw new Error();
     }
 
-    result = await User.retrieveVerification({ id: result.insertId });
+    result = await User.retrieveVerification({ id: result.insertId, key: false });
 
     if (result.length != 1) {
         res.status(404);
@@ -97,9 +97,30 @@ const registration = asyncHandler(async (req, res) => {
 //@route GET /api/auth/verify
 //@access public
 const verify = asyncHandler(async (req, res) => {
-    console.log(req.query);
+    let result = await User.retrieveVerification({ id: false, key: req.query.verification_key });
+    console.log(result);
+    const key = result[0].verification_key;
 
-    res.status(201).send({ message: "Controlla la tua email" });
+    if (result.length != 1) {
+        res.status(404);
+        throw new Error();
+    }
+
+    result = await User.setVerified({ key });
+    if (result.affectedRows != 1){
+        res.status(400);
+        throw new Error();
+    }
+
+    const user_credentials = JOSN.parse(result[0].user_credentials);
+
+    result = await User.registration({ ...user_credentials });
+    if (result.affectedRows != 1){
+        res.status(400);
+        throw new Error();
+    }
+
+    res.status(201).send({ message: "Registrazione completata" });
 })
 
 //@desc in caso di password dimenticata
