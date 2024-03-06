@@ -21,7 +21,7 @@ const User = {
         const mysql = `
             SELECT * 
             FROM ${VERIFICATION_TABLE}
-            WHERE ${id ? "id=@id":"1=1" } ${key ? "AND verification_key=@key" : "1=1"}`;
+            WHERE ${id ? "id=@id":"1=1" } AND ${key ? " verification_key=@key" : "1=1"}`;
         const result = await connFunction.query(mysql, { id, key });
         return result;
     },
