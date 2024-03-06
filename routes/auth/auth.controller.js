@@ -98,7 +98,6 @@ const registration = asyncHandler(async (req, res) => {
 //@access public
 const verify = asyncHandler(async (req, res) => {
     let result = await User.retrieveVerification({ id: false, key: req.query.verification_key });
-    console.log(result);
     const key = result[0].verification_key;
 
     if (result.length != 1) {
@@ -106,7 +105,7 @@ const verify = asyncHandler(async (req, res) => {
         throw new Error();
     }
 
-    result = await User.setVerified({ key });
+    result = await User.setVerified({ verification_key: key });
     if (result.affectedRows != 1){
         res.status(400);
         throw new Error();
@@ -115,11 +114,12 @@ const verify = asyncHandler(async (req, res) => {
     const user_credentials = JOSN.parse(result[0].user_credentials);
 
     result = await User.registration({ ...user_credentials });
+    console.log(result);
     if (result.affectedRows != 1){
         res.status(400);
         throw new Error();
     }
-
+    console.log("froc")
     res.status(201).send({ message: "Registrazione completata" });
 })
 
