@@ -60,14 +60,14 @@ const registration = asyncHandler(async (req, res) => {
     let result = await User.selectUserByEmail({ email: req.body.email });
 
     if (result.length > 0) { // utente già registrato
-        res.status(400);
+        res.status(500);
         throw new Error();
     }
 
     result = await User.insertVerification({ user_credentials: JSON.stringify(req.body) });
 
     if (result.affectedRows != 1) {
-        res.status(400);
+        res.status(500);
         throw new Error();
     }
 

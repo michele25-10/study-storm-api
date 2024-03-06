@@ -27,7 +27,7 @@ const createTask = asyncHandler(async (req, res) => {
     const result = await Task.createTask({ ...req.body });
 
     if (result.affectedRows != 1) {
-        res.status(400);
+        res.status(500);
         throw new Error();
     }
 
@@ -60,7 +60,7 @@ const updateTask = asyncHandler(async (req, res) => {
     const result = await Task.updateTask({ ...req.body, id: req.params.id });
 
     if (result.affectedRows != 1) {
-        res.status(400);
+        res.status(500);
         throw new Error();
     }
 
@@ -88,7 +88,7 @@ const deleteTask = asyncHandler(async (req, res) => {
     const result = await Task.deleteTask({ id: req.params.id });
 
     if (result.affectedRows != 1) {
-        res.status(404);
+        res.status(500);
         throw new Error();
     }
 
