@@ -3,12 +3,15 @@ const ResetPassword = require('../../models/reset-password.model');
 const User = require('../../models/user.model');
 const sendMailer = require('../../utils/mail');
 const { hash } = require("../../utils/crypto");
+const fs = require('fs');
+const handlebars = require('handlebars');
+const path = require('path')
 
 const generatePassword = () => {
-    const charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+{}[]|:;"<>,.?/~';
+    const charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*:;<>,.?';
     const uppercaseCharset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     const numbersCharset = '0123456789';
-    const specialCharset = '!@#$%^&*()_+{}[]|:;"<>,.?/~';
+    const specialCharset = '!@#$%^&*:;<>,.?';
 
     let password = '';
 
@@ -50,36 +53,18 @@ const confirm = asyncHandler(async (req, res) => {
         throw new Error();
     }
 
+    const template = handlebars.compile(fs.readFileSync(path.join(__dirname, "../../templates/confirmResetPassword.html")).toString());
+    const replacements = {
+        email,
+        password
+    };
+
     await sendMailer({
         from: process.env.MAIL,
         to: email,
         subject: "STUDENTIME: Generazione password dimenticata",
         body: "",
-        html: `
-        <!DOCTYPE html>
-            <html lang="it">
-            <head>
-                <meta charset="UTF-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>Password Dimenticata</title>
-            </head>
-            <body>
-                <h1 class="title" style="color: orange; font-size: 32px; font-weight: bold;">Nuove Credenziali!</h1>
-                
-                <div class="paragraph" style="margin-top: 20px; margin-bottom: 20px; color: black; ">
-                    <p>Gentile utente, poco fa hai confermato il cambio password e noi abbiamo generato le tue nuove credenziali!<br></p>
-
-                    <ul>
-                        <li><b>Email: </b><i>${email}</i></li>
-                        <li><b>Password:</b><i>${password}</i></li>
-                    </ul>
-                
-                    <p>Ti suggeriamo cortesemente di modificare ulteriormente le password dopo il tuo accesso, così da poter rendere il più sicuro possibile il tuo account.<br></p>
-
-                    <p>Il nostro team ti saluta e ti augura un buono studio!</p>
-                </div>
-            </body>
-        </html>`
+        html: template(replacements)
     });
 
     result = await ResetPassword.confirmResetPassword({ id: req.params.id });

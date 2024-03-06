@@ -81,7 +81,7 @@ const registration = asyncHandler(async (req, res) => {
     const template = handlebars.compile(fs.readFileSync(path.join(__dirname, "../../templates/verify.html")).toString());
     const replacements = {
         verification_key: result[0].verification_key
-      };
+    };
     await sendMailer({
         from: process.env.MAIL,
         to: req.body.email,
@@ -125,6 +125,7 @@ const verify = asyncHandler(async (req, res) => {
         prof_img: user_credentials.prof_img || ""
      });
     console.log(result);
+
     if (result.affectedRows != 1){
         res.status(500);
         throw new Error();
@@ -153,44 +154,28 @@ const forgotPassword = asyncHandler(async (req, res) => {
         throw new Error('La mail è già stata inviata');
     }
 
-    await sendMailer({
-        from: process.env.MAIL,
-        to: req.body.email,
-        subject: "PASSWORD DIMENTICATA STUDENTIME",
-        text: "",
-        html: `
-        <!DOCTYPE html>
-            <html lang="it">
-            <head>
-                <meta charset="UTF-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>Password Dimenticata</title>
-            </head>
-            <body>
-
-                <h1 class="title" style="color: orange; font-size: 32px; font-weight: bold;">Password Dimenticata!</h1>
-                
-                <div class="paragraph" style="margin-top: 20px; margin-bottom: 20px; color: black; ">
-                    <p>Gentile utente, qualora avessi dimenticato la password premi il bottone conferma!<br></p>
-
-                    <p>Qualora invece non fossi stato tu a richiedere il cambio password, assicurati che la tua password sia sicura:<br>
-                    <i>${req.headers['user-agent']}</i></p>
-                
-                    <p>Se non sei tu che stai cercando di recuperare la tua password inviaci una mail all'indirizzo:<br>
-                    studentime@gmail.com</p>
-
-                    <!-- Bottone Invia -->
-                    <button style="background-color: green;border-radius: 5px; color: white; font-weight: bold;width: maxcontent; border-color:green; ">Confermo!</button>
-                </div>
-            </body>
-        </html>`
-    });
-
     const result = await ResetPassword.insertResetPassword({ idu });
     if (result.affectedRows != 1) {
         res.status(500);
         throw new Error();
     }
+
+    const idResetPassword = result.insertId;
+
+    const template = handlebars.compile(fs.readFileSync(path.join(__dirname, "../../templates/forgotPassword.html")).toString());
+    const replacements = {
+        idResetPassword,
+        host: req.headers['user-agent']
+    };
+
+
+    await sendMailer({
+        from: process.env.MAIL,
+        to: req.body.email,
+        subject: "PASSWORD DIMENTICATA STUDENTIME",
+        text: "",
+        html: template(replacements)
+    });
 
     res.status(200).send({ message: "Controlla le tue mail!" });
 });

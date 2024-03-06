@@ -25,7 +25,7 @@ const ResetPassword = {
         select rp.id, u.id as idu, u.email 
         from reset_password rp 
         inner join user u on u.id = rp.id_user 
-        where rp.id = @id AND rp.verified = '1'`;
+        where rp.id = @id AND rp.verified = '0'`;
         const result = await connFunction.query(mysql, { id });
         return result;
     },
