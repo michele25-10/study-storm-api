@@ -1,5 +1,6 @@
 const asyncHandler = require('express-async-handler');
 const User = require('../../models/user.model');
+const { hash } = require('../../utils/crypto');
 
 //@desc get di tutti gli utenti
 //@route GET /api/user/
@@ -50,7 +51,7 @@ const updateUser = asyncHandler(async (req, res) => {
     const result = await User.updateUser({ ...req.body, idu: req.params.idu });
 
     if (result.affectedRows != 1) {
-        res.status(400);
+        res.status(500);
         throw new Error();
     }
 
@@ -64,11 +65,26 @@ const deleteUser = asyncHandler(async (req, res) => {
     const result = await User.deleteUser({ ...req.params });
 
     if (result.affectedRows != 1) {
-        res.status(400);
+        res.status(404);
         throw new Error();
     }
 
     res.status(200).send({ message: "Utente eliminato" });
 });
 
-module.exports = { getAllUsers, getUser, getUserByEmail, updateUser, deleteUser };
+//@desc Cambio password utente
+//@route PUT /api/user/change-password/:idu
+//@access private
+const changePassword = asyncHandler(async (req, res) => {
+    const hashedPassword = hash(req.body.newPassword);
+
+    const result = await User.changePassword({ idu: req.params.idu, password: hashedPassword });
+    if (result.affectedRows != 1) {
+        res.status(500);
+        throw new Error();
+    }
+
+    res.status(200).send({ message: "Password cambiata" });
+});
+
+module.exports = { getAllUsers, getUser, getUserByEmail, updateUser, deleteUser, changePassword };
