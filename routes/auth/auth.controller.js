@@ -98,6 +98,12 @@ const registration = asyncHandler(async (req, res) => {
 //@access public
 const verify = asyncHandler(async (req, res) => {
     let result = await User.retrieveVerification({ id: false, key: req.query.verification_key });
+
+    if (result[0].verified == 1){
+        res.status(500);
+        throw new Error();
+    }
+
     const key = result[0].verification_key;
 
     if (result.length != 1) {
