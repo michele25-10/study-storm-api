@@ -61,6 +61,16 @@ const Agenda = {
         });
         return result;
     },
+    isAuthorizedUserAddAgenda: async ({ idu, id_task }) => {
+        const mysql = `
+        select g.id as idGoal, ug.admin, ug.id_user as idu
+        from user_goal ug 
+        inner join goal g on g.id = ug.id_goal 
+        inner join task t on t.id_goal = g.id and t.id = 5
+        where ug.id_user like @idu and ug.active = 1`;
+        const result = await connFunction.query(mysql, { idu, id_task });
+        return result;
+    }
 };
 
 module.exports = Agenda;

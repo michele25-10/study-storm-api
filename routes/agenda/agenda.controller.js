@@ -9,7 +9,16 @@ const UserTaskAgenda = require('../../models/user-task-agenda.model');
 //@route POST /api/agenda/
 //@access private
 const addAgenda = asyncHandler(async (req, res) => {
-    const check = await Agenda.isExistedAgenda({ idu: req.user.idu, id_task: req.body.id_task, date: req.body.date });
+    //Controllo se l'utente è associato all'obiettivo al quale cerca di aggiungere una agenda
+    let check = await Agenda.isAuthorizedUserAddAgenda({ idu: req.user.idu, id_task: req.body.task });
+    if (check.length != 1) {
+        res.status(403);
+        throw new Error("Non hai i permessi per inserire questa agenda");
+    }
+    const idGoal = check[0].idGoal;
+
+    //Un utente non deve poter inserire più agende nella stessa data 
+    check = await Agenda.isExistedAgenda({ idu: req.user.idu, id_task: req.body.id_task, date: req.body.date });
     if (check.length != 0) {
         res.status(200).send({ message: "Agenda già esistente" });
         return;
@@ -28,8 +37,8 @@ const addAgenda = asyncHandler(async (req, res) => {
 
     const idAgenda = result.insertId;
 
+    //Creo un record nella tabella di mezzo
     result = await UserTaskAgenda.insertUserTaskAgenda({ idu: req.user.idu, id_task: req.body.id_task, id_agenda: idAgenda })
-
     if (result.affectedRows != 1) {
         res.status(500);
         throw new Error();
@@ -41,7 +50,6 @@ const addAgenda = asyncHandler(async (req, res) => {
         res.status(500);
         throw new Error();
     }
-    const idGoal = await Task.selectIdGoalByTask({ id: req.body.id_task });
     result = await Goal.updateMinutes({ id_goal: idGoal });
     if (result.affectedRows != 1) {
         res.status(500);
@@ -55,8 +63,16 @@ const addAgenda = asyncHandler(async (req, res) => {
 //@route PUT /api/feedback/:id
 //@access private
 const putAgenda = asyncHandler(async (req, res) => {
-    const check = await Agenda.isExistedAgenda({ idu: req.user.idu, id_task: req.body.id_task, date: req.body.date, id_agenda: req.params.id });
+    //Controllo se l'utente è associato all'obiettivo al quale cerca di aggiungere una agenda
+    let check = await Agenda.isAuthorizedUserAddAgenda({ idu: req.user.idu, id_task: req.body.task });
+    if (check.length != 1) {
+        res.status(403);
+        throw new Error("Non hai i permessi per inserire questa agenda");
+    }
+    const idGoal = check[0].idGoal;
 
+    //controllo che non ci siano doppioni in quella data
+    check = await Agenda.isExistedAgenda({ idu: req.user.idu, id_task: req.body.id_task, date: req.body.date, id_agenda: req.params.id });
     for (const row of check) {
         if (row.id != req.params.id) {
             res.status(200).send({ message: "Data occupata da un'altra agenda" });
@@ -64,6 +80,7 @@ const putAgenda = asyncHandler(async (req, res) => {
         }
     }
 
+    //Modifico l'agenda 
     let result = await Agenda.updateAgenda({ ...req.body, id: req.params.id });
     if (result.affectedRows != 1) {
         res.status(500);
@@ -77,7 +94,6 @@ const putAgenda = asyncHandler(async (req, res) => {
         res.status(500);
         throw new Error();
     }
-    const idGoal = await Task.selectIdGoalByTask({ id: idTask });
     result = await Goal.updateMinutes({ id_goal: idGoal });
     if (result.affectedRows != 1) {
         res.status(500);
