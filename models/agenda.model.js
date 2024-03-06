@@ -43,9 +43,13 @@ const Agenda = {
         const result = await connFunction.delete(TABLE, " id=@id ", { id });
         return result;
     },
-    selectSingleAgenda: async ({ id }) => {
-        const mysql = "select id, date, note, minutes from agenda where id=@id";
-        const result = await connFunction.query(mysql, { id });
+    selectSingleAgenda: async ({ id, user }) => {
+        const mysql = `
+        select a.id, a.date, a.note, a.minutes, uta.id_task
+        from agenda a
+        inner join user_task_agenda uta on a.id = uta.id_agenda and uta.id_agenda=@id 
+        where a.id=@id ${user ? " and uta.id_user = @user " : ""}`;
+        const result = await connFunction.query(mysql, { id, user });
         return result;
     },
     selectAllAgenda: async ({ idu, admin, id_task, date }) => {
@@ -66,7 +70,7 @@ const Agenda = {
         select g.id as idGoal, ug.admin, ug.id_user as idu
         from user_goal ug 
         inner join goal g on g.id = ug.id_goal 
-        inner join task t on t.id_goal = g.id and t.id = 5
+        inner join task t on t.id_goal = g.id and t.id = @id_task
         where ug.id_user like @idu and ug.active = 1`;
         const result = await connFunction.query(mysql, { idu, id_task });
         return result;

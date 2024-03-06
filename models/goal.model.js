@@ -94,6 +94,15 @@ const Goal = {
         const result = await connFunction.delete(TABLE, "id=@id", { id });
         return result;
     },
+    adminGoal: async ({ id }) => {
+        const mysql = `
+        select ug.id_user as idu
+        from goal g
+        inner join user_goal ug on ug.id_goal = g.id
+        where g.id=@id and g.active = '1';`;
+        const result = await connFunction.query(mysql, { id });
+        return result;
+    }
 }
 
 module.exports = Goal;

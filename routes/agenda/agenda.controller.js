@@ -67,7 +67,7 @@ const putAgenda = asyncHandler(async (req, res) => {
     let check = await Agenda.isAuthorizedUserAddAgenda({ idu: req.user.idu, id_task: req.body.task });
     if (check.length != 1) {
         res.status(403);
-        throw new Error("Non hai i permessi per inserire questa agenda");
+        throw new Error("Non hai i permessi per modificare questa agenda");
     }
     const idGoal = check[0].idGoal;
 
@@ -120,7 +120,24 @@ const deleteAgenda = asyncHandler(async (req, res) => {
 //@route GET /api/feedback/:id
 //@access private
 const getSingleAgenda = asyncHandler(async (req, res) => {
-    const response = await Agenda.selectSingleAgenda({ id: req.params.id });
+    let response = await Agenda.selectSingleAgenda({ id: req.params.id });
+    const idTask = response[0].id_task;
+
+    //Controllo se l'utente è associato all'obiettivo al quale cerca di aggiungere una agenda
+    let check = await Agenda.isAuthorizedUserAddAgenda({ idu: req.user.idu, id_task: idTask });
+    if (check.length != 1) {
+        res.status(403);
+        throw new Error("Non hai i permessi per visualizzare questa agenda");
+    }
+
+    //Se non sei admin dell'obiettivo rifai la query aggiungendo il filtro utente
+    if (!check[0].admin) {
+        response = await Agenda.selectSingleAgenda({ id: req.params.id, user: req.user.idu });
+        if (response.length != 1) {
+            res.status(403);
+            throw new Error("Non hai i permessi");
+        }
+    }
 
     res.status(200).send(response);
 });
