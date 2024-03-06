@@ -60,14 +60,14 @@ const registration = asyncHandler(async (req, res) => {
     let result = await User.selectUserByEmail({ email: req.body.email });
 
     if (result.length > 0) { // utente già registrato
-        res.status(400);
+        res.status(500);
         throw new Error();
     }
 
     result = await User.insertVerification({ user_credentials: JSON.stringify(req.body) });
 
     if (result.affectedRows != 1) {
-        res.status(400);
+        res.status(500);
         throw new Error();
     }
 
@@ -105,21 +105,32 @@ const verify = asyncHandler(async (req, res) => {
         throw new Error();
     }
 
+    const user_credentials = JSON.parse(result[0].user_credentials);
+
     result = await User.setVerified({ verification_key: key });
-    if (result.affectedRows != 1) {
-        res.status(400);
+    if (result.affectedRows != 1){
+        res.status(500);
         throw new Error();
     }
-
-    const user_credentials = JOSN.parse(result[0].user_credentials);
-
-    result = await User.registration({ ...user_credentials });
+    console.log(user_credentials)
+    result = await User.registration({ 
+        name: user_credentials.name,
+        surname: user_credentials.surname,
+        email: user_credentials.email,
+        tel: user_credentials.tel,
+        password: user_credentials.password,
+        id_student_type: user_credentials.id_student_type,
+        course_study: user_credentials.course_study,
+        birth_date: user_credentials.birth_date,
+        prof_img: user_credentials.prof_img || ""
+     });
     console.log(result);
-    if (result.affectedRows != 1) {
-        res.status(400);
+
+    if (result.affectedRows != 1){
+        res.status(500);
         throw new Error();
     }
-    console.log("froc")
+
     res.status(201).send({ message: "Registrazione completata" });
 })
 

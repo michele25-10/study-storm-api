@@ -31,7 +31,7 @@ const createGoal = asyncHandler(async (req, res) => {
     const result = await Goal.createGoal({ ...req.body });
 
     if (result.affectedRows != 1) {
-        res.status(400);
+        res.status(500);
         throw new Error();
     }
 
@@ -40,7 +40,7 @@ const createGoal = asyncHandler(async (req, res) => {
     result = UserGoal.createUserGoal({ id_user: req.user.idu, id_goal: goalId, admin: req.body.admin || 0 });
 
     if (result.affectedRows != 1) {
-        res.status(400);
+        res.status(500);
         throw new Error();
     }
 
@@ -73,7 +73,7 @@ const updateGoal = asyncHandler(async (req, res) => {
     const result = await Goal.updateGoal({ ...req.body, id: req.params.id });
 
     if (result.affectedRows != 1) {
-        res.status(400);
+        res.status(500);
         throw new Error();
     }
 
