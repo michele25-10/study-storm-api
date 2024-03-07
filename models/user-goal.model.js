@@ -1,6 +1,8 @@
 const connFunction = require('../utils/executeMySql');
+const moment = require('moment');
 
 const TABLE = "user_goal";
+const TEAM_TABLE = "invite_team"
 
 const UserGoal = {
     selectAllUserGoal: async () => {
@@ -39,6 +41,14 @@ const UserGoal = {
         const result = await connFunction.delete(TABLE, "id_goal=@id_goal AND id_user=@id_user", { id_goal, id_user });
         return result;
     },
+    invite: async ({ id_user, id_goal }) => {
+        const result = await connFunction.insert(TEAM_TABLE, { 
+            id_user,
+            id_goal,
+            date_created: moment(new Date()).format("YYYY-MM-DD HH:mm:ss")
+         });
+         return result;
+    }
 }
 
 module.exports = UserGoal;

@@ -57,6 +57,22 @@ const deleteUserGoal = asyncHandler(async (req, res) => {
     res.status(200).send({ message: "Eliminato" });
 });
 
+//@desc creazione di un'associazione utente-obiettivo
+//@route POST /api/user-goal/:id
+//@access private
+const invite = asyncHandler(async (req, res) => {
+    req.body.id_users.forEach(async entry => {
+        const result = await UserGoal.invite({ id_user: entry.idu, id_goal: req.params.id });
+
+        if (result.affectedRows != 1) {
+            res.status(404);
+            throw new Error();
+        }
+    });
+
+    res.status(201).send({ message: "Invito/i inviato" });
+});
+
 //@desc ottiene l'associazione in base all'obiettivio
 //@route GET /api/user-goal/filter
 //@access private
@@ -71,4 +87,4 @@ const deleteUserGoal = asyncHandler(async (req, res) => {
 //     res.status(200).send(result);
 // });
 
-module.exports = { /* getAllUserGoal, */ createUserGoal, updateAdmin, deleteUserGoal, /* filter */ };
+module.exports = { /* getAllUserGoal, */ createUserGoal, updateAdmin, deleteUserGoal, invite, /* filter */ };

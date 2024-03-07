@@ -30,9 +30,21 @@ const deleteUserGoal = {
     })
 };
 
+const invite = {
+    params: Joi.object().keys({
+        id: Joi.number().integer().required(),
+    }),
+    body: Joi.object().keys({
+        id_users: Joi.array().items({
+            idu: Joi.string().length(36).required(),
+        }).required()
+    })
+};
+
 module.exports = { 
     createUserGoal, 
     updateAdmin,
     deleteUserGoal,
-    filter
+    filter,
+    invite
 };

@@ -9,6 +9,7 @@ const validate = require('../../middleware/JoiValidation');
 router.post("/", validate(userGoalValidation.createUserGoal), userGoalController.createUserGoal);
 // router.get("/filter", validate(userGoalValidation.filter), userGoalController.filter);
 router.put("/", validate(userGoalValidation.updateAdmin), userGoalController.updateAdmin);
+router.post("/:id", validate(userGoalValidation.invite), userGoalController.invite);
 router.delete("/", validate(userGoalValidation.deleteUserGoal), userGoalController.deleteUserGoal)
 
 module.exports = router;
