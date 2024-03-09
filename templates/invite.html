@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verifica account</title>
+    <title>Invito Condivisione</title>
 </head>
 <body>
 
-    <h1>Verifica account!</h1>
-    <p>Verifica il tuo account per completare la tua registrazione</p>
+    <h1>! Condivisione "{{goal}}"</h1>
+    <p>Accetta o Rifiuta la condivisione da parte di {{user}}</p>
     <!-- Bottone Invia -->
-    <a href="http://localhost:5010/api/auth/verify?verification_key={{verification_key}}">
+    <a href="http://localhost:5010/api/invite-team?verification_key={{verification_key}}">
         <button
           style="
             background-color: green;
@@ -21,7 +21,7 @@
             border-color: green;
           "
         >
-            Verifica!
+            Accetta
         </button>
     </a>
 </body>

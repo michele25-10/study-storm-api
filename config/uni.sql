@@ -168,6 +168,7 @@ CREATE TABLE `invite_team` (
   `date_created` datetime NOT NULL,
   `verified` bit NOT NULL default 0,
   `id_goal` INT NOT NULL,
+  `verification_key` char(36) NOT NULL,
   FOREIGN KEY (`id_user`)
   REFERENCES user(`id`)
   on delete cascade, 
@@ -175,6 +176,14 @@ CREATE TABLE `invite_team` (
   REFERENCES goal(`id`)
   on delete cascade, 
 ); 
+
+DELIMITER $$
+CREATE TRIGGER `init_uuid_verification_key_invite` 
+BEFORE INSERT ON `invite_team` 
+FOR EACH ROW 
+SET NEW.verification_key = UUID(); 
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 

@@ -1,5 +1,11 @@
 const asyncHandler = require('express-async-handler');
 const UserGoal = require('../../models/user-goal.model');
+const Goal = require('../../models/goal.model');
+const InviteTeam = require('../../models/invite-team.model');
+const sendMailer = require('../../utils/mail');
+const fs = require('fs');
+const handlebars = require('handlebars');
+const path = require('path')
 
 //@desc get di tutti le associazioni utente-obiettivo
 //@route GET /api/user-goal/
@@ -57,17 +63,39 @@ const deleteUserGoal = asyncHandler(async (req, res) => {
     res.status(200).send({ message: "Eliminato" });
 });
 
-//@desc creazione di un'associazione utente-obiettivo
+//@desc invito alla collaborazione di un obiettivo
 //@route POST /api/user-goal/:id
 //@access private
 const invite = asyncHandler(async (req, res) => {
-    req.body.id_users.forEach(async entry => {
+    const goal = await Goal.selectGoal({id: req.params.id});
+    req.body.users.forEach(async entry => {
         const result = await UserGoal.invite({ id_user: entry.idu, id_goal: req.params.id });
 
         if (result.affectedRows != 1) {
+            res.status(500);
+            throw new Error();
+        }
+
+        const invite = await InviteTeam.selectInvite({id: result.insertId });
+        if (invite.length != 1) {
             res.status(404);
             throw new Error();
         }
+
+        const template = handlebars.compile(fs.readFileSync(path.join(__dirname, "../../templates/invite.html")).toString());
+        const replacements = {
+            user: req.user.email,
+            goal: goal[0].name,
+            verification_key: invite[0].verification_key
+        };
+
+        await sendMailer({
+            from: process.env.MAIL,
+            to: entry.email,
+            subject: "INVITO CONDIVISIONE STUDENTIME",
+            text: "",
+            html: template(replacements)
+        });
     });
 
     res.status(201).send({ message: "Invito/i inviato" });

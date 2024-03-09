@@ -35,8 +35,10 @@ const invite = {
         id: Joi.number().integer().required(),
     }),
     body: Joi.object().keys({
-        id_users: Joi.array().items({
+        
+        users: Joi.array().items({
             idu: Joi.string().length(36).required(),
+            email: Joi.string().max(60).required(),
         }).required()
     })
 };
@@ -46,5 +48,5 @@ module.exports = {
     updateAdmin,
     deleteUserGoal,
     filter,
-    invite
+    invite,
 };
