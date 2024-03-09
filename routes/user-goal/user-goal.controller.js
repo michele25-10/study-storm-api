@@ -76,7 +76,7 @@ const invite = asyncHandler(async (req, res) => {
             throw new Error();
         }
 
-        const invite = await InviteTeam.selectInvite({id: result.insertId });
+        const invite = await InviteTeam.selectInvite({ id: result.insertId, verification_key: false });
         if (invite.length != 1) {
             res.status(404);
             throw new Error();

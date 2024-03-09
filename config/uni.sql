@@ -166,7 +166,7 @@ CREATE TABLE `invite_team` (
   `id` int unsigned not null auto_increment primary key,
   `id_user` char(36) NOT NULL,
   `date_created` datetime NOT NULL,
-  `verified` bit NOT NULL default 0,
+  `verified` boolean NOT NULL default 0,
   `id_goal` INT NOT NULL,
   `verification_key` char(36) NOT NULL,
   FOREIGN KEY (`id_user`)
