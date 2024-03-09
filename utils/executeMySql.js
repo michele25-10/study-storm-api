@@ -125,7 +125,6 @@ const connFunction = {
         mysql += ` WHERE ${whereCondition} `;
 
         mysql = stringaQuery(mysql, arguments);
-
         const result = await executeQuery(mysql);
         return result;
     },

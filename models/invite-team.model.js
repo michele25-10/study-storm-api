@@ -5,7 +5,8 @@ const TABLE = "invite_team";
 
 const InviteTeam = {
     verifyInvite: async({ verification_key }) => {
-        
+        const result = await connFunction.update(TABLE, { verified: 1 }, "verification_key=@verification_key", { verification_key });
+        return result;
     },
     selectInvite: async({ id }) => {
         const mysql = `SELECT * 

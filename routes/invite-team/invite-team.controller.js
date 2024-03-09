@@ -6,7 +6,12 @@ const InviteTeam = require('../../models/invite-team.model');
 //@route GET /api/invite-team/
 //@access private
 const verifyInvite = asyncHandler(async (req, res) => {
-    console.log(req.query.verification_key);
+    const result = await InviteTeam.verifyInvite({ verification_key: req.query.verification_key });
+    console.log(result);
+    if (result.affectedRows != 1){
+        res.status(500);
+        throw new Error();
+    }
 
     res.status(201).send({ message: "Invito Accettato" });
 });
