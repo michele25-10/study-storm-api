@@ -17,7 +17,14 @@ const verifyInvite = asyncHandler(async (req, res) => {
         throw new Error();
     }   
 
-    const result = await InviteTeam.verifyInvite({ verification_key: req.query.verification_key });
+    let result = await InviteTeam.verifyInvite({ verification_key: req.query.verification_key });
+
+    if (result.affectedRows != 1){
+        res.status(500);
+        throw new Error();
+    }
+
+    result = await UserGoal.createUserGoal({ id_user: invitation[0].id_user, id_goal: invitation[0].id_goal, admin: 0 })
 
     if (result.affectedRows != 1){
         res.status(500);
