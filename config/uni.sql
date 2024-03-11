@@ -253,7 +253,7 @@ CREATE TABLE `reset_password` (
 CREATE TABLE newsletter (
   `id` int auto_increment primary key,
   `email` varchar(60) NOT NULL unique,
-  `cookie_accepted` boolean default 0
+  `cookie_accepted` boolean default 0 not null
 );
 
 -- --------------------------------------------------------

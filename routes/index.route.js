@@ -5,6 +5,7 @@ const validateToken = require('./../middleware/validateToken');
 router.use("/auth", require("./auth/auth.route"));
 router.use("/reset-password", require("./reset-password/reset-password.route"));
 router.use("/invite-team", require("./invite-team/invite-team.route"));
+router.use("/newsletter", require("./newsletter/newsletter.route"));
 
 //Rotte con token
 router.all('*', validateToken);
