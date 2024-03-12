@@ -99,6 +99,10 @@ const registration = asyncHandler(async (req, res) => {
 //@access public
 const verify = asyncHandler(async (req, res) => {
     let result = await User.retrieveVerification({ id: false, key: req.query.verification_key });
+    if (result.length != 1) {
+        res.status(404);
+        throw new Error();
+    }
 
     if (result[0].verified == 1) {
         res.status(500);
@@ -137,7 +141,7 @@ const verify = asyncHandler(async (req, res) => {
         throw new Error();
     }
 
-    res.status(201).send({ message: "Registrazione completata" });
+    res.status(200).send({ message: "Registrazione completata" });
 })
 
 //@desc in caso di password dimenticata
