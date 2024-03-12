@@ -6,7 +6,7 @@ const Newsletter = {
     insertNewsletter: async ({ email, cookie_accepted }) => {
         const result = await connFunction.insert(TABLE, {
             email,
-            cookie_accepted,
+            cookie_accepted: cookie_accepted ? 1 : 0,
         });
         return result;
     },

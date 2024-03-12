@@ -9,7 +9,7 @@ const path = require('path')
 //@route POST /api/newsletter/
 //@access private
 const addNewsletter = asyncHandler(async (req, res) => {
-    const result = await Newsletter.insertNewsletter({ email: req.body.email, cookie_accepted: req.body.cookie_accepted || 0 });
+    const result = await Newsletter.insertNewsletter({ email: req.body.email, cookie_accepted: req.body.accepted_cookie });
 
     if (result.affectedRows != 1) {
         res.status(500);
