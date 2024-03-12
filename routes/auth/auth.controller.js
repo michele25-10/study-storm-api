@@ -100,7 +100,7 @@ const registration = asyncHandler(async (req, res) => {
 const verify = asyncHandler(async (req, res) => {
     let result = await User.retrieveVerification({ id: false, key: req.query.verification_key });
 
-    if (result[0].verified == 1){
+    if (result[0].verified == 1) {
         res.status(500);
         throw new Error();
     }
@@ -115,12 +115,12 @@ const verify = asyncHandler(async (req, res) => {
     const user_credentials = JSON.parse(result[0].user_credentials);
 
     result = await User.setVerified({ verification_key: key });
-    if (result.affectedRows != 1){
+    if (result.affectedRows != 1) {
         res.status(500);
         throw new Error();
     }
 
-    result = await User.registration({ 
+    result = await User.registration({
         name: user_credentials.name,
         surname: user_credentials.surname,
         email: user_credentials.email,
@@ -130,9 +130,9 @@ const verify = asyncHandler(async (req, res) => {
         course_study: user_credentials.course_study,
         birth_date: user_credentials.birth_date,
         prof_img: user_credentials.prof_img || ""
-     });
+    });
 
-    if (result.affectedRows != 1){
+    if (result.affectedRows != 1) {
         res.status(500);
         throw new Error();
     }
