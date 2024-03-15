@@ -174,7 +174,7 @@ CREATE TABLE `invite_team` (
   on delete cascade, 
   FOREIGN KEY (`id_goal`)
   REFERENCES goal(`id`)
-  on delete cascade, 
+  on delete cascade
 ); 
 
 DELIMITER $$
