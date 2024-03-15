@@ -195,7 +195,7 @@ CREATE TABLE `user_goal` (
   `id_user` char(36) NOT NULL,
   `id_goal` int NOT NULL,
   `admin` tinyint(1) DEFAULT '0',
-  `active` bit NOT NULL DEFAULT '1'
+  `active` tinyint(1) DEFAULT '1'
 ); 
 
 -- --------------------------------------------------------
