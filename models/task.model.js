@@ -18,7 +18,8 @@ const Task = {
         expiry_date,
         planned_minutes,
         minutes,
-        id_goal
+        id_goal,
+        color
     }) => {
         const result = await connFunction.insert(TABLE, {
             name,
@@ -26,7 +27,8 @@ const Task = {
             expiry_date: expiry_date ? moment(expiry_date).format("YYYY-MM-DD") : null,
             planned_minutes,
             minutes,
-            id_goal
+            id_goal,
+            color
         });
         return result;
     },
@@ -45,7 +47,8 @@ const Task = {
         expiry_date,
         planned_minutes,
         minutes,
-        id
+        id,
+        color
     }) => {
         const result = await connFunction.update(TABLE, {
             name,
@@ -53,6 +56,7 @@ const Task = {
             expiry_date: moment(expiry_date).format("YYYY-MM-DD"),
             planned_minutes,
             minutes,
+            color
         },
             "id=@id",
             { id });
