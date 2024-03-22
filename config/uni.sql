@@ -37,7 +37,8 @@ CREATE TABLE `goal` (
   `minutes` int DEFAULT NULL,
   `expected_grade` float DEFAULT NULL,
   `grade` float DEFAULT NULL,
-  `finished` tinyint(1) DEFAULT '0'
+  `finished` tinyint(1) DEFAULT '0',
+  `color` varchar(7) not null
 ) ; 
 
 -- --------------------------------------------------------
@@ -113,7 +114,8 @@ CREATE TABLE `task` (
   `minutes` int DEFAULT NULL,
   `planned_minutes` int DEFAULT NULL,
   `expiry_date` date DEFAULT NULL,
-  `id_goal` int NOT NULL
+  `id_goal` int NOT NULL, 
+  `color` varchar(7) not null 
 );
 
 -- --------------------------------------------------------
