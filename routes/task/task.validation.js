@@ -7,7 +7,8 @@ const createTask = {
         expiry_date: Joi.date().allow(null, ""),
         planned_minutes: Joi.number().integer().allow(null, ""),
         minutes: Joi.number().integer().allow(null, ""),
-        id_goal: Joi.number().integer().required()
+        id_goal: Joi.number().integer().required(),
+        color: Joi.string().pattern(/^#(?:[0-9a-fA-F]{3}){1,2}$/).allow(null, "")
     })
 };
 
@@ -33,7 +34,8 @@ const updateTask = {
         expiry_date: Joi.date().allow(null, ""),
         planned_minutes: Joi.number().integer().allow(null, ""),
         minutes: Joi.number().integer().allow(null, ""),
-        id_goal: Joi.number().integer().required()
+        id_goal: Joi.number().integer().required(),
+        color: Joi.string().pattern(/^#(?:[0-9a-fA-F]{3}){1,2}$/).allow(null, "")
     })
 };
 
