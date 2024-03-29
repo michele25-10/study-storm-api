@@ -24,6 +24,7 @@ const createGoal = {
 const getGoal = {
     query: Joi.object().keys({
         alsoFinished: Joi.boolean(),
+        tasks: Joi.boolean()
     }),
     params: Joi.object().keys({
         id: Joi.number().integer().required(),
