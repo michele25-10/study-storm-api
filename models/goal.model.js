@@ -6,7 +6,7 @@ const TABLE = "goal";
 const Goal = {
     selectAllGoals: async ({ alsoFinished, idu }) => {
         const mysql = `
-            SELECT id, name, \`desc\`, expiry_date, planned_minutes, minutes, expected_grade, grade, finished
+            SELECT id, name, \`desc\`, expiry_date, planned_minutes, minutes, expected_grade, grade, finished, color
             FROM ${TABLE} g
             INNER JOIN user_goal ug ON ug.id_goal = g.id
             WHERE ${alsoFinished ? " 1=1 " : " finished = 0"} AND ug.id_user=@idu`;
@@ -21,6 +21,7 @@ const Goal = {
         minutes,
         expected_grade,
         grade,
+        color
     }) => {
         const result = await connFunction.insert(TABLE, {
             name,
@@ -29,13 +30,14 @@ const Goal = {
             planned_minutes,
             minutes,
             expected_grade,
-            grade
+            grade,
+            color
         });
         return result;
     },
     selectGoal: async ({ id, alsoFinished }) => {
         const mysql = `
-            SELECT id, name, \`desc\`, expiry_date, planned_minutes, minutes, expected_grade, grade, finished
+            SELECT id, name, \`desc\`, expiry_date, planned_minutes, minutes, expected_grade, grade, finished, color
             FROM ${TABLE}
             WHERE ${alsoFinished ? " 1=1 " : " finished = 0 "} AND id=@id`;
         const result = await connFunction.query(mysql, { id });
@@ -49,7 +51,8 @@ const Goal = {
         minutes,
         expected_grade,
         grade,
-        id
+        id,
+        color
     }) => {
         const result = await connFunction.update(TABLE, {
             name,
@@ -58,7 +61,8 @@ const Goal = {
             planned_minutes,
             minutes,
             expected_grade,
-            grade
+            grade,
+            color
         },
             "id=@id",
             { id });

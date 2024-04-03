@@ -42,7 +42,8 @@ CREATE TABLE `goal` (
   `minutes` int DEFAULT NULL,
   `expected_grade` float DEFAULT NULL,
   `grade` float DEFAULT NULL,
-  `finished` tinyint(1) DEFAULT '0'
+  `finished` tinyint(1) DEFAULT '0',
+  `color` varchar(7) not null
 ) ; 
 
 -- --------------------------------------------------------
@@ -118,7 +119,8 @@ CREATE TABLE `task` (
   `minutes` int DEFAULT NULL,
   `planned_minutes` int DEFAULT NULL,
   `expiry_date` date DEFAULT NULL,
-  `id_goal` int NOT NULL
+  `id_goal` int NOT NULL, 
+  `color` varchar(7) not null 
 );
 
 -- --------------------------------------------------------
@@ -179,7 +181,7 @@ CREATE TABLE `invite_team` (
   on delete cascade, 
   FOREIGN KEY (`id_goal`)
   REFERENCES goal(`id`)
-  on delete cascade, 
+  on delete cascade
 ); 
 
 DELIMITER $$
@@ -200,7 +202,7 @@ CREATE TABLE `user_goal` (
   `id_user` char(36) NOT NULL,
   `id_goal` int NOT NULL,
   `admin` tinyint(1) DEFAULT '0',
-  `active` bit NOT NULL DEFAULT '1'
+  `active` tinyint(1) DEFAULT '1'
 ); 
 
 -- --------------------------------------------------------

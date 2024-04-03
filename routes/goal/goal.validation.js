@@ -16,13 +16,15 @@ const createGoal = {
         minutes: Joi.number().integer().allow(null, ""),
         expected_grade: Joi.number().allow(null, ""),
         grade: Joi.number().allow(null, ""),
-        admin: Joi.number().integer()
+        admin: Joi.number().integer(),
+        color: Joi.string().pattern(/^#(?:[0-9a-fA-F]{3}){1,2}$/).allow(null, "")
     })
 };
 
 const getGoal = {
     query: Joi.object().keys({
         alsoFinished: Joi.boolean(),
+        tasks: Joi.boolean()
     }),
     params: Joi.object().keys({
         id: Joi.number().integer().required(),
@@ -41,6 +43,7 @@ const updateGoal = {
         minutes: Joi.number().integer().allow(null, ""),
         expected_grade: Joi.number().allow(null, ""),
         grade: Joi.number().allow(null, ""),
+        color: Joi.string().pattern(/^#(?:[0-9a-fA-F]{3}){1,2}$/).allow(null, "")
     })
 };
 

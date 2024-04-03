@@ -107,8 +107,9 @@ const verify = asyncHandler(async (req, res) => {
     console.log(result);
 
     if (result[0].verified == 1) {
-        res.status(500);
-        throw new Error();
+        res.status(201).send({
+            message: `L'utente è già stato confermato, inizia ad usare l'APP, e facci sapere cosa ne pensi! Buono studio!`
+        });
     }
 
     const key = result[0].verification_key;
@@ -143,7 +144,11 @@ const verify = asyncHandler(async (req, res) => {
         throw new Error();
     }
 
-    res.status(200).send({ message: "Registrazione completata" });
+    res.status(200).send({
+        message: `Ciao utente, grazie per aver confermato la tua iscrizione!
+        Il nostro team è entusiasta di averti in squadra e lavoreremo per migliorare l'applicazione 
+        e di conseguenza migliorare il tuo studio.`
+    });
 })
 
 //@desc in caso di password dimenticata

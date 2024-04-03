@@ -53,19 +53,26 @@ const createGoal = asyncHandler(async (req, res) => {
 const getGoal = asyncHandler(async (req, res) => {
     let result = await UserGoal.filter({ id_user: req.user.idu, id_goal: req.params.id });
 
-    if (result.length != 1){
+    if (result.length != 1) {
         res.status(403);
         throw new Error();
     }
 
-    result = await Goal.selectGoal({ alsoDisactive: req.query.alsoDisactive || false, id: req.params.id });
+    let response = await Goal.selectGoal({ alsoDisactive: req.query.alsoDisactive || false, id: req.params.id });
 
-    if (result.length == 0) {
+    if (response.length == 0) {
         res.status(404);
         throw new Error();
     }
 
-    res.status(200).send(result);
+    if (req.query.tasks) {
+        for (const row of response) {
+            const task = await Task.selectAllTasks({ id_goal: row.id });
+            row.tasks = task;
+        }
+    }
+
+    res.status(200).send(response);
 });
 
 //@desc modifica di un obiettivo
@@ -74,7 +81,7 @@ const getGoal = asyncHandler(async (req, res) => {
 const updateGoal = asyncHandler(async (req, res) => {
     let result = await UserGoal.filter({ id_user: req.user.idu, id_goal: req.params.id });
 
-    if (result.length != 1){
+    if (result.length != 1) {
         res.status(403);
         throw new Error();
     }
@@ -100,7 +107,7 @@ const updateGoal = asyncHandler(async (req, res) => {
 const updateFinished = asyncHandler(async (req, res) => {
     let result = await UserGoal.filter({ id_user: req.user.idu, id_goal: req.params.id });
 
-    if (result.length != 1){
+    if (result.length != 1) {
         res.status(403);
         throw new Error();
     }
@@ -135,7 +142,7 @@ const updateFinished = asyncHandler(async (req, res) => {
 const deleteGoal = asyncHandler(async (req, res) => {
     let result = await UserGoal.filter({ id_user: req.user.idu, id_goal: req.params.id });
 
-    if (result.length != 1){
+    if (result.length != 1) {
         res.status(403);
         throw new Error();
     }

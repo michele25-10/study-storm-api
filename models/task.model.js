@@ -6,7 +6,7 @@ const TABLE = "task";
 const Task = {
     selectAllTasks: async ({ id_goal }) => {
         const mysql = `
-            SELECT id, name, \`desc\`, expiry_date, planned_minutes, minutes, id_goal
+            SELECT id, name, \`desc\`, expiry_date, planned_minutes, minutes, id_goal, color
             FROM ${TABLE}
             WHERE 1=1 ${id_goal ? " AND id_goal=@id_goal" : ""}`;
         const result = await connFunction.query(mysql, { id_goal });
@@ -18,7 +18,8 @@ const Task = {
         expiry_date,
         planned_minutes,
         minutes,
-        id_goal
+        id_goal,
+        color
     }) => {
         const result = await connFunction.insert(TABLE, {
             name,
@@ -26,13 +27,14 @@ const Task = {
             expiry_date: expiry_date ? moment(expiry_date).format("YYYY-MM-DD") : null,
             planned_minutes,
             minutes,
-            id_goal
+            id_goal,
+            color
         });
         return result;
     },
     selectTask: async ({ id, user_idu }) => {
         const mysql = `
-            SELECT t.id, t.name, t.\`desc\`, t.expiry_date, t.planned_minutes, t.minutes, t.id_goal
+            SELECT t.id, t.name, t.\`desc\`, t.expiry_date, t.planned_minutes, t.minutes, t.id_goal, t.color
             FROM ${TABLE} t
             INNER JOIN user_goal ug ON ug.id_goal = t.id_goal
             WHERE t.id=@id AND ug.id_user=@user_idu`;
@@ -45,7 +47,8 @@ const Task = {
         expiry_date,
         planned_minutes,
         minutes,
-        id
+        id,
+        color
     }) => {
         const result = await connFunction.update(TABLE, {
             name,
@@ -53,6 +56,7 @@ const Task = {
             expiry_date: moment(expiry_date).format("YYYY-MM-DD"),
             planned_minutes,
             minutes,
+            color
         },
             "id=@id",
             { id });
