@@ -104,6 +104,8 @@ const verify = asyncHandler(async (req, res) => {
         throw new Error();
     }
 
+    console.log(result);
+
     if (result[0].verified == 1) {
         res.status(500);
         throw new Error();
