@@ -15,7 +15,7 @@ const putAgenda = {
     }),
     body: Joi.object().keys({
         date: Joi.date().required(),
-        note: Joi.string().max(512).required(),
+        note: Joi.string().max(512).allow("", null).required(),
         minutes: Joi.number().integer().required(),
     })
 };
@@ -38,6 +38,5 @@ const getAllAgenda = {
         date: Joi.date(),
     })
 };
-
 
 module.exports = { addAgenda, putAgenda, deleteAgenda, getSingleAgenda, getAllAgenda };

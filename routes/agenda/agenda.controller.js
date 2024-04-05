@@ -10,7 +10,8 @@ const UserTaskAgenda = require('../../models/user-task-agenda.model');
 //@access private
 const addAgenda = asyncHandler(async (req, res) => {
     //Controllo se l'utente è associato all'obiettivo al quale cerca di aggiungere una agenda
-    let check = await Agenda.isAuthorizedUserAddAgenda({ idu: req.user.idu, id_task: req.body.task });
+    let check = await Agenda.isAuthorizedUserAddAgenda({ idu: req.user.idu, id_task: req.body.id_task });
+
     if (check.length != 1) {
         res.status(403);
         throw new Error("Non hai i permessi per inserire questa agenda");
@@ -20,30 +21,38 @@ const addAgenda = asyncHandler(async (req, res) => {
     //Un utente non deve poter inserire più agende nella stessa data 
     check = await Agenda.isExistedAgenda({ idu: req.user.idu, id_task: req.body.id_task, date: req.body.date });
     if (check.length != 0) {
-        res.status(200).send({ message: "Agenda già esistente" });
-        return;
+        const idAgenda = check[0].id;
+        let result = await Agenda.updateAgenda({
+            date: req.body.date,
+            note: req.body.note,
+            minutes: req.body.minutes,
+            id: idAgenda
+        });
+        if (result.affectedRows != 1) {
+            res.status(500);
+            throw new Error();
+        }
+    } else {
+        //Agenda non esiste in tale data all'ora la aggiungo
+        let result = await Agenda.insertAgenda({
+            date: req.body.date,
+            note: req.body.note,
+            minutes: req.body.minutes,
+        });
+        if (result.affectedRows != 1) {
+            res.status(500);
+            throw new Error();
+        }
+
+        const idAgenda = result.insertId;
+
+        //Creo un record nella tabella di mezzo
+        result = await UserTaskAgenda.insertUserTaskAgenda({ idu: req.user.idu, id_task: req.body.id_task, id_agenda: idAgenda })
+        if (result.affectedRows != 1) {
+            res.status(500);
+            throw new Error();
+        }
     }
-
-    let result = await Agenda.insertAgenda({
-        date: req.body.date,
-        note: req.body.note,
-        minutes: req.body.minutes,
-    });
-
-    if (result.affectedRows != 1) {
-        res.status(500);
-        throw new Error();
-    }
-
-    const idAgenda = result.insertId;
-
-    //Creo un record nella tabella di mezzo
-    result = await UserTaskAgenda.insertUserTaskAgenda({ idu: req.user.idu, id_task: req.body.id_task, id_agenda: idAgenda })
-    if (result.affectedRows != 1) {
-        res.status(500);
-        throw new Error();
-    }
-
     // aggiornamento minuti totali sulle task e sui goal
     result = await Task.updateMinutes({ id_task: req.body.id_task });
     if (result.affectedRows != 1) {
@@ -64,7 +73,7 @@ const addAgenda = asyncHandler(async (req, res) => {
 //@access private
 const putAgenda = asyncHandler(async (req, res) => {
     //Controllo se l'utente è associato all'obiettivo al quale cerca di aggiungere una agenda
-    let check = await Agenda.isAuthorizedUserAddAgenda({ idu: req.user.idu, id_task: req.body.task });
+    let check = await Agenda.isAuthorizedUserAddAgenda({ idu: req.user.idu, id_task: req.body.id_task });
     if (check.length != 1) {
         res.status(403);
         throw new Error("Non hai i permessi per modificare questa agenda");
@@ -164,14 +173,20 @@ const getAllAgenda = asyncHandler(async (req, res) => {
     }
 
     if (check[0].admin) {
-        response = await Agenda.selectAllAgenda({
+        response.personal = await Agenda.selectAllAgenda({
+            admin: false,
+            idu: req.user.idu,
+            date: req.query.date,
+            id_task: req.query.id_task
+        });
+        response.team = await Agenda.selectAllAgenda({
             admin: true,
             idu: req.user.idu,
             date: req.query.date,
             id_task: req.query.id_task
         });
     } else {
-        response = await Agenda.selectAllAgenda({
+        response.personal = await Agenda.selectAllAgenda({
             admin: false,
             idu: req.user.idu,
             date: req.query.date,
