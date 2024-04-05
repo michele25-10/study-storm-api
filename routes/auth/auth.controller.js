@@ -104,8 +104,6 @@ const verify = asyncHandler(async (req, res) => {
         throw new Error();
     }
 
-    console.log(result);
-
     if (result[0].verified == 1) {
         res.status(201).send({
             message: `L'utente è già stato confermato, inizia ad usare l'APP, e facci sapere cosa ne pensi! Buono studio!`
