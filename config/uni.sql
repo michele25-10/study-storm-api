@@ -43,7 +43,7 @@ CREATE TABLE `goal` (
   `expected_grade` float DEFAULT NULL,
   `grade` float DEFAULT NULL,
   `finished` tinyint(1) DEFAULT '0',
-  `color` varchar(7) not null
+  `id_palette` int not null
 ) ; 
 
 -- --------------------------------------------------------
@@ -120,7 +120,7 @@ CREATE TABLE `task` (
   `planned_minutes` int DEFAULT NULL,
   `expiry_date` date DEFAULT NULL,
   `id_goal` int NOT NULL, 
-  `color` varchar(7) not null 
+  `id_palette` int not null
 );
 
 -- --------------------------------------------------------
@@ -149,7 +149,7 @@ CREATE TABLE `user` (
   `id_student_type` int NOT NULL,
   `course_study` varchar(30) NOT NULL,
   `birth_date` date NOT NULL,
-  `prof_img` blob,
+  `id_img` int not null,
   `status` tinyint(1) DEFAULT '1'
 ); 
 
@@ -262,6 +262,18 @@ CREATE TABLE newsletter (
   `email` varchar(60) NOT NULL unique,
   `cookie_accepted` boolean default 0 not null
 );
+
+create table palette_color(
+ id INT NOT NULL   AUTO_INCREMENT  PRIMARY key, 
+ primary_color varchar(7) not null, 
+ secondary_color varchar(7) not null
+); 
+
+create table img_profile(
+ id INT NOT NULL   AUTO_INCREMENT  PRIMARY key,
+ `path` varchar(40) not null,
+ `desc` varchar(20) not null
+); 
 
 -- --------------------------------------------------------
 
@@ -479,5 +491,13 @@ ALTER TABLE `user_task_agenda`
   ADD CONSTRAINT `fk_u_task_a` FOREIGN KEY (`id_task`) REFERENCES `task` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `fk_user_t_a` FOREIGN KEY (`id_user`) REFERENCES `user` (`id`) ON DELETE CASCADE;
 
-COMMIT;
+ALTER TABLE `task`
+  ADD CONSTRAINT `fk_task_palette_color` FOREIGN KEY (`id_palette`) references `palette_color` (`id`); 
 
+ALTER TABLE `goal`
+  ADD CONSTRAINT `fk_goal_palette` FOREIGN KEY (`id_palette`) REFERENCES `palette_color` (`id`); 
+  
+  ALTER TABLE `user`
+  ADD CONSTRAINT `fk_user_img` FOREIGN KEY (`id_img`) REFERENCES `img_profile` (`id`); 
+  
+  COMMIT;
