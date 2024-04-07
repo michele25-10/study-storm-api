@@ -23,13 +23,10 @@ const getAllGoals = asyncHandler(async (req, res) => {
 //@route POST /api/goal
 //@access private
 const createGoal = asyncHandler(async (req, res) => {
-    console.log(req.body)
     if (req.body.expiry_date != null &&  req.body.expiry_date < new Date()) {
         res.status(400);
         throw new Error();
     }
-
-    console.log(req.body)
 
     const result = await Goal.createGoal({ ...req.body });
 
