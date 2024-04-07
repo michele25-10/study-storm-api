@@ -10,7 +10,7 @@ const Goal = {
             FROM ${TABLE} g
             inner join palette_color pc on pc.id = g.id_palette
             INNER JOIN user_goal ug ON ug.id_goal = g.id
-            WHERE ${alsoFinished ? " 1=1 " : " finished = 0"} AND ug.id_user=@idu`;
+            WHERE ${alsoFinished ? " 1=1 " : " g.finished = 0"} AND ug.id_user=@idu`;
         const result = await connFunction.query(mysql, { idu });
         return result;
     },
@@ -41,7 +41,7 @@ const Goal = {
             SELECT g.id, g.name, g.\`desc\`, g.expiry_date, g.planned_minutes, g.minutes, g.expected_grade, g.grade, g.finished, pc.primary_color, pc.secondary_color
             FROM ${TABLE} g
             inner join palette_color pc on pc.id = g.id_palette
-            WHERE ${alsoFinished ? " 1=1 " : " finished = 0 "} AND id=@id`;
+            WHERE ${alsoFinished ? " 1=1 " : " g.finished = 0 "} AND g.id=@id`;
         const result = await connFunction.query(mysql, { id });
         return result;
     },
