@@ -8,7 +8,7 @@ const createTask = {
         planned_minutes: Joi.number().integer().allow(null, ""),
         minutes: Joi.number().integer().allow(null, ""),
         id_goal: Joi.number().integer().required(),
-        color: Joi.string().pattern(/^#(?:[0-9a-fA-F]{3}){1,2}$/).allow(null, "")
+        id_palette: Joi.number().allow(null, "")
     })
 };
 
@@ -35,7 +35,7 @@ const updateTask = {
         planned_minutes: Joi.number().integer().allow(null, ""),
         minutes: Joi.number().integer().allow(null, ""),
         id_goal: Joi.number().integer().required(),
-        color: Joi.string().pattern(/^#(?:[0-9a-fA-F]{3}){1,2}$/).allow(null, "")
+        id_palette: Joi.number().allow(null, "")
     })
 };
 

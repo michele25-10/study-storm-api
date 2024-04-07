@@ -20,9 +20,9 @@ const getAllTasks = asyncHandler(async (req, res) => {
 //@route POST /api/task/
 //@access private
 const createTask = asyncHandler(async (req, res) => {
-    let result = await UserGoal.filter({ id_user: req.user.idu, id_goal: req.params.id });
+    let result = await UserGoal.filter({ id_user: req.user.idu, id_goal: req.body.id_goal });
 
-    if (result.length != 1){
+    if (result.length != 1) {
         res.status(403);
         throw new Error();
     }
@@ -62,7 +62,7 @@ const getTask = asyncHandler(async (req, res) => {
 const updateTask = asyncHandler(async (req, res) => {
     let result = await UserGoal.filter({ id_user: req.user.idu, id_goal: req.body.id_goal });
 
-    if (result.length != 1){
+    if (result.length != 1) {
         res.status(403);
         throw new Error();
     }
@@ -102,7 +102,7 @@ const updateTask = asyncHandler(async (req, res) => {
 const deleteTask = asyncHandler(async (req, res) => {
     let result = await UserGoal.filter({ id_user: req.user.idu, id_goal: req.body.id_goal });
 
-    if (result.length != 1){
+    if (result.length != 1) {
         res.status(403);
         throw new Error();
     }
