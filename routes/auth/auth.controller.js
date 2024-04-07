@@ -58,6 +58,8 @@ const registration = asyncHandler(async (req, res) => {
     const hashedPassword = hash(req.body.password);
     req.body.password = hashedPassword;
 
+    req.body.id_img = req.body.id_img ? req.body.id_img : 1;
+
     let result = await User.selectUserByEmail({ email: req.body.email });
 
     if (result.length > 0) { // utente già registrato
@@ -134,7 +136,7 @@ const verify = asyncHandler(async (req, res) => {
         id_student_type: user_credentials.id_student_type,
         course_study: user_credentials.course_study,
         birth_date: user_credentials.birth_date,
-        prof_img: user_credentials.prof_img || ""
+        id_img: user_credentials.id_img || 1
     });
 
     if (result.affectedRows != 1) {

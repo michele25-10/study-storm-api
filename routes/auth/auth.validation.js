@@ -18,7 +18,7 @@ const registration = {
         id_student_type: Joi.number().integer().required(),
         course_study: Joi.string().max(30).required(),
         birth_date: Joi.date().required(),
-        prof_img: Joi.string().allow(null, ""),
+        id_img: Joi.number().allow(null, ""),
     })
 };
 

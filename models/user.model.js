@@ -7,9 +7,10 @@ const VERIFICATION_TABLE = "user_verification";
 const User = {
     login: async ({ email }) => {
         const mysql = `
-        select id, password, name, surname, email, tel, prof_img, course_study, id_student_type
-        from ${TABLE}
-        where email like @email and status=1`;
+        select u.id, u.password, u.name, u.surname, u.email, u.tel, ip.path as "prof_img", u.course_study, u.id_student_type
+        from ${TABLE} u 
+        inner join img_profile ip on ip.id = u.id_img
+        where u.email like @email and u.status=1`;
         const result = await connFunction.query(mysql, { email });
         return result;
     },
@@ -21,18 +22,18 @@ const User = {
         const mysql = `
             SELECT * 
             FROM ${VERIFICATION_TABLE}
-            WHERE ${id ? "id=@id":"1=1" } AND ${key ? " verification_key=@key" : "1=1"}`;
+            WHERE ${id ? "id=@id" : "1=1"} AND ${key ? " verification_key=@key" : "1=1"}`;
         const result = await connFunction.query(mysql, { id, key });
         return result;
     },
     setVerified: async ({ verification_key }) => {
-        const result = await connFunction.update(VERIFICATION_TABLE, 
+        const result = await connFunction.update(VERIFICATION_TABLE,
             { date_verified: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"), verified: 1 },
             "verification_key=@verification_key",
-            { verification_key } );
+            { verification_key });
         return result;
     },
-    registration: async ({ name, surname, email, tel, password, id_student_type, course_study, birth_date, prof_img }) => {
+    registration: async ({ name, surname, email, tel, password, id_student_type, course_study, birth_date, id_img }) => {
         const result = await connFunction.insert(TABLE, {
             name,
             surname,
@@ -42,29 +43,31 @@ const User = {
             id_student_type,
             course_study,
             birth_date: moment(birth_date).format("YYYY-MM-DD"),
-            prof_img
+            id_img: id_img ? id_img : 1,
         });
         return result;
     },
     selectAllUsers: async ({ alsoDisactive }) => {
         const mysql = `
-            SELECT id, name, surname, email, tel, prof_img, course_study
-            FROM ${TABLE}
-            WHERE ${alsoDisactive ? " 1=1 " : " status = 1 "}`;
+            SELECT u.id, u.name, u.surname, u.email, u.tel, ip.path as "prof_img", u.course_study
+            FROM ${TABLE} u
+            inner join img_profile ip on ip.id = u.id_img 
+            WHERE ${alsoDisactive ? " 1=1 " : " u.status = 1 "}`;
         const result = await connFunction.query(mysql);
         return result;
     },
     selectUser: async ({ idu, alsoDisactive }) => {
         const mysql = `
-            SELECT id, name, surname, email, tel, prof_img, course_study
-            FROM ${TABLE}
-            WHERE ${alsoDisactive ? " 1=1 " : " status = 1 "} AND id=@idu`;
+            SELECT u.id, u.name, u.surname, u.email, u.tel, ip.path as "prof_img",u. course_study
+            FROM ${TABLE} u
+            inner join image_profile ip on ip.id = u.id_img
+            WHERE ${alsoDisactive ? " 1=1 " : " u.status = 1 "} AND u.id=@idu`;
         const result = await connFunction.query(mysql, { idu });
         return result;
     },
     selectUserByEmail: async ({ email, alsoDisactive }) => {
         const mysql = `
-            SELECT id, name, surname, email, tel, prof_img, course_study
+            SELECT u.id, u.name, surname, email, tel, prof_img, course_study
             FROM ${TABLE}
             WHERE ${alsoDisactive ? " 1=1 " : " status = 1 "} AND email=@email`;
         const result = await connFunction.query(mysql, { email });
