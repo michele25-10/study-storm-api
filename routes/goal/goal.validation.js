@@ -17,7 +17,7 @@ const createGoal = {
         expected_grade: Joi.number().allow(null, ""),
         grade: Joi.number().allow(null, ""),
         admin: Joi.number().integer(),
-        color: Joi.string().pattern(/^#(?:[0-9a-fA-F]{3}){1,2}$/).allow(null, "")
+        id_palette: Joi.number().allow(null, "")
     })
 };
 
@@ -43,7 +43,7 @@ const updateGoal = {
         minutes: Joi.number().integer().allow(null, ""),
         expected_grade: Joi.number().allow(null, ""),
         grade: Joi.number().allow(null, ""),
-        color: Joi.string().pattern(/^#(?:[0-9a-fA-F]{3}){1,2}$/).allow(null, "")
+        id_palette: Joi.number().allow(null, "")
     })
 };
 

@@ -6,8 +6,9 @@ const TABLE = "goal";
 const Goal = {
     selectAllGoals: async ({ alsoFinished, idu }) => {
         const mysql = `
-            SELECT id, name, \`desc\`, expiry_date, planned_minutes, minutes, expected_grade, grade, finished, color
+            SELECT g.id, g.name, g.\`desc\`, g.expiry_date, g.planned_minutes, g.minutes, g.expected_grade, g.grade, g.finished, pc.primary_color, pc.secondary_color
             FROM ${TABLE} g
+            inner join palette_color pc on pc.id = g.id_palette
             INNER JOIN user_goal ug ON ug.id_goal = g.id
             WHERE ${alsoFinished ? " 1=1 " : " finished = 0"} AND ug.id_user=@idu`;
         const result = await connFunction.query(mysql, { idu });
@@ -21,7 +22,7 @@ const Goal = {
         minutes,
         expected_grade,
         grade,
-        color
+        id_palette
     }) => {
         const result = await connFunction.insert(TABLE, {
             name,
@@ -31,14 +32,15 @@ const Goal = {
             minutes,
             expected_grade,
             grade,
-            color
+            id_palette: id_palette ? id_palette : 1,
         });
         return result;
     },
     selectGoal: async ({ id, alsoFinished }) => {
         const mysql = `
-            SELECT id, name, \`desc\`, expiry_date, planned_minutes, minutes, expected_grade, grade, finished, color
-            FROM ${TABLE}
+            SELECT g.id, g.name, g.\`desc\`, g.expiry_date, g.planned_minutes, g.minutes, g.expected_grade, g.grade, g.finished, pc.primary_color, pc.secondary_color
+            FROM ${TABLE} g
+            inner join palette_color pc on pc.id = g.id_palette
             WHERE ${alsoFinished ? " 1=1 " : " finished = 0 "} AND id=@id`;
         const result = await connFunction.query(mysql, { id });
         return result;
@@ -52,7 +54,7 @@ const Goal = {
         expected_grade,
         grade,
         id,
-        color
+        id_palette,
     }) => {
         const result = await connFunction.update(TABLE, {
             name,
@@ -62,7 +64,7 @@ const Goal = {
             minutes,
             expected_grade,
             grade,
-            color
+            id_palette: id_palette ? id_palette : 1
         },
             "id=@id",
             { id });
