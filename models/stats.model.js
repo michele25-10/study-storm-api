@@ -16,30 +16,22 @@ const Stats = {
         });
         return result;
     },
-    selectHourStudyType: async ({ idu, type }) => {
+    selectHourStudyType: async ({ idu, min, max }) => {
         let mysql = "";
-        if (type === "week") {
-            mysql = `
-            SELECT round(sum(a.minutes) / 60) as tot
+
+        mysql = `
+            SELECT a.date, round(sum(a.minutes) / 60) as tot
             from user_task_agenda uta
             inner join agenda a on a.id = uta.id_agenda and uta.id_user=@idu
-            where a.date BETWEEN DATE_SUB(NOW(), INTERVAL 1 WEEK) AND NOW()`;
-        } else if (type === "month") {
-            mysql = `
-            SELECT round(sum(a.minutes) / 60) as tot
-            from user_task_agenda uta
-            inner join agenda a on a.id = uta.id_agenda and uta.id_user=@idu
-            where a.date BETWEEN DATE_SUB(NOW(), INTERVAL 1 MONTH) AND NOW();`;
-        } else if (type === "year") {
-            mysql = `
-            SELECT round(sum(a.minutes) / 60) as tot
-            from user_task_agenda uta
-            inner join agenda a on a.id = uta.id_agenda and uta.id_user=@idu
-            where a.date BETWEEN DATE_SUB(NOW(), INTERVAL 1 YEAR) AND NOW()`;
-        }
+            where a.date between @min and @max
+            group by a.date`;
+
         const result = await connFunction.query(mysql, {
-            idu
+            idu,
+            min: moment(min).format('YYYY-MM-DD'),
+            max: moment(max).format('YYYY-MM-DD')
         });
+
         return result;
     },
 };

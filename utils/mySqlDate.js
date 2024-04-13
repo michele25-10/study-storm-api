@@ -1,5 +1,6 @@
+const moment = require("moment");
+
 const giorniSettimana = [
-    "",
     "D",
     "L",
     "M",
@@ -11,7 +12,7 @@ const giorniSettimana = [
 
 const convertDaySql = (data) => {
     let result = [];
-    for (let i = 1; i < 8; i++) {
+    for (let i = 0; i < 7; i++) {
         const obj = {
             position: i,
             name: giorniSettimana[i],
@@ -22,7 +23,7 @@ const convertDaySql = (data) => {
 
     for (const row of data) {
         for (const giorno of result) {
-            if (row.giorno_settimana === giorno.position) {
+            if (moment(row.date).format('d') == giorno.position) {
                 giorno.tot = row.tot;
                 break;
             }
@@ -32,7 +33,6 @@ const convertDaySql = (data) => {
     for (const giorno of result) {
         delete giorno.position;
     }
-
 
     return result;
 }
@@ -66,7 +66,7 @@ const convertMonthSql = (data) => {
 
     for (const row of data) {
         for (const mese of result) {
-            if (row.mese === mese.position) {
+            if (moment(row.data).format("M") == mese.position) {
                 mese.tot = row.tot;
                 break;
             }
