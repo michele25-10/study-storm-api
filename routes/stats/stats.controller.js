@@ -8,9 +8,7 @@ const { convertDaySql, convertMonthSql } = require('../../utils/mySqlDate');
 //@access private
 const getStatsHourStudy = asyncHandler(async (req, res) => {
     const response = {};
-
-    const result = await Stats.selectHourStudyType({ idu: req.user.idu, min: req.query.min, max: req.query.max });
-    console.log(result);
+    const result = await Stats.selectHourStudyType({ idu: req.user.idu, min: req.query.min, max: req.query.max, type: req.query.type });
 
     if (req.query.type === "Settimana") {
         console.log(convertDaySql(result));
@@ -28,9 +26,7 @@ const getStatsHourStudy = asyncHandler(async (req, res) => {
         console.log(response);
     } else {
         //Anno
-        console.info("Ho superato la query");
         response.chartData = convertMonthSql(result);
-
     }
 
     res.status(200).send(response);

@@ -63,10 +63,9 @@ const convertMonthSql = (data) => {
         }
         result.push(obj);
     }
-
     for (const row of data) {
         for (const mese of result) {
-            if (moment(row.data).format("M") == mese.position) {
+            if (row.month == mese.position) {
                 mese.tot = row.tot;
                 break;
             }
