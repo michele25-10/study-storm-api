@@ -24,7 +24,8 @@ const Stats = {
             from user_task_agenda uta
             inner join agenda a on a.id = uta.id_agenda and uta.id_user=@idu
             where a.date between @min and @max
-            group by a.date`;
+            group by a.date
+            order by a.date asc`;
 
         const result = await connFunction.query(mysql, {
             idu,

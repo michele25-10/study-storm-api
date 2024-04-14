@@ -18,13 +18,19 @@ const getStatsHourStudy = asyncHandler(async (req, res) => {
     }
     else if (req.query.type === "Mese") {
         console.info("Ho superato la query");
-        response.chartData = result;
+        response.chartData = [];
+        for (const row of result) {
+            response.chartData.push({
+                tot: row.tot,
+                name: moment(row.date).format("DD-MM"),
+            })
+        }
         console.log(response);
     } else {
         //Anno
         console.info("Ho superato la query");
         response.chartData = convertMonthSql(result);
-        console.log(response);
+
     }
 
     res.status(200).send(response);
