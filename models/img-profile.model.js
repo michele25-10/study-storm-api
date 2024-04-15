@@ -5,7 +5,7 @@ const TABLE = "img_profile";
 const ImgProfile = {
     selectImgProfile: async () => {
         const mysql = `
-        select id, path, desc
+        select id, path, \`desc\`
         from ${TABLE} 
         where 1=1; `;
         const result = await connFunction.query(mysql);
