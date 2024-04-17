@@ -23,6 +23,8 @@ const errorHandler = (err, req, res, next) => {
             break;
     };
 
+    console.error(json);
+
     if (process.env.NODE_ENV === "production") {
         delete (json.stackTrace);
     }
