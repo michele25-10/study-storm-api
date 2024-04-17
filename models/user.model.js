@@ -67,9 +67,10 @@ const User = {
     },
     selectUserByEmail: async ({ email, alsoDisactive }) => {
         const mysql = `
-            SELECT u.id, u.name, surname, email, tel, prof_img, course_study
-            FROM ${TABLE}
-            WHERE ${alsoDisactive ? " 1=1 " : " status = 1 "} AND email=@email`;
+            SELECT u.id, u.name, u.surname, u.email, u.tel, ip.path as "prof_img", course_study
+            FROM ${TABLE} u 
+            INNER JOIN img_profile ip on ip.id = u.id_img
+            WHERE ${alsoDisactive ? " 1=1 " : " u.status = 1 "} AND u.email=@email`;
         const result = await connFunction.query(mysql, { email });
         return result;
     },
