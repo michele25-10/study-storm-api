@@ -19,7 +19,7 @@ INSERT INTO palette_color(primary_color, secondary_color) VALUES
     ("82BBBB", "5D8888"), 
     ("B1C08F", "84955E"), 
     ("CF9FA3", "997376"), 
-    ("8A4EAB", "B18AC7"); 
+    ("B18AC7", "8A4EAB"); 
 
 INSERT INTO img_profile(`path`, `desc`)
 VALUES ("male1.png", "provaa"), 
