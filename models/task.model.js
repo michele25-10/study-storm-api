@@ -6,7 +6,7 @@ const TABLE = "task";
 const Task = {
     selectAllTasks: async ({ id_goal }) => {
         const mysql = `
-            SELECT t.id, t.name, t.\`desc\`, t.expiry_date, t.planned_minutes, t.minutes, t.id_goal, pc.primary_color, pc.secondary_color
+            SELECT t.id, t.name, t.\`desc\`, t.expiry_date, t.planned_minutes, t.minutes, t.id_goal, pc.primary_color, pc.secondary_color, pc.id as "id_palette"
             FROM ${TABLE} t
             inner join palette_color pc on pc.id = t.id_palette
             WHERE 1=1 ${id_goal ? " AND t.id_goal=@id_goal" : ""}`;
@@ -35,7 +35,7 @@ const Task = {
     },
     selectTask: async ({ id, user_idu }) => {
         const mysql = `
-            SELECT t.id, t.name, t.\`desc\`, t.expiry_date, t.planned_minutes, t.minutes, t.id_goal, pc.primary_color, pc.secondary_color
+            SELECT t.id, t.name, t.\`desc\`, t.expiry_date, t.planned_minutes, t.minutes, t.id_goal, pc.primary_color, pc.secondary_color, pc.id as "id_palette"
             FROM ${TABLE} t
             inner join palette_color pc on pc.id = t.id_palette
             INNER JOIN user_goal ug ON ug.id_goal = t.id_goal
