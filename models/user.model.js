@@ -60,7 +60,7 @@ const User = {
         const mysql = `
             SELECT u.id, u.name, u.surname, u.email, u.tel, ip.path as "prof_img",u. course_study
             FROM ${TABLE} u
-            inner join image_profile ip on ip.id = u.id_img
+            inner join img_profile ip on ip.id = u.id_img
             WHERE ${alsoDisactive ? " 1=1 " : " u.status = 1 "} AND u.id=@idu`;
         const result = await connFunction.query(mysql, { idu });
         return result;
