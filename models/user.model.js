@@ -96,7 +96,16 @@ const User = {
     changePassword: async ({ idu, password }) => {
         const result = await connFunction.update(TABLE, { password }, " id=@idu", { idu });
         return result;
-    }
+    },
+    selectInfoUser: async ({ idu }) => {
+        const mysql = `
+            SELECT u.name, u.surname, ip.path as "prof_img"
+            FROM ${TABLE} u 
+            INNER JOIN img_profile ip on ip.id = u.id_img
+            WHERE u.status = 1 AND u.id=@idu`;
+        const result = await connFunction.query(mysql, { idu });
+        return result;
+    },
 }
 
 module.exports = User;

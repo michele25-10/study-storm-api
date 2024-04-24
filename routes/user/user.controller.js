@@ -87,4 +87,17 @@ const changePassword = asyncHandler(async (req, res) => {
     res.status(200).send({ message: "Password cambiata" });
 });
 
-module.exports = { getAllUsers, getUser, getUserByEmail, updateUser, deleteUser, changePassword };
+//@desc get Nome Cognome immagine profilo
+//@route GET /api/user/info/
+//@access private
+const getInfo = asyncHandler(async (req, res) => {
+    const result = await User.selectInfoUser({ idu: req.user.idu });
+    if (result.affectedRows != 1) {
+        res.status(500);
+        throw new Error();
+    }
+
+    res.status(200).send(result[0]);
+});
+
+module.exports = { getAllUsers, getUser, getUserByEmail, updateUser, deleteUser, changePassword, getInfo };

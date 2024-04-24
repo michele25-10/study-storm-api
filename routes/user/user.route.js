@@ -12,5 +12,5 @@ router.put("/:idu", validate(userValidation.updateUser), userController.updateUs
 router.delete("/:idu", validate(userValidation.deleteUser), userController.deleteUser);
 
 router.put("/change-password/:idu", validate(userValidation.changePassword), userController.changePassword);
-
+router.get("/info/", userController.getInfo);
 module.exports = router;
