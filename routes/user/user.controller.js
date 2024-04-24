@@ -92,12 +92,8 @@ const changePassword = asyncHandler(async (req, res) => {
 //@access private
 const getInfo = asyncHandler(async (req, res) => {
     const result = await User.selectInfoUser({ idu: req.user.idu });
-    if (result.affectedRows != 1) {
-        res.status(500);
-        throw new Error();
-    }
 
-    res.status(200).send(result[0]);
+    res.status(200).send(result);
 });
 
 module.exports = { getAllUsers, getUser, getUserByEmail, updateUser, deleteUser, changePassword, getInfo };
