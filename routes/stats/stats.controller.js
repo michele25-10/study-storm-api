@@ -20,7 +20,7 @@ const getStatsHourStudy = asyncHandler(async (req, res) => {
         for (const row of result) {
             response.chartData.push({
                 tot: row.tot,
-                name: moment(row.date).format("DD-MM"),
+                name: moment(row.date).format("DD"),
             })
         }
         console.log(response);
