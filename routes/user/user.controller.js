@@ -48,7 +48,8 @@ const getUserByEmail = asyncHandler(async (req, res) => {
 //@route PUT /api/user/
 //@access private
 const updateUser = asyncHandler(async (req, res) => {
-    const result = await User.updateUser({ ...req.body, idu: req.params.idu });
+    // const result = await User.updateUser({ ...req.body, idu: req.params.idu });
+    const result = await User.updateUser({ ...req.body, idu: req.user.idu });
 
     if (result.affectedRows != 1) {
         res.status(500);

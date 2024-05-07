@@ -74,8 +74,11 @@ const User = {
         const result = await connFunction.query(mysql, { email });
         return result;
     },
-    updateUser: async ({ course_study, birth_date, tel, idu }) => {
+    updateUser: async ({ name, surname, email, course_study, birth_date, tel, idu }) => {
         const result = await connFunction.update(TABLE, {
+            name,
+            surname,
+            email,
             tel,
             course_study,
             birth_date: moment(birth_date).format("YYYY-MM-DD"),

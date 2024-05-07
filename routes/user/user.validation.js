@@ -23,10 +23,13 @@ const getUserByEmail = {
 };
 
 const updateUser = {
-    params: Joi.object().keys({
-        idu: Joi.string().length(36).required(),
-    }),
+    // params: Joi.object().keys({
+    //     idu: Joi.string().length(36).required(),
+    // }),
     body: Joi.object().keys({
+        name: Joi.string().max(20).required(),
+        surname: Joi.string().max(20).required(),
+        email: Joi.string().max(60).required(),
         tel: Joi.string().max(10).required(),
         course_study: Joi.string().max(30).required(),
         birth_date: Joi.date().required(),
