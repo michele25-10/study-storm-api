@@ -9,10 +9,10 @@ const Goal = require('../../models/goal.model');
 const getAllTasks = asyncHandler(async (req, res) => {
     const result = await Task.selectAllTasks({ id_goal: req.query.id_goal || false });
 
-    if (result.length == 0) {
+    /*if (result.length == 0) {
         res.status(404);
         throw new Error();
-    }
+    }*/
 
     res.status(200).send(result);
 });
@@ -25,19 +25,19 @@ const createTask = asyncHandler(async (req, res) => {
 
     if (result.length != 1) {
         res.status(403);
-        throw new Error();
+        throw new Error("Non hai i permessi");
     }
 
     if (req.body.expiry_date < new Date()) {
         res.status(400);
-        throw new Error();
+        throw new Error("Data di scadenza già superata");
     }
 
     result = await Task.createTask({ ...req.body });
 
     if (result.affectedRows != 1) {
         res.status(500);
-        throw new Error();
+        throw new Error("Errore inaspettato");
     }
 
     res.status(201).send({ message: "Obiettivo creato" });
@@ -51,7 +51,7 @@ const getTask = asyncHandler(async (req, res) => {
 
     if (result.length == 0) {
         res.status(404);
-        throw new Error();
+        throw new Error("Task non trovata");
     }
 
     res.status(200).send(result);
@@ -65,19 +65,19 @@ const updateTask = asyncHandler(async (req, res) => {
 
     if (result.length != 1) {
         res.status(403);
-        throw new Error();
+        throw new Error("Non hai i permessi");
     }
 
     if (req.body.expiry_date < new Date()) {
         res.status(400);
-        throw new Error();
+        throw new Error("Data di scadenza già superata");
     }
 
     result = await Task.updateTask({ ...req.body, id: req.params.id });
 
     if (result.affectedRows != 1) {
         res.status(500);
-        throw new Error();
+        throw new Error("Errore inaspettato");
     }
 
     res.status(201).send({ message: "Task modificata" });
@@ -90,7 +90,7 @@ const deleteTask = asyncHandler(async (req, res) => {
     let result = await UserGoal.filter({ id_user: req.user.idu, id_goal: req.body.id_goal });
     if (result.length != 1) {
         res.status(403);
-        throw new Error();
+        throw new Error("Non hai i permessi");
     }
     const idGoal = result[0].id_goal;
 
@@ -98,17 +98,17 @@ const deleteTask = asyncHandler(async (req, res) => {
 
     if (result.affectedRows != 1) {
         res.status(500);
-        throw new Error();
+        throw new Error("Errore inaspettato");
     }
 
     //Aggiorno i minuti dei goal dopo aver eliminato una task; 
     result = await Goal.updateMinutes({ id_goal: idGoal });
     if (result.affectedRows != 1) {
         res.status(500);
-        throw new Error();
+        throw new Error("Errore inaspettato");
     }
 
     res.status(200).send({ message: "Task eliminata" });
 });
 
-module.exports = { getAllTasks, createTask, getTask, updateTask, deleteTask /*, addMinutes */ };
+module.exports = { getAllTasks, createTask, getTask, updateTask, deleteTask };

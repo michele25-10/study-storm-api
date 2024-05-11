@@ -50,7 +50,7 @@ const confirm = asyncHandler(async (req, res) => {
     result = await User.changePassword({ idu, password: hashedPassword });
     if (result.affectedRows != 1) {
         res.status(500);
-        throw new Error();
+        throw new Error("Errore inaspettato");
     }
 
     const template = handlebars.compile(fs.readFileSync(path.join(__dirname, "../../templates/confirmResetPassword.html")).toString());
@@ -70,7 +70,7 @@ const confirm = asyncHandler(async (req, res) => {
     result = await ResetPassword.confirmResetPassword({ id: req.params.id });
     if (result.affectedRows != 1) {
         res.status(500);
-        throw new Error();
+        throw new Error("Errore inaspettato");
     }
 
     res.status(200).send("Controlla le mail");

@@ -53,7 +53,7 @@ const updateUser = asyncHandler(async (req, res) => {
 
     if (result.affectedRows != 1) {
         res.status(500);
-        throw new Error();
+        throw new Error("Errore inaspettato");
     }
 
     res.status(200).send({ message: "Utente modificato" });
@@ -66,8 +66,8 @@ const deleteUser = asyncHandler(async (req, res) => {
     const result = await User.deleteUser({ ...req.params });
 
     if (result.affectedRows != 1) {
-        res.status(404);
-        throw new Error();
+        res.status(500);
+        throw new Error("Errore inaspettato");
     }
 
     res.status(200).send({ message: "Utente eliminato" });
@@ -82,7 +82,7 @@ const changePassword = asyncHandler(async (req, res) => {
     const result = await User.changePassword({ idu: req.params.idu, password: hashedPassword });
     if (result.affectedRows != 1) {
         res.status(500);
-        throw new Error();
+        throw new Error("Errore inaspettato");
     }
 
     res.status(200).send({ message: "Password cambiata" });

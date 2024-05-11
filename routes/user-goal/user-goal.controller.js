@@ -7,20 +7,6 @@ const fs = require('fs');
 const handlebars = require('handlebars');
 const path = require('path')
 
-//@desc get di tutti le associazioni utente-obiettivo
-//@route GET /api/user-goal/
-//@access private
-// const getAllUserGoal = asyncHandler(async (req, res) => {
-//     const result = await UserGoal.selectAllUserGoal();
-
-//     if (result.length == 0) {
-//         res.status(404);
-//         throw new Error();
-//     }
-
-//     res.status(200).send(result);
-// });
-
 //@desc creazione di un'associazione utente-obiettivo
 //@route POST /api/user-goal
 //@access private
@@ -28,8 +14,8 @@ const createUserGoal = asyncHandler(async (req, res) => {
     const result = await UserGoal.createUserGoal({ ...req.body });
 
     if (result.affectedRows != 1) {
-        res.status(404);
-        throw new Error();
+        res.status(500);
+        throw new Error("Errore inaspettato");
     }
 
     res.status(201).send({ message: "Gruppo creato" });
@@ -67,19 +53,19 @@ const deleteUserGoal = asyncHandler(async (req, res) => {
 //@route POST /api/user-goal/:id
 //@access private
 const invite = asyncHandler(async (req, res) => {
-    const goal = await Goal.selectGoal({id: req.params.id});
+    const goal = await Goal.selectGoal({ id: req.params.id });
     req.body.users.forEach(async entry => {
         const result = await UserGoal.invite({ id_user: entry.idu, id_goal: req.params.id });
 
         if (result.affectedRows != 1) {
             res.status(500);
-            throw new Error();
+            throw new Error("Errore inaspettato");
         }
 
         const invite = await InviteTeam.selectInvite({ id: result.insertId, verification_key: false });
         if (invite.length != 1) {
             res.status(404);
-            throw new Error();
+            throw new Error("Errore inaspettato");
         }
 
         const template = handlebars.compile(fs.readFileSync(path.join(__dirname, "../../templates/invite.html")).toString());
@@ -101,18 +87,6 @@ const invite = asyncHandler(async (req, res) => {
     res.status(201).send({ message: "Invito/i inviato" });
 });
 
-//@desc ottiene l'associazione in base all'obiettivio
-//@route GET /api/user-goal/filter
-//@access private
-// const filter = asyncHandler(async (req, res) => {
-//     const result = await UserGoal.filter({ id_goal: req.query.id_goal || false, id_user: req.query.id_user || false });
 
-//     if (result.length == 0) {
-//         res.status(404);
-//         throw new Error();
-//     }
 
-//     res.status(200).send(result);
-// });
-
-module.exports = { /* getAllUserGoal, */ createUserGoal, updateAdmin, deleteUserGoal, invite, /* filter */ };
+module.exports = { createUserGoal, updateAdmin, deleteUserGoal, invite, };

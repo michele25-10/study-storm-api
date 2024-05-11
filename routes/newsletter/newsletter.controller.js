@@ -13,7 +13,7 @@ const addNewsletter = asyncHandler(async (req, res) => {
 
     if (result.affectedRows != 1) {
         res.status(500);
-        throw new Error();
+        throw new Error("Errore inaspettato");
     }
 
     const template = handlebars.compile(fs.readFileSync(path.join(__dirname, "../../templates/newsletter_sub.html")).toString());

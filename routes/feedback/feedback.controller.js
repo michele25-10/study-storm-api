@@ -10,7 +10,7 @@ const addFeedback = asyncHandler(async (req, res) => {
 
     if (result.affectedRows != 1) {
         res.status(500);
-        throw new Error();
+        throw new Error("Errore inaspettato");
     }
 
     res.status(201).send({ message: "Feedback inserito con successo!" });
@@ -24,7 +24,7 @@ const putFeedback = asyncHandler(async (req, res) => {
 
     if (result.affectedRows != 1) {
         res.status(500);
-        throw new Error();
+        throw new Error("Errore inaspettato");
     }
 
     res.status(200).send({ message: "Feedback modificata con successo!" });
@@ -38,7 +38,7 @@ const deleteFeedback = asyncHandler(async (req, res) => {
 
     if (result.affectedRows != 1) {
         res.status(500);
-        throw new Error();
+        throw new Error("Errore inaspettato");
     }
 
     res.status(200).send({ message: "Feedback eliminato!" });

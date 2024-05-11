@@ -20,7 +20,7 @@ const login = asyncHandler(async (req, res) => {
 
     if (objUser.length != 1) {
         res.status(404);
-        throw new Error();
+        throw new Error("Email o password sbagliata");
     }
 
     objUser = objUser[0];
@@ -47,7 +47,7 @@ const login = asyncHandler(async (req, res) => {
         });
     } else {
         res.status(404);
-        throw new Error();
+        throw new Error("Email o password sbagliata");
     }
 });
 
@@ -64,21 +64,21 @@ const registration = asyncHandler(async (req, res) => {
 
     if (result.length > 0) { // utente già registrato
         res.status(500);
-        throw new Error();
+        throw new Error("Utente già esistente");
     }
 
     result = await User.insertVerification({ user_credentials: JSON.stringify(req.body) });
 
     if (result.affectedRows != 1) {
         res.status(500);
-        throw new Error();
+        throw new Error("Errore inaspettato");
     }
 
     result = await User.retrieveVerification({ id: result.insertId, key: false });
 
     if (result.length != 1) {
         res.status(404);
-        throw new Error();
+        throw new Error("Errore inaspettato");
     }
 
     const template = handlebars.compile(fs.readFileSync(path.join(__dirname, "../../templates/verify.html")).toString());

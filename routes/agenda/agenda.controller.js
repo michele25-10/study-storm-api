@@ -14,7 +14,7 @@ const addAgenda = asyncHandler(async (req, res) => {
 
     if (check.length != 1) {
         res.status(403);
-        throw new Error("Non hai i permessi per inserire questa agenda");
+        throw new Error("Non hai i permessi");
     }
     const idGoal = check[0].idGoal;
 
@@ -30,7 +30,7 @@ const addAgenda = asyncHandler(async (req, res) => {
         });
         if (result.affectedRows != 1) {
             res.status(500);
-            throw new Error();
+            throw new Error("Errore inaspettato");
         }
     } else {
         //Agenda non esiste in tale data all'ora la aggiungo
@@ -41,7 +41,7 @@ const addAgenda = asyncHandler(async (req, res) => {
         });
         if (result.affectedRows != 1) {
             res.status(500);
-            throw new Error();
+            throw new Error("Errore inaspettato");
         }
 
         const idAgenda = result.insertId;
@@ -50,19 +50,19 @@ const addAgenda = asyncHandler(async (req, res) => {
         result = await UserTaskAgenda.insertUserTaskAgenda({ idu: req.user.idu, id_task: req.body.id_task, id_agenda: idAgenda })
         if (result.affectedRows != 1) {
             res.status(500);
-            throw new Error();
+            throw new Error("Errore inaspettato");
         }
     }
     // aggiornamento minuti totali sulle task e sui goal
     result = await Task.updateMinutes({ id_task: req.body.id_task });
     if (result.affectedRows != 1) {
         res.status(500);
-        throw new Error();
+        throw new Error("Errore inaspettato");
     }
     result = await Goal.updateMinutes({ id_goal: idGoal });
     if (result.affectedRows != 1) {
         res.status(500);
-        throw new Error();
+        throw new Error("Errore inaspettato");
     }
 
     res.status(201).send({ message: "Agenda inserita con successo!" });
@@ -93,7 +93,7 @@ const putAgenda = asyncHandler(async (req, res) => {
     let result = await Agenda.updateAgenda({ ...req.body, id: req.params.id });
     if (result.affectedRows != 1) {
         res.status(500);
-        throw new Error();
+        throw new Error("Errore inaspettato");
     }
 
     // aggiornamento minuti totali sulle task e sui goal
@@ -101,12 +101,12 @@ const putAgenda = asyncHandler(async (req, res) => {
     result = await Task.updateMinutes({ id_task: idTask });
     if (result.affectedRows != 1) {
         res.status(500);
-        throw new Error();
+        throw new Error("Errore inaspettato");
     }
     result = await Goal.updateMinutes({ id_goal: idGoal });
     if (result.affectedRows != 1) {
         res.status(500);
-        throw new Error();
+        throw new Error("Errore inaspettato");
     }
 
     res.status(200).send({ message: "Agenda modificata con successo!" });
@@ -140,7 +140,7 @@ const getSingleAgenda = asyncHandler(async (req, res) => {
         response = await Agenda.selectSingleAgenda({ id: req.params.id });
         if (response.length != 1) {
             res.status(404);
-            throw new Error();
+            throw new Error("Agenda inesistente");
         }
         const idTask = response[0].id_task;
 
@@ -148,7 +148,7 @@ const getSingleAgenda = asyncHandler(async (req, res) => {
         let check = await Agenda.isAuthorizedUserAddAgenda({ idu: req.user.idu, id_task: idTask });
         if (check.length != 1) {
             res.status(403);
-            throw new Error("Non hai i permessi per visualizzare questa agenda");
+            throw new Error("Non hai i permessi");
         }
 
         //Se non sei admin dell'obiettivo rifai la query aggiungendo il filtro utente
@@ -169,7 +169,7 @@ const getAllAgenda = asyncHandler(async (req, res) => {
     let check = await Agenda.isAuthorizedUserAddAgenda({ idu: req.user.idu, id_task: req.query.id_task });
     if (check.length != 1) {
         res.status(403);
-        throw new Error("Non hai i permessi per visualizzare questa agenda");
+        throw new Error("Non hai i permessi");
     }
 
     if (check[0].admin) {

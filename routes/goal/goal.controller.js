@@ -25,14 +25,14 @@ const getAllGoals = asyncHandler(async (req, res) => {
 const createGoal = asyncHandler(async (req, res) => {
     if (req.body.expiry_date != null && req.body.expiry_date < new Date()) {
         res.status(400);
-        throw new Error();
+        throw new Error("Data di scadenza già superata");
     }
 
     const result = await Goal.createGoal({ ...req.body });
 
     if (result.affectedRows != 1) {
         res.status(500);
-        throw new Error();
+        throw new Error("Errore inaspettato");
     }
 
     const goalId = result.insertId;
@@ -41,7 +41,7 @@ const createGoal = asyncHandler(async (req, res) => {
 
     if (result.affectedRows != 1) {
         res.status(500);
-        throw new Error();
+        throw new Error("Errore inaspettato");
     }
 
     res.status(201).send({ message: "Obiettivo creato" });
@@ -55,14 +55,14 @@ const getGoal = asyncHandler(async (req, res) => {
 
     if (result.length != 1) {
         res.status(403);
-        throw new Error();
+        throw new Error("Non hai i permessi");
     }
 
     let response = await Goal.selectGoal({ alsoDisactive: req.query.alsoDisactive || false, id: req.params.id });
 
     if (response.length == 0) {
         res.status(404);
-        throw new Error();
+        throw new Error("Goal non trovato");
     }
 
     if (req.query.tasks) {
@@ -83,19 +83,19 @@ const updateGoal = asyncHandler(async (req, res) => {
 
     if (result.length != 1) {
         res.status(403);
-        throw new Error();
+        throw new Error("Non hai i permessi");
     }
 
     if (req.body.expiry_date < new Date()) {
         res.status(400);
-        throw new Error();
+        throw new Error("La scadenza è già passata");
     }
 
     result = await Goal.updateGoal({ ...req.body, id: req.params.id });
 
     if (result.affectedRows != 1) {
         res.status(500);
-        throw new Error();
+        throw new Error("Errore inaspettato");
     }
 
     res.status(201).send({ message: "Obiettivo modificato" });
@@ -109,32 +109,18 @@ const updateFinished = asyncHandler(async (req, res) => {
 
     if (result.length != 1) {
         res.status(403);
-        throw new Error();
+        throw new Error("Non hai i permessi");
     }
 
     result = await Goal.updateFinished({ ...req.body, id: req.params.id });
 
     if (result.affectedRows != 1) {
         res.status(404);
-        throw new Error();
+        throw new Error("Goal non trovato");
     }
 
     res.status(200).send({ message: "Obiettivo aggiornato" });
 });
-
-//@desc modifica i minuti
-//@route PUT /api/goal/addMinutes
-//@access private
-/*const addMinutes = asyncHandler(async (req, res) => {
-    const result = await Goal.updateMinutes({ ...req.body });
-
-    if (result.affectedRows != 1) {
-        res.status(404);
-        throw new Error();
-    }
-
-    res.status(200).send({ message: "Tempo aggiornato" });
-});*/
 
 //@desc elimina un obiettivo
 //@route PUT /api/goal/
@@ -144,14 +130,14 @@ const deleteGoal = asyncHandler(async (req, res) => {
 
     if (result.length != 1) {
         res.status(403);
-        throw new Error();
+        throw new Error("Non hai i permessi");
     }
 
     result = await Goal.deleteGoal({ ...req.params });
 
     if (result.affectedRows != 1) {
         res.status(404);
-        throw new Error();
+        throw new Error("Goal non trovato");
     }
 
     res.status(200).send({ message: "Obiettivo eliminato" });
@@ -159,4 +145,4 @@ const deleteGoal = asyncHandler(async (req, res) => {
 
 
 
-module.exports = { getAllGoals, createGoal, getGoal, updateGoal, updateFinished, deleteGoal /*, addMinutes,*/ };
+module.exports = { getAllGoals, createGoal, getGoal, updateGoal, updateFinished, deleteGoal };
