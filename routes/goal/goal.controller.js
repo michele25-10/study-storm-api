@@ -7,7 +7,7 @@ const UserGoal = require('../../models/user-goal.model');
 //@route GET /api/goal/
 //@access private
 const getAllGoals = asyncHandler(async (req, res) => {
-    const response = await Goal.selectAllGoals({ alsoFinished: req.query.alsoFinished || false, idu: req.user.idu, tasks: req.query.tasks });
+    const response = await Goal.selectAllGoals({ alsoFinished: req.query.alsoFinished || false, idu: req.user.idu });
 
     if (req.query.tasks) {
         for (const row of response) {
