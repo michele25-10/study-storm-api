@@ -4,6 +4,9 @@ const Agenda = require('../../models/agenda.model');
 const Task = require('../../models/task.model');
 const Goal = require('../../models/goal.model');
 const UserTaskAgenda = require('../../models/user-task-agenda.model');
+const moment = require('moment');
+const { months } = require('../../enums/date');
+
 
 //@desc API inserimento agenda di una task da parte di un utente
 //@route POST /api/agenda/
@@ -197,5 +200,22 @@ const getAllAgenda = asyncHandler(async (req, res) => {
     res.status(200).send(response);
 });
 
+//@desc API get di agenda calendario con numero ore per ogni giorno all'indietro di tot giorni
+//@route GET /api/feedback/
+//@access private
+const getAgendaCalendar = asyncHandler(async (req, res) => {
+    const days = req.query.days || 30;
 
-module.exports = { addAgenda, putAgenda, deleteAgenda, getSingleAgenda, getAllAgenda };
+    let result = await Agenda.getAgendaCalendar({ days, idu: req.user.idu });
+
+    for (const row of result) {
+        row.day = moment(row.date).date();
+        row.month = moment(row.date).month();
+        row.year = moment(row.date).year();
+        row.month = months(row.month);
+    }
+
+    res.status(200).send(result);
+});
+
+module.exports = { addAgenda, putAgenda, deleteAgenda, getSingleAgenda, getAllAgenda, getAgendaCalendar };
