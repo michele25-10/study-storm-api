@@ -1,4 +1,4 @@
-export const months = [
+const months = [
     "",
     "Gen",
     "Feb",
@@ -13,3 +13,5 @@ export const months = [
     "Nov",
     "Dic"
 ];
+
+module.exports = { months }; 

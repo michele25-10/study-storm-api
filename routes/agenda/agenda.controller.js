@@ -212,7 +212,7 @@ const getAgendaCalendar = asyncHandler(async (req, res) => {
         row.day = moment(row.date).date();
         row.month = moment(row.date).month();
         row.year = moment(row.date).year();
-        row.month = months(row.month);
+        row.month = months[row.month];
     }
 
     res.status(200).send(result);

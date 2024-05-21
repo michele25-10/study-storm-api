@@ -10,6 +10,6 @@ router.put("/:id", validate(agendaValidation.putAgenda), agendaController.putAge
 router.delete("/:id", validate(agendaValidation.deleteAgenda), agendaController.deleteAgenda);
 router.get("/:id", validate(agendaValidation.getSingleAgenda), agendaController.getSingleAgenda);
 router.get("/", validate(agendaValidation.getAllAgenda), agendaController.getAllAgenda);
-router.get("/calendar/", validate(agendaValidation.getAgendaCalendar), agendaController.getAgendaCalendar);
+router.get("/calendar/personal", validate(agendaValidation.getAgendaCalendar), agendaController.getAgendaCalendar);
 
 module.exports = router;
