@@ -78,12 +78,12 @@ const Agenda = {
     },
     getAgendaCalendar: async ({ days, idu }) => {
         const mysql = `
-        select a.id, a.date, a.minutes, t.id as "id_task", g.id as "id_goal", pc.primary_color, pc.secondary_color
+        select a.id, a.date, a.minutes, t.id as "id_task", g.id as "id_goal", pc.primary_color, pc.secondary_color, g.name, t.name as "name_task"
         from user_task_agenda uta
         inner join agenda a on a.id = uta.id_agenda
         inner join task t on t.id = uta.id_task
         inner join goal g on g.id = t.id_goal
-        inner join palette_color pc on pc.id = g.id_palette
+        inner join palette_color pc on pc.id = t.id_palette
         where uta.id_user like @idu and a.\`date\` BETWEEN DATE_SUB(CURDATE(), INTERVAL @days DAY) AND CURDATE();
         `;
         const result = await connFunction.query(mysql, { idu, days });
