@@ -210,28 +210,36 @@ const getAgendaCalendar = asyncHandler(async (req, res) => {
     let result = await Agenda.getAgendaCalendar({ days, idu: req.user.idu });
 
     for (const row of result) {
-        let dataObject = {};
-        dataObject.date = row.date;
-        dataObject.day = moment(row.date).date();
-        dataObject.month = moment(row.date).month();
-        dataObject.year = moment(row.date).year();
-        dataObject.month = months[row.month];
-        dataObject.agenda = [];
-        for (const i in result) {
-            let array = [];
-            if (result[i].date == row.date) {
-                array.push({
-                    minutes: result[i].minutes,
-                    id_agenda: result[i].id_agenda,
-                    id_task: result[i].id_task,
-                    id_goal: result[i].id_goal,
-                    primary_color: result[i].primary_color,
-                    secondary_color: result[i].secondary_color,
-                    name: result[i].name,
-                    name_task: result[i].name_task
-                });
+        let isPresent = false;
+        for (const item of response) {
+            if (moment(row.date).isSame(moment(item.date))) {
+                isPresent = true;
             }
-            dataObject.agenda.push(array);
+        }
+
+        if (!isPresent) {
+            let dataObject = {};
+            dataObject.date = row.date;
+            dataObject.day = moment(row.date).date();
+            row.month = moment(row.date).month();
+            dataObject.month = months[row.month];
+            dataObject.year = moment(row.date).year();
+            dataObject.agenda = [];
+            for (const i in result) {
+                if (moment(result[i].date).isSame(moment(row.date))) {
+                    dataObject.agenda.push({
+                        minutes: result[i].minutes,
+                        id_agenda: result[i].id_agenda,
+                        id_task: result[i].id_task,
+                        id_goal: result[i].id_goal,
+                        primary_color: result[i].primary_color,
+                        secondary_color: result[i].secondary_color,
+                        name: result[i].name,
+                        name_task: result[i].name_task
+                    });
+                }
+            }
+            response.push(dataObject);
         }
     }
 
