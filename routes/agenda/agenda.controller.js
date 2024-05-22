@@ -228,6 +228,7 @@ const getAgendaCalendar = asyncHandler(async (req, res) => {
             for (const i in result) {
                 if (moment(result[i].date).isSame(moment(row.date))) {
                     dataObject.agenda.push({
+                        id: result[i].id,
                         minutes: result[i].minutes,
                         id_agenda: result[i].id_agenda,
                         id_task: result[i].id_task,
