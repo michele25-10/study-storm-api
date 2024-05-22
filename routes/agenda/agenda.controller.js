@@ -204,18 +204,38 @@ const getAllAgenda = asyncHandler(async (req, res) => {
 //@route GET /api/feedback/
 //@access private
 const getAgendaCalendar = asyncHandler(async (req, res) => {
-    const days = req.query.days || 30;
+    let response = [];
+    const days = req.query.days ? req.query.days : 30;
 
     let result = await Agenda.getAgendaCalendar({ days, idu: req.user.idu });
 
     for (const row of result) {
-        row.day = moment(row.date).date();
-        row.month = moment(row.date).month();
-        row.year = moment(row.date).year();
-        row.month = months[row.month];
+        let dataObject = {};
+        dataObject.date = row.date;
+        dataObject.day = moment(row.date).date();
+        dataObject.month = moment(row.date).month();
+        dataObject.year = moment(row.date).year();
+        dataObject.month = months[row.month];
+        dataObject.agenda = [];
+        for (const i in result) {
+            let array = [];
+            if (result[i].date == row.date) {
+                array.push({
+                    minutes: result[i].minutes,
+                    id_agenda: result[i].id_agenda,
+                    id_task: result[i].id_task,
+                    id_goal: result[i].id_goal,
+                    primary_color: result[i].primary_color,
+                    secondary_color: result[i].secondary_color,
+                    name: result[i].name,
+                    name_task: result[i].name_task
+                });
+            }
+            dataObject.agenda.push(array);
+        }
     }
 
-    res.status(200).send(result);
+    res.status(200).send(response);
 });
 
 module.exports = { addAgenda, putAgenda, deleteAgenda, getSingleAgenda, getAllAgenda, getAgendaCalendar };
