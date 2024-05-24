@@ -1,5 +1,4 @@
 const months = [
-    "",
     "Gen",
     "Feb",
     "Mar",
