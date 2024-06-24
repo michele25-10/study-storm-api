@@ -38,7 +38,7 @@ const Goal = {
     },
     selectGoal: async ({ id, alsoFinished }) => {
         const mysql = `
-            SELECT g.id, g.name, g.\`desc\`, g.expiry_date, g.planned_minutes, g.minutes, g.expected_grade, g.grade, g.finished, pc.primary_color, pc.secondary_color
+            SELECT g.id, g.name, g.\`desc\`, g.expiry_date, g.planned_minutes, g.minutes, g.expected_grade, g.grade, g.finished, g.id_palette, pc.primary_color, pc.secondary_color
             FROM ${TABLE} g
             inner join palette_color pc on pc.id = g.id_palette
             WHERE ${alsoFinished ? " 1=1 " : " g.finished = 0 "} AND g.id=@id`;
