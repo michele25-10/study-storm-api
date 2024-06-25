@@ -54,7 +54,7 @@ const changePassword = {
 
 const changeImageProfile = {
     body: Joi.object().keys({
-        id_image: Joi.number().integer().required(),
+        id_img: Joi.number().integer().required(),
     })
 };
 

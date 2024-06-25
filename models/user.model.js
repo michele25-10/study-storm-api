@@ -109,8 +109,8 @@ const User = {
         const result = await connFunction.query(mysql, { idu });
         return result;
     },
-    changeImage: async ({ idu, id_image }) => {
-        const result = await connFunction.update(TABLE, { id_image }, " id=@idu", { idu });
+    changeImage: async ({ idu, id_img }) => {
+        const result = await connFunction.update(TABLE, { id_img }, " id=@idu", { idu });
         return result;
     },
 }
