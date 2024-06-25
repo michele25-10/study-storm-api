@@ -106,7 +106,7 @@ const changeImageProfile = asyncHandler(async (req, res) => {
         res.status(500);
         throw new Error("Errore inaspettato");
     }
-    res.status(200).send(result);
+    res.status(200).send({ message: "Immagine profilo cambiata" });
 });
 
 module.exports = { getAllUsers, getUser, getUserByEmail, updateUser, deleteUser, changePassword, getInfo, changeImageProfile };
