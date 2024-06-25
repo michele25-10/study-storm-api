@@ -97,4 +97,16 @@ const getInfo = asyncHandler(async (req, res) => {
     res.status(200).send(result);
 });
 
-module.exports = { getAllUsers, getUser, getUserByEmail, updateUser, deleteUser, changePassword, getInfo };
+//@desc API cambio immagine del profilo utente
+//@route put /api/user/change-image/
+//@access private
+const changeImageProfile = asyncHandler(async (req, res) => {
+    const result = await User.changeImage({ idu: req.user.idu, id_image: req.body.id_image });
+    if (result.affectedRows != 1) {
+        res.status(500);
+        throw new Error("Errore inaspettato");
+    }
+    res.status(200).send(result);
+});
+
+module.exports = { getAllUsers, getUser, getUserByEmail, updateUser, deleteUser, changePassword, getInfo, changeImageProfile };

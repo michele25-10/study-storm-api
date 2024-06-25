@@ -13,4 +13,5 @@ router.delete("/:idu", validate(userValidation.deleteUser), userController.delet
 
 router.put("/change-password/:idu", validate(userValidation.changePassword), userController.changePassword);
 router.get("/info/", userController.getInfo);
+router.put("/change-image/", validate(userValidation.changeImageProfile), userController.changeImageProfile);
 module.exports = router;

@@ -52,4 +52,10 @@ const changePassword = {
     })
 };
 
-module.exports = { getAllUsers, getUser, getUserByEmail, updateUser, deleteUser, changePassword };
+const changeImageProfile = {
+    body: Joi.object().keys({
+        id_image: Joi.number().integer().required(),
+    })
+};
+
+module.exports = { getAllUsers, getUser, getUserByEmail, updateUser, deleteUser, changePassword, changeImageProfile };
