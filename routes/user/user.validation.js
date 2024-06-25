@@ -36,16 +36,7 @@ const updateUser = {
     })
 };
 
-const deleteUser = {
-    params: Joi.object().keys({
-        idu: Joi.string().length(36).required(),
-    })
-};
-
 const changePassword = {
-    params: Joi.object().keys({
-        idu: Joi.string().length(36).required(),
-    }),
     body: Joi.object().keys({
         newPassword: Joi.string().min(8).pattern(new RegExp('^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*[0-9]).{8,}$')).required(),
         confirmPassword: Joi.string().valid(Joi.ref('newPassword')).required().strict()
@@ -58,4 +49,4 @@ const changeImageProfile = {
     })
 };
 
-module.exports = { getAllUsers, getUser, getUserByEmail, updateUser, deleteUser, changePassword, changeImageProfile };
+module.exports = { getAllUsers, getUser, getUserByEmail, updateUser, changePassword, changeImageProfile };

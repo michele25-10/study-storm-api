@@ -63,7 +63,7 @@ const updateUser = asyncHandler(async (req, res) => {
 //@route DELETE /api/user/
 //@access private
 const deleteUser = asyncHandler(async (req, res) => {
-    const result = await User.deleteUser({ ...req.params });
+    const result = await User.deleteUser({ idu: req.user.idu });
 
     if (result.affectedRows != 1) {
         res.status(500);
@@ -79,7 +79,7 @@ const deleteUser = asyncHandler(async (req, res) => {
 const changePassword = asyncHandler(async (req, res) => {
     const hashedPassword = hash(req.body.newPassword);
 
-    const result = await User.changePassword({ idu: req.params.idu, password: hashedPassword });
+    const result = await User.changePassword({ idu: req.user.idu, password: hashedPassword });
     if (result.affectedRows != 1) {
         res.status(500);
         throw new Error("Errore inaspettato");
