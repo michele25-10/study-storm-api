@@ -7,20 +7,14 @@ const UserGoal = require('../../models/user-goal.model');
 //@route GET /api/goal/
 //@access private
 const getAllGoals = asyncHandler(async (req, res) => {
-    const response = await Goal.selectAllGoals({ alsoFinished: req.query.alsoFinished || false, idu: req.user.idu });
+    let response = await Goal.selectAllGoals({ alsoFinished: req.query.alsoFinished || false, idu: req.user.idu });
 
-    if (req.query.tasks) {
-        let totMinutesGoal = 0;
-        for (const row of response) {
+    for (const row of response) {
+        row.percentuage = Math.round((row.minutes / row.planned_minutes) * 100);
+        if (req.query.tasks) {
             const tasks = await Task.selectAllTasks({ id_goal: row.id });
             row.tasks = tasks;
-            for (const task of tasks) {
-                totMinutesGoal += task.minutes;
-            }
-            row.percentuage = (totMinutesGoal / row.planned_minutes) * 100;
-            totMinutesGoal = 0;
         }
-
     }
 
     res.status(200).send(response);
