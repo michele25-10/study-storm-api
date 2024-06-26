@@ -11,7 +11,7 @@ router.get("/:id", validate(goalValidation.getGoal), goalController.getGoal);
 router.put("/:id", validate(goalValidation.updateGoal), goalController.updateGoal);
 router.delete("/:id", validate(goalValidation.deleteGoal), goalController.deleteGoal);
 
-router.get("/name/", goalController.getAllGoalsName);
+router.get("/name/menu/", goalController.getAllGoalsName);
 //Quando voglio chiudere un obiettivo chiamo questa API
 router.patch("/:id", validate(goalValidation.updateFinished), goalController.updateFinished);
 

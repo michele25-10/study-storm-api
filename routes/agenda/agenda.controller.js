@@ -206,8 +206,10 @@ const getAllAgenda = asyncHandler(async (req, res) => {
 const getAgendaCalendar = asyncHandler(async (req, res) => {
     let response = [];
     const days = req.query.days ? req.query.days : 30;
+    let idString = req.query.id_filter;
+    idString = idString.slice(1, -1);
 
-    let result = await Agenda.getAgendaCalendar({ days, idu: req.user.idu });
+    let result = await Agenda.getAgendaCalendar({ days, idu: req.user.idu, idString });
 
     for (const row of result) {
         let isPresent = false;

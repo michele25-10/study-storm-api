@@ -42,6 +42,7 @@ const getAllAgenda = {
 const getAgendaCalendar = {
     query: Joi.object().keys({
         days: Joi.number().integer(),
+        id_filter: Joi.string().required(),
     })
 };
 module.exports = { addAgenda, putAgenda, deleteAgenda, getSingleAgenda, getAllAgenda, getAgendaCalendar };
