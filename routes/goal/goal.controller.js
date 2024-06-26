@@ -143,6 +143,13 @@ const deleteGoal = asyncHandler(async (req, res) => {
     res.status(200).send({ message: "Obiettivo eliminato" });
 });
 
+//@desc get di tutti i nomi e colori degli obiettivi
+//@route GET /api/goal/name/
+//@access private
+const getAllGoalsName = asyncHandler(async (req, res) => {
+    const response = await Goal.selectAllGoalsName({ idu: req.user.idu });
 
+    res.status(200).send(response);
+});
 
-module.exports = { getAllGoals, createGoal, getGoal, updateGoal, updateFinished, deleteGoal };
+module.exports = { getAllGoals, createGoal, getGoal, updateGoal, updateFinished, deleteGoal, getAllGoalsName };
