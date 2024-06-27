@@ -38,7 +38,7 @@ const Goal = {
     },
     selectGoal: async ({ id, alsoFinished }) => {
         const mysql = `
-            SELECT g.id, g.name, g.\`desc\`, g.expiry_date, g.planned_minutes, g.minutes, g.expected_grade, g.grade, g.finished, pc.primary_color, pc.secondary_color
+            SELECT g.id, g.name, g.\`desc\`, g.expiry_date, g.planned_minutes, g.minutes, g.expected_grade, g.grade, g.finished, g.id_palette, pc.primary_color, pc.secondary_color
             FROM ${TABLE} g
             inner join palette_color pc on pc.id = g.id_palette
             WHERE ${alsoFinished ? " 1=1 " : " g.finished = 0 "} AND g.id=@id`;
@@ -108,7 +108,18 @@ const Goal = {
         where g.id=@id and g.active = '1';`;
         const result = await connFunction.query(mysql, { id });
         return result;
-    }
+    },
+    selectAllGoalsName: async ({ idu }) => {
+        const mysql = `
+            SELECT g.id, g.name, pc.primary_color, pc.secondary_color
+            FROM ${TABLE} g
+            inner join palette_color pc on pc.id = g.id_palette
+            INNER JOIN user_goal ug ON ug.id_goal = g.id
+            WHERE  (g.finished = 0 OR expiry_date > now()) AND ug.id_user LIKE @idu ;`;
+        const result = await connFunction.query(mysql, { idu });
+        return result;
+    },
+
 }
 
 module.exports = Goal;

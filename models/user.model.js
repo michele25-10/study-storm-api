@@ -102,11 +102,15 @@ const User = {
     },
     selectInfoUser: async ({ idu }) => {
         const mysql = `
-            SELECT u.name, u.surname, ip.path as "prof_img", u.email, u.tel, u.course_study, u.birth_date
+            SELECT u.name, u.surname, ip.path as "prof_img", u.email, u.tel, u.course_study, u.id_img, u.birth_date
             FROM ${TABLE} u 
             INNER JOIN img_profile ip on ip.id = u.id_img
             WHERE u.status = 1 AND u.id=@idu`;
         const result = await connFunction.query(mysql, { idu });
+        return result;
+    },
+    changeImage: async ({ idu, id_img }) => {
+        const result = await connFunction.update(TABLE, { id_img }, " id=@idu", { idu });
         return result;
     },
 }

@@ -7,12 +7,13 @@ const UserGoal = require('../../models/user-goal.model');
 //@route GET /api/goal/
 //@access private
 const getAllGoals = asyncHandler(async (req, res) => {
-    const response = await Goal.selectAllGoals({ alsoFinished: req.query.alsoFinished || false, idu: req.user.idu });
+    let response = await Goal.selectAllGoals({ alsoFinished: req.query.alsoFinished || false, idu: req.user.idu });
 
-    if (req.query.tasks) {
-        for (const row of response) {
-            const task = await Task.selectAllTasks({ id_goal: row.id });
-            row.tasks = task;
+    for (const row of response) {
+        row.percentuage = Math.round((row.minutes / row.planned_minutes) * 100);
+        if (req.query.tasks) {
+            const tasks = await Task.selectAllTasks({ id_goal: row.id });
+            row.tasks = tasks;
         }
     }
 
@@ -143,6 +144,13 @@ const deleteGoal = asyncHandler(async (req, res) => {
     res.status(200).send({ message: "Obiettivo eliminato" });
 });
 
+//@desc get di tutti i nomi e colori degli obiettivi
+//@route GET /api/goal/name/
+//@access private
+const getAllGoalsName = asyncHandler(async (req, res) => {
+    const response = await Goal.selectAllGoalsName({ idu: req.user.idu });
 
+    res.status(200).send(response);
+});
 
-module.exports = { getAllGoals, createGoal, getGoal, updateGoal, updateFinished, deleteGoal };
+module.exports = { getAllGoals, createGoal, getGoal, updateGoal, updateFinished, deleteGoal, getAllGoalsName };

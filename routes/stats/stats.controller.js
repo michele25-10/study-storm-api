@@ -4,7 +4,7 @@ const Stats = require("../../models/stats.model");
 const { convertDaySql, convertMonthSql } = require('../../utils/mySqlDate');
 
 //@desc get di tutti gli obiettivi
-//@route PUT /api/stats/study/:idu
+//@route GET /api/stats/study/:idu
 //@access private
 const getStatsHourStudy = asyncHandler(async (req, res) => {
     const response = {};
@@ -32,4 +32,33 @@ const getStatsHourStudy = asyncHandler(async (req, res) => {
     res.status(200).send(response);
 });
 
-module.exports = { getStatsHourStudy }; 
+//@desc get della divisione dello studio negli ultimi 7 giorni tra i vari obiettivi (Studio del tempo investito)
+//@route GET /api/stats/study/:idu
+//@access private
+const getLastSevenDaysStats = asyncHandler(async (req, res) => {
+    const response = await Stats.selectLastTotDaysStats({ idu: req.user.idu, numberOfDays: 7 });
+    res.status(200).send(response);
+});
+
+//@desc get della divisione dello studio negli ultimi 30 giorni tra i vari obiettivi (Studio del tempo investito)
+//@route GET /api/stats/study/:idu
+//@access private
+const getLastThirtyDaysStats = asyncHandler(async (req, res) => {
+    const response = await Stats.selectLastTotDaysStats({ idu: req.user.idu, numberOfDays: 30 });
+
+    res.status(200).send(response);
+});
+
+//@desc get delle informazioni come media ore di studio all'interno di una settimana, distribuzione di frequenza, Andamento rispetto alla settimana precedente ancora
+//@route GET /api/stats/study/:idu
+//@access private
+const getStudyInfo = asyncHandler(async (req, res) => {
+    const response = await Stats.selectInfoStudy({ idu: req.user.idu, numberOfDays: 7 });
+
+    delete response[0].idu;
+    response[0].percentuage = Math.round(((response[0].avg / response[0].last_avg) * 100) - 100);
+
+    res.status(200).send(response[0]);
+});
+
+module.exports = { getStatsHourStudy, getLastSevenDaysStats, getLastThirtyDaysStats, getStudyInfo }; 

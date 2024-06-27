@@ -4,6 +4,9 @@ const Agenda = require('../../models/agenda.model');
 const Task = require('../../models/task.model');
 const Goal = require('../../models/goal.model');
 const UserTaskAgenda = require('../../models/user-task-agenda.model');
+const moment = require('moment');
+const { months } = require('../../enums/date');
+
 
 //@desc API inserimento agenda di una task da parte di un utente
 //@route POST /api/agenda/
@@ -197,5 +200,53 @@ const getAllAgenda = asyncHandler(async (req, res) => {
     res.status(200).send(response);
 });
 
+//@desc API get di agenda calendario con numero ore per ogni giorno all'indietro di tot giorni
+//@route GET /api/feedback/
+//@access private
+const getAgendaCalendar = asyncHandler(async (req, res) => {
+    let response = [];
+    const days = req.query.days ? req.query.days : 30;
+    let idString = req.query.id_filter;
+    idString = idString.slice(1, -1);
 
-module.exports = { addAgenda, putAgenda, deleteAgenda, getSingleAgenda, getAllAgenda };
+    let result = await Agenda.getAgendaCalendar({ days, idu: req.user.idu, idString });
+
+    for (const row of result) {
+        let isPresent = false;
+        for (const item of response) {
+            if (moment(row.date).isSame(moment(item.date))) {
+                isPresent = true;
+            }
+        }
+
+        if (!isPresent) {
+            let dataObject = {};
+            dataObject.date = row.date;
+            dataObject.day = moment(row.date).date();
+            row.month = moment(row.date).month();
+            dataObject.month = months[row.month];
+            dataObject.year = moment(row.date).year();
+            dataObject.agenda = [];
+            for (const i in result) {
+                if (moment(result[i].date).isSame(moment(row.date))) {
+                    dataObject.agenda.push({
+                        id: result[i].id,
+                        minutes: result[i].minutes,
+                        id_agenda: result[i].id_agenda,
+                        id_task: result[i].id_task,
+                        id_goal: result[i].id_goal,
+                        primary_color: result[i].primary_color,
+                        secondary_color: result[i].secondary_color,
+                        name: result[i].name,
+                        name_task: result[i].name_task
+                    });
+                }
+            }
+            response.push(dataObject);
+        }
+    }
+
+    res.status(200).send(response);
+});
+
+module.exports = { addAgenda, putAgenda, deleteAgenda, getSingleAgenda, getAllAgenda, getAgendaCalendar };
