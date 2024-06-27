@@ -102,7 +102,7 @@ const updateGoal = asyncHandler(async (req, res) => {
 });
 
 //@desc aggiorna il valore di admin
-//@route PUT /api/user-goal/updateAdmin
+//@route PUT /api/goal/
 //@access private
 const updateFinished = asyncHandler(async (req, res) => {
     let result = await UserGoal.filter({ id_user: req.user.idu, id_goal: req.params.id });
