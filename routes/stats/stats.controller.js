@@ -37,7 +37,6 @@ const getStatsHourStudy = asyncHandler(async (req, res) => {
 //@access private
 const getLastSevenDaysStats = asyncHandler(async (req, res) => {
     const response = await Stats.selectLastTotDaysStats({ idu: req.user.idu, numberOfDays: 7 });
-
     res.status(200).send(response);
 });
 
@@ -56,8 +55,8 @@ const getLastThirtyDaysStats = asyncHandler(async (req, res) => {
 const getStudyInfo = asyncHandler(async (req, res) => {
     const response = await Stats.selectInfoStudy({ idu: req.user.idu, numberOfDays: 7 });
 
-    log(response[0]);
-    response[0].percentuage = (response[0].avg / response[0].last_avg) * 100;
+    delete response[0].idu;
+    response[0].percentuage = Math.round(((response[0].avg / response[0].last_avg) * 100) - 100);
 
     res.status(200).send(response[0]);
 });
