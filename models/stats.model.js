@@ -46,7 +46,7 @@ const Stats = {
     },
     selectLastTotDaysStats: async ({ idu, numberOfDays }) => {
         const mysql = `
-        SELECT g.id, g.name, ROUND(SUM(a.minutes) / 60) AS hour, pc.primary_color, pc.secondary_color
+        SELECT g.id, g.name, ROUND(SUM(a.minutes) / 60) AS value, pc.primary_color, pc.secondary_color
         FROM user_task_agenda uta
         INNER JOIN agenda a ON a.id = uta.id_agenda
         INNER JOIN task t ON t.id = uta.id_task
