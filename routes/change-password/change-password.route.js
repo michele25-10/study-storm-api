@@ -5,4 +5,5 @@ const changePswController = require('./change-password.controller');
 const changePswValidation = require('./change-password.validation');
 const validate = require('../../middleware/JoiValidation');
 
-router.put("/change-password/", validate(changePswController.changePassword), changePswValidation.changePassword);
+router.get("/:idu", validate(changePswValidation.changePassword), changePswController.changePassword);
+module.exports = router;

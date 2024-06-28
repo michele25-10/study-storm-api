@@ -86,8 +86,8 @@ const confirmChangePassword = asyncHandler(async (req, res) => {
 
     const template = handlebars.compile(fs.readFileSync(path.join(__dirname, "../../templates/changePassword.html")).toString());
     const replacements = {
-        password: hashedPassword,
         idu: req.user.idu,
+        password: hashedPassword
     };
     await sendMailer({
         from: process.env.MAIL,
@@ -127,4 +127,4 @@ const changeImageProfile = asyncHandler(async (req, res) => {
     res.status(200).send({ message: "Immagine profilo cambiata" });
 });
 
-module.exports = { getAllUsers, getUser, getUserByEmail, updateUser, deleteUser, confirmChangePassword, changePassword, getInfo, changeImageProfile };
+module.exports = { getAllUsers, getUser, getUserByEmail, updateUser, deleteUser, confirmChangePassword, getInfo, changeImageProfile };

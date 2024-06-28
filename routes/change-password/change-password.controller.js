@@ -1,8 +1,8 @@
 const User = require('../../models/user.model');
-const { hash } = require("../../utils/crypto");
+const asyncHandler = require('express-async-handler');
 
 //@desc Cambio password utente
-//@route PUT /api/user/change-password/:idu
+//@route PUT /api/change-password/:idu
 //@access private
 const changePassword = asyncHandler(async (req, res) => {
     console.log(req.params, req.query)
