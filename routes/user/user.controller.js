@@ -1,6 +1,10 @@
 const asyncHandler = require('express-async-handler');
 const User = require('../../models/user.model');
 const { hash } = require('../../utils/crypto');
+const sendMailer = require('../../utils/mail');
+const fs = require('fs');
+const handlebars = require('handlebars');
+const path = require('path')
 
 //@desc get di tutti gli utenti
 //@route GET /api/user/
@@ -73,11 +77,41 @@ const deleteUser = asyncHandler(async (req, res) => {
     res.status(200).send({ message: "Utente eliminato" });
 });
 
+//@desc conferma cambio password utente
+//@route PUT /api/user/confirm-change-password/
+//@access private
+const confirmChangePassword = asyncHandler(async (req, res) => {
+    const hashedPassword = hash(req.body.newPassword);
+    req.body.newPassword = hashedPassword;
+
+    const template = handlebars.compile(fs.readFileSync(path.join(__dirname, "../../templates/changePassword.html")).toString());
+    const replacements = {
+        password: hashedPassword
+    };
+    console.log("si");
+    await sendMailer({
+        from: process.env.MAIL,
+        to: req.user.email,
+        subject: "CAMBIO PASSWORD",
+        text: "",
+        html: template(replacements)
+    });
+
+    // const result = await User.changePassword({ idu: req.user.idu, password: hashedPassword });
+    // if (result.affectedRows != 1) {
+    //     res.status(500);
+    //     throw new Error("Errore inaspettato");
+    // }
+
+    res.status(200).send({ message: "Email mandata" });
+});
+
 //@desc Cambio password utente
 //@route PUT /api/user/change-password/:idu
 //@access private
 const changePassword = asyncHandler(async (req, res) => {
     const hashedPassword = hash(req.body.newPassword);
+    req.body.password = hashedPassword;
 
     const result = await User.changePassword({ idu: req.user.idu, password: hashedPassword });
     if (result.affectedRows != 1) {
@@ -109,4 +143,4 @@ const changeImageProfile = asyncHandler(async (req, res) => {
     res.status(200).send({ message: "Immagine profilo cambiata" });
 });
 
-module.exports = { getAllUsers, getUser, getUserByEmail, updateUser, deleteUser, changePassword, getInfo, changeImageProfile };
+module.exports = { getAllUsers, getUser, getUserByEmail, updateUser, deleteUser, confirmChangePassword, changePassword, getInfo, changeImageProfile };

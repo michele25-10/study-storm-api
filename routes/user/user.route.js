@@ -11,6 +11,7 @@ router.get("/filter/:idu", validate(userValidation.getUser), userController.getU
 router.put("/", validate(userValidation.updateUser), userController.updateUser);
 router.delete("/", userController.deleteUser);
 
+router.put("/confirm-change-password/", validate(userValidation.confirmChangePassword), userController.confirmChangePassword);
 router.put("/change-password/", validate(userValidation.changePassword), userController.changePassword);
 router.get("/info/", userController.getInfo);
 router.put("/change-image/", validate(userValidation.changeImageProfile), userController.changeImageProfile);
