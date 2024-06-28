@@ -43,17 +43,10 @@ const confirmChangePassword = {
     })
 };
 
-const changePassword = {
-    body: Joi.object().keys({
-        newPassword: Joi.string().min(8).pattern(new RegExp('^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*[0-9]).{8,}$')).required(),
-        confirmPassword: Joi.string().valid(Joi.ref('newPassword')).required().strict()
-    })
-};
-
 const changeImageProfile = {
     body: Joi.object().keys({
         id_img: Joi.number().integer().required(),
     })
 };
 
-module.exports = { getAllUsers, getUser, getUserByEmail, updateUser, changePassword, confirmChangePassword, changeImageProfile };
+module.exports = { getAllUsers, getUser, getUserByEmail, updateUser, confirmChangePassword, changeImageProfile };

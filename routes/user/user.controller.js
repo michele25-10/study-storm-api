@@ -86,9 +86,9 @@ const confirmChangePassword = asyncHandler(async (req, res) => {
 
     const template = handlebars.compile(fs.readFileSync(path.join(__dirname, "../../templates/changePassword.html")).toString());
     const replacements = {
-        password: hashedPassword
+        password: hashedPassword,
+        idu: req.user.idu,
     };
-    console.log("si");
     await sendMailer({
         from: process.env.MAIL,
         to: req.user.email,
@@ -104,22 +104,6 @@ const confirmChangePassword = asyncHandler(async (req, res) => {
     // }
 
     res.status(200).send({ message: "Email mandata" });
-});
-
-//@desc Cambio password utente
-//@route PUT /api/user/change-password/:idu
-//@access private
-const changePassword = asyncHandler(async (req, res) => {
-    const hashedPassword = hash(req.body.newPassword);
-    req.body.password = hashedPassword;
-
-    const result = await User.changePassword({ idu: req.user.idu, password: hashedPassword });
-    if (result.affectedRows != 1) {
-        res.status(500);
-        throw new Error("Errore inaspettato");
-    }
-
-    res.status(200).send({ message: "Password cambiata" });
 });
 
 //@desc get Nome Cognome immagine profilo
