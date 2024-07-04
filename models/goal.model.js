@@ -4,13 +4,13 @@ const connFunction = require('../utils/executeMySql');
 const TABLE = "goal";
 
 const Goal = {
-    selectAllGoals: async ({ alsoFinished, idu }) => {
+    selectAllGoals: async ({ finished, idu }) => {
         const mysql = `
             SELECT g.id, g.name, g.\`desc\`, g.expiry_date, g.planned_minutes, g.minutes, g.expected_grade, g.grade, g.finished, pc.primary_color, pc.secondary_color
             FROM ${TABLE} g
             inner join palette_color pc on pc.id = g.id_palette
             INNER JOIN user_goal ug ON ug.id_goal = g.id
-            WHERE ${alsoFinished ? " ug.id_user LIKE @idu " : " (g.finished = 1 OR expiry_date < now()) AND ug.id_user LIKE @idu "}`;
+            WHERE ${finished ? " (g.finished = 1 OR expiry_date < now()) AND ug.id_user LIKE @idu " : " ug.id_user LIKE @idu AND (g.finished = 0 OR expiry_date < now())"}`;
         const result = await connFunction.query(mysql, { idu });
         return result;
     },

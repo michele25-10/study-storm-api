@@ -7,7 +7,7 @@ const UserGoal = require('../../models/user-goal.model');
 //@route GET /api/goal/
 //@access private
 const getAllGoals = asyncHandler(async (req, res) => {
-    let response = await Goal.selectAllGoals({ finished: req.query.alsoFinished || false, idu: req.user.idu });
+    let response = await Goal.selectAllGoals({ finished: req.query.finished || false, idu: req.user.idu });
 
     for (const row of response) {
         row.percentuage = Math.round((row.minutes / row.planned_minutes) * 100);
