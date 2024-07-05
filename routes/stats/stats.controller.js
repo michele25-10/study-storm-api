@@ -61,4 +61,16 @@ const getStudyInfo = asyncHandler(async (req, res) => {
     res.status(200).send(response[0]);
 });
 
-module.exports = { getStatsHourStudy, getLastSevenDaysStats, getLastThirtyDaysStats, getStudyInfo }; 
+//@desc get delle informazioni come media ore di studio per ogni mese, distribuzione di frequenza, Andamento rispetto alla settimana precedente ancora
+//@route GET /api/stats/study/info/:id
+//@access private
+const getStudyInfoHistory = asyncHandler(async (req, res) => {
+    const response = await Stats.selectInfoStudyHistory({ idu: req.user.idu, id_goal: req.params.id_goal });
+
+    delete response[0].idu;
+    response[0].percentuage = Math.round(((response[0].avg / response[0].last_avg) * 100) - 100);
+
+    res.status(200).send(response[0]);
+});
+
+module.exports = { getStatsHourStudy, getLastSevenDaysStats, getLastThirtyDaysStats, getStudyInfo, getStudyInfoHistory }; 

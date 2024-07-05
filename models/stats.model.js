@@ -55,7 +55,7 @@ const Stats = {
         WHERE uta.id_user = @idu
             AND a.\`date\` BETWEEN DATE_SUB(CURDATE(), INTERVAL ${numberOfDays} DAY) AND CURDATE()
         GROUP BY g.id, g.name;`;
-        console.log(mysql);
+
         const result = await connFunction.query(mysql, {
             idu
         });
@@ -83,6 +83,25 @@ const Stats = {
 
         const result = await connFunction.query(mysql, {
             idu
+        });
+
+        return result;
+    },
+    selectInfoStudyHistory: async ({idu, id_goal}) => {
+        const mysql = `
+            SELECT * ,
+            (
+                SELECT tk.id 
+                FROM task tk
+                WHERE id_goal = @id_goal
+            ) AS tsk
+            FROM user_task_agenda uta
+            INNER JOIN agenda a ON a.id = uta.id_agenda
+            WHERE uta.id_user = @idu`;
+
+        const result = await connFunction.query(mysql, {
+            id_goal,
+            idu,
         });
 
         return result;

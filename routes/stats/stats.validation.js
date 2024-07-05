@@ -8,4 +8,10 @@ const getStatsHourStudy = {
     })
 };
 
-module.exports = { getStatsHourStudy };
+const getStudyInfoHistory = {
+    params: Joi.object().keys({
+        id_goal: Joi.number(),
+    })
+};
+
+module.exports = { getStatsHourStudy, getStudyInfoHistory };
