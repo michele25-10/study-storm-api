@@ -1,8 +1,3 @@
-
-
-
-
-
 CREATE DATABASE uni;
 
 USE uni;
@@ -175,13 +170,7 @@ CREATE TABLE `invite_team` (
   `date_created` datetime NOT NULL,
   `verified` boolean NOT NULL default 0,
   `id_goal` INT NOT NULL,
-  `verification_key` char(36) NOT NULL,
-  FOREIGN KEY (`id_user`)
-  REFERENCES user(`id`)
-  on delete cascade, 
-  FOREIGN KEY (`id_goal`)
-  REFERENCES goal(`id`)
-  on delete cascade
+  `verification_key` char(36) NOT NULL
 ); 
 
 DELIMITER $$
@@ -251,11 +240,9 @@ CREATE TABLE `reset_password` (
   `id` int unsigned not null auto_increment primary key,
   `id_user` char(36) NOT NULL,
   `date_created` datetime NOT NULL,
-  `verified` bit NOT NULL default 0,
-  FOREIGN KEY (`id_user`)
-  REFERENCES user(`id`)
-  on delete cascade
+  `verified` bit NOT NULL default 0
 ); 
+
 
 CREATE TABLE newsletter (
   `id` int auto_increment primary key,
@@ -500,4 +487,13 @@ ALTER TABLE `goal`
   ALTER TABLE `user`
   ADD CONSTRAINT `fk_user_img` FOREIGN KEY (`id_img`) REFERENCES `img_profile` (`id`); 
   
+ALTER TABLE `invite_team`
+  ADD CONSTRAINT `fk_invite_team_idu` FOREIGN KEY (`id_user`) REFERENCES `user` (`id`) ON DELETE CASCADE;
+
+ALTER TABLE `invite_team`
+  ADD CONSTRAINT `fk_invite_team_idg` FOREIGN KEY (`id_goal`) REFERENCES `goal` (`id`) ON DELETE CASCADE;
+
+ALTER TABLE `reset_password`
+  ADD CONSTRAINT `fk_reset_password` FOREIGN KEY (`id_user`) REFERENCES `user` (`id`) ON DELETE CASCADE;
+
   COMMIT;

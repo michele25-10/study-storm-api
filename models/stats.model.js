@@ -89,19 +89,17 @@ const Stats = {
     },
     selectInfoStudyHistory: async ({idu, id_goal}) => {
         const mysql = `
-            SELECT * ,
-            (
-                SELECT tk.id 
+                SELECT SUM(a.minutes) as 'minutes', MONTH(a.date), YEAR(a.date)
                 FROM task tk
-                WHERE id_goal = @id_goal
-            ) AS tsk
-            FROM user_task_agenda uta
-            INNER JOIN agenda a ON a.id = uta.id_agenda
-            WHERE uta.id_user = @idu`;
+                INNER JOIN user_task_agenda uta ON uta.id_task = tk.id
+                INNER JOIN agenda a ON a.id = uta.id_agenda
+                WHERE tk.id_goal = @id_goal AND uta.id_user = @idu
+                GROUP BY MONTH(a.date), YEAR(a.date)
+            `;
 
         const result = await connFunction.query(mysql, {
             id_goal,
-            idu,
+            idu
         });
 
         return result;

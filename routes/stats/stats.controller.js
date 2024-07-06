@@ -66,11 +66,12 @@ const getStudyInfo = asyncHandler(async (req, res) => {
 //@access private
 const getStudyInfoHistory = asyncHandler(async (req, res) => {
     const response = await Stats.selectInfoStudyHistory({ idu: req.user.idu, id_goal: req.params.id_goal });
-
-    delete response[0].idu;
-    response[0].percentuage = Math.round(((response[0].avg / response[0].last_avg) * 100) - 100);
-
-    res.status(200).send(response[0]);
+    if (response.length == 0)
+    {
+        res.status(404);
+        throw new Error();
+    }
+    res.status(200).send(response);
 });
 
 module.exports = { getStatsHourStudy, getLastSevenDaysStats, getLastThirtyDaysStats, getStudyInfo, getStudyInfoHistory }; 
