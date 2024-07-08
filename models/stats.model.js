@@ -89,7 +89,7 @@ const Stats = {
     },
     selectInfoStudyHistory: async ({idu, id_goal}) => {
         const mysql = `
-                SELECT SUM(a.minutes) as 'minutes', MONTH(a.date), YEAR(a.date)
+                SELECT SUM(a.minutes) / 60 as 'tot', MONTH(a.date) as 'month', YEAR(a.date) as 'year'
                 FROM task tk
                 INNER JOIN user_task_agenda uta ON uta.id_task = tk.id
                 INNER JOIN agenda a ON a.id = uta.id_agenda

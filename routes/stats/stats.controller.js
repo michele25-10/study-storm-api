@@ -65,12 +65,27 @@ const getStudyInfo = asyncHandler(async (req, res) => {
 //@route GET /api/stats/study/info/:id
 //@access private
 const getStudyInfoHistory = asyncHandler(async (req, res) => {
-    const response = await Stats.selectInfoStudyHistory({ idu: req.user.idu, id_goal: req.params.id_goal });
-    if (response.length == 0)
+    const response = {};
+    let result = await Stats.selectInfoStudyHistory({ idu: req.user.idu, id_goal: req.params.id_goal });
+    if (result.length == 0)
     {
         res.status(404);
         throw new Error();
     }
+
+    result = convertMonthSql(result);
+
+    response.chartData = [];
+    for (const row of result) {
+        if (row.tot != 0)
+        {
+            response.chartData.push({
+                value: row.tot,
+                name: row.name,
+            });
+        }
+    }
+
     res.status(200).send(response);
 });
 
