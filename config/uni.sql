@@ -31,7 +31,6 @@ CREATE TABLE `answer` (
 CREATE TABLE `goal` (
   `id` int NOT NULL,
   `name` varchar(40) NOT NULL,
-  `desc` varchar(64) NOT NULL,
   `expiry_date` date DEFAULT NULL,
   `planned_minutes` int DEFAULT NULL,
   `minutes` int DEFAULT NULL,
@@ -110,12 +109,9 @@ CREATE TABLE `student_type` (
 CREATE TABLE `task` (
   `id` int NOT NULL,
   `name` varchar(40) NOT NULL,
-  `desc` varchar(64) NOT NULL,
   `minutes` int DEFAULT NULL,
-  `planned_minutes` int DEFAULT NULL,
-  `expiry_date` date DEFAULT NULL,
   `id_goal` int NOT NULL, 
-  `id_palette` int not null
+  `finished` tinyint(1) DEFAULT '0'
 );
 
 -- --------------------------------------------------------
@@ -477,9 +473,6 @@ ALTER TABLE `user_task_agenda`
   ADD CONSTRAINT `fk_u_t_agenda` FOREIGN KEY (`id_agenda`) REFERENCES `agenda` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `fk_u_task_a` FOREIGN KEY (`id_task`) REFERENCES `task` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `fk_user_t_a` FOREIGN KEY (`id_user`) REFERENCES `user` (`id`) ON DELETE CASCADE;
-
-ALTER TABLE `task`
-  ADD CONSTRAINT `fk_task_palette_color` FOREIGN KEY (`id_palette`) references `palette_color` (`id`); 
 
 ALTER TABLE `goal`
   ADD CONSTRAINT `fk_goal_palette` FOREIGN KEY (`id_palette`) REFERENCES `palette_color` (`id`); 
