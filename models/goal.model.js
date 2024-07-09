@@ -6,7 +6,7 @@ const TABLE = "goal";
 const Goal = {
     selectAllGoals: async ({ finished, idu }) => {
         const mysql = `
-            SELECT g.id, g.name, g.\`desc\`, g.expiry_date, g.planned_minutes, g.minutes, g.expected_grade, g.grade, g.finished, pc.primary_color, pc.secondary_color
+            SELECT g.id, g.name, g.expiry_date, g.planned_minutes, g.minutes, g.expected_grade, g.grade, g.finished, pc.primary_color, pc.secondary_color
             FROM ${TABLE} g
             inner join palette_color pc on pc.id = g.id_palette
             INNER JOIN user_goal ug ON ug.id_goal = g.id
@@ -16,7 +16,6 @@ const Goal = {
     },
     createGoal: async ({
         name,
-        desc,
         expiry_date,
         planned_minutes,
         minutes,
@@ -26,7 +25,6 @@ const Goal = {
     }) => {
         const result = await connFunction.insert(TABLE, {
             name,
-            "`desc`": desc,
             expiry_date: moment(expiry_date).format("YYYY-MM-DD"),
             planned_minutes,
             minutes,
@@ -38,7 +36,7 @@ const Goal = {
     },
     selectGoal: async ({ id, alsoFinished }) => {
         const mysql = `
-            SELECT g.id, g.name, g.\`desc\`, g.expiry_date, g.planned_minutes, g.minutes, g.expected_grade, g.grade, g.finished, g.id_palette, pc.primary_color, pc.secondary_color
+            SELECT g.id, g.name, g.expiry_date, g.planned_minutes, g.minutes, g.expected_grade, g.grade, g.finished, g.id_palette, pc.primary_color, pc.secondary_color
             FROM ${TABLE} g
             inner join palette_color pc on pc.id = g.id_palette
             WHERE ${alsoFinished ? " 1=1 " : " g.finished = 0 "} AND g.id=@id`;
@@ -47,7 +45,6 @@ const Goal = {
     },
     updateGoal: async ({
         name,
-        desc,
         expiry_date,
         planned_minutes,
         minutes,
@@ -58,7 +55,6 @@ const Goal = {
     }) => {
         const result = await connFunction.update(TABLE, {
             name,
-            "`desc`": desc,
             expiry_date: moment(expiry_date).format("YYYY-MM-DD"),
             planned_minutes,
             minutes,
