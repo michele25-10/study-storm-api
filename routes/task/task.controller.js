@@ -11,11 +11,11 @@ const getAllTasks = asyncHandler(async (req, res) => {
 
     //task attive
     let result = await Task.selectAllTasks({ id_goal: req.query.id_goal || false, finished: false });
-    response.not_finished = result;
+    response.active_tasks = result;
 
     //Task terminate
     result = await Task.selectAllTasks({ id_goal: req.query.id_goal || false, finished: true });
-    response.finished = result;
+    response.finished_tasks = result;
 
     res.status(200).send(response);
 });
