@@ -12,8 +12,11 @@ const getAllGoals = asyncHandler(async (req, res) => {
     for (const row of response) {
         row.percentuage = Math.round((row.minutes / row.planned_minutes) * 100);
         if (req.query.tasks) {
-            const tasks = await Task.selectAllTasks({ id_goal: row.id });
-            row.tasks = tasks;
+            const activeTask = await Task.selectAllTasks({ id_goal: row.id, finished: false });
+            row.active_tasks = activeTask;
+
+            const finishedTask = await Task.selectAllTasks({ id_goal: row.id, finished: false });
+            row.tasks = finishedTask;
         }
     }
 
@@ -68,8 +71,11 @@ const getGoal = asyncHandler(async (req, res) => {
 
     if (req.query.tasks) {
         for (const row of response) {
-            const task = await Task.selectAllTasks({ id_goal: row.id });
-            row.tasks = task;
+            const task = await Task.selectAllTasks({ id_goal: row.id, finished: false });
+            row.active_task = task;
+
+            const finishdeTask = await Task.selectAllTasks({ id_goal: row.id, finished: true });
+            row.active_task = finishdeTask;
         }
     }
 

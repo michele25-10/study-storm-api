@@ -4,11 +4,11 @@ const connFunction = require('../utils/executeMySql');
 const TABLE = "task";
 
 const Task = {
-    selectAllTasks: async ({ id_goal }) => {
+    selectAllTasks: async ({ id_goal, finished }) => {
         const mysql = `
             SELECT t.id, t.name, t.minutes, t.id_goal
             FROM ${TABLE} t
-            WHERE 1=1 ${id_goal ? " AND t.id_goal=@id_goal" : ""}`;
+            WHERE 1=1 ${id_goal ? ` AND t.id_goal=@id_goal ${finished ? " AND finished=1 " : ""} ` : ""}`;
         const result = await connFunction.query(mysql, { id_goal });
         return result;
     },
@@ -69,6 +69,17 @@ const Task = {
         const mysql = "select id_goal from task where id=@id limit 1";
         const result = await connFunction.query(mysql, { id });
         return result[0].id_goal;
+    },
+    finishedTask: async ({
+        finished,
+        id,
+    }) => {
+        const result = await connFunction.update(TABLE, {
+            finished: finished ? 1 : 0,
+        },
+            "id=@id",
+            { id });
+        return result;
     },
 }
 

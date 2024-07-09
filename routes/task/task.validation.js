@@ -30,10 +30,11 @@ const updateTask = {
     })
 };
 
-const addMinutes = {
-    body: Joi.object().keys({
-        minutes: Joi.number().integer().required(),
+const finishedTask = {
+    params: Joi.object().keys({
         id: Joi.number().integer().required(),
+    }), body: Joi.object().keys({
+        finished: Joi.boolean().required(),
     })
 };
 
@@ -46,4 +47,4 @@ const deleteTask = {
     })
 };
 
-module.exports = { createTask, getTask, getAllTasks, updateTask, addMinutes, deleteTask };
+module.exports = { createTask, getTask, getAllTasks, updateTask, finishedTask, deleteTask };

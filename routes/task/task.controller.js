@@ -7,14 +7,17 @@ const Goal = require('../../models/goal.model');
 //@route GET /api/task/
 //@access private
 const getAllTasks = asyncHandler(async (req, res) => {
-    const result = await Task.selectAllTasks({ id_goal: req.query.id_goal || false });
+    let response = {};
 
-    /*if (result.length == 0) {
-        res.status(404);
-        throw new Error();
-    }*/
+    //task attive
+    let result = await Task.selectAllTasks({ id_goal: req.query.id_goal || false, finished: false });
+    response.not_finished = result;
 
-    res.status(200).send(result);
+    //Task terminate
+    result = await Task.selectAllTasks({ id_goal: req.query.id_goal || false, finished: true });
+    response.finished = result;
+
+    res.status(200).send(response);
 });
 
 //@desc creazione di una task
@@ -52,25 +55,27 @@ const getTask = asyncHandler(async (req, res) => {
     res.status(200).send(result);
 });
 
-//@desc modifica di una task
-//@route PUT /api/task/updateTask
+//@desc terminare una task
+//@route PATCH /api/task/finished/:id
 //@access private
-const updateTask = asyncHandler(async (req, res) => {
-    let result = await UserGoal.filter({ id_user: req.user.idu, id_goal: req.body.id_goal });
+const finishedTask = asyncHandler(async (req, res) => {
+    const idGoal = await Task.selectIdGoalByTask({ id: req.params.id });
+
+    let result = await UserGoal.filter({ id_user: req.user.idu, id_goal: idGoal });
 
     if (result.length != 1) {
         res.status(403);
         throw new Error("Non hai i permessi");
     }
 
-    result = await Task.updateTask({ ...req.body, id: req.params.id });
+    result = await Task.finishedTask({ ...req.body, id: req.params.id });
 
     if (result.affectedRows != 1) {
         res.status(500);
         throw new Error("Errore inaspettato");
     }
 
-    res.status(201).send({ message: "Task modificata" });
+    res.status(201).send({ message: "Task Terminata" });
 });
 
 //@desc elimina una task
@@ -101,4 +106,25 @@ const deleteTask = asyncHandler(async (req, res) => {
     res.status(200).send({ message: "Task eliminata" });
 });
 
-module.exports = { getAllTasks, createTask, getTask, updateTask, deleteTask };
+//@desc modifica di una task
+//@route PUT /api/task/updateTask
+//@access private
+const updateTask = asyncHandler(async (req, res) => {
+    let result = await UserGoal.filter({ id_user: req.user.idu, id_goal: req.body.id_goal });
+
+    if (result.length != 1) {
+        res.status(403);
+        throw new Error("Non hai i permessi");
+    }
+
+    result = await Task.updateTask({ ...req.body, id: req.params.id });
+
+    if (result.affectedRows != 1) {
+        res.status(500);
+        throw new Error("Errore inaspettato");
+    }
+
+    res.status(201).send({ message: "Task modificata" });
+});
+
+module.exports = { getAllTasks, createTask, getTask, updateTask, deleteTask, finishedTask };
