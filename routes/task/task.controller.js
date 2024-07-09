@@ -28,11 +28,6 @@ const createTask = asyncHandler(async (req, res) => {
         throw new Error("Non hai i permessi");
     }
 
-    if (req.body.expiry_date < new Date()) {
-        res.status(400);
-        throw new Error("Data di scadenza già superata");
-    }
-
     result = await Task.createTask({ ...req.body });
 
     if (result.affectedRows != 1) {
@@ -66,11 +61,6 @@ const updateTask = asyncHandler(async (req, res) => {
     if (result.length != 1) {
         res.status(403);
         throw new Error("Non hai i permessi");
-    }
-
-    if (req.body.expiry_date < new Date()) {
-        res.status(400);
-        throw new Error("Data di scadenza già superata");
     }
 
     result = await Task.updateTask({ ...req.body, id: req.params.id });

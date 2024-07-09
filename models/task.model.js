@@ -6,38 +6,28 @@ const TABLE = "task";
 const Task = {
     selectAllTasks: async ({ id_goal }) => {
         const mysql = `
-            SELECT t.id, t.name, t.\`desc\`, t.expiry_date, t.planned_minutes, t.minutes, t.id_goal, pc.primary_color, pc.secondary_color, pc.id as "id_palette"
+            SELECT t.id, t.name, t.minutes, t.id_goal
             FROM ${TABLE} t
-            inner join palette_color pc on pc.id = t.id_palette
             WHERE 1=1 ${id_goal ? " AND t.id_goal=@id_goal" : ""}`;
         const result = await connFunction.query(mysql, { id_goal });
         return result;
     },
     createTask: async ({
         name,
-        desc,
-        expiry_date,
-        planned_minutes,
         minutes,
         id_goal,
-        id_palette,
     }) => {
         const result = await connFunction.insert(TABLE, {
             name,
-            "`desc`": desc,
-            expiry_date: expiry_date ? moment(expiry_date).format("YYYY-MM-DD") : null,
-            planned_minutes,
             minutes,
             id_goal,
-            id_palette: id_palette ? id_palette : 1,
         });
         return result;
     },
     selectTask: async ({ id, user_idu }) => {
         const mysql = `
-            SELECT t.id, t.name, t.\`desc\`, t.expiry_date, t.planned_minutes, t.minutes, t.id_goal, pc.primary_color, pc.secondary_color, pc.id as "id_palette"
+            SELECT t.id, t.name, t.minutes, t.id_goal
             FROM ${TABLE} t
-            inner join palette_color pc on pc.id = t.id_palette
             INNER JOIN user_goal ug ON ug.id_goal = t.id_goal
             WHERE t.id=@id AND ug.id_user=@user_idu`;
         const result = await connFunction.query(mysql, { id, user_idu });
@@ -45,20 +35,10 @@ const Task = {
     },
     updateTask: async ({
         name,
-        desc,
-        expiry_date,
-        planned_minutes,
-        minutes,
         id,
-        id_palette,
     }) => {
         const result = await connFunction.update(TABLE, {
             name,
-            "`desc`": desc,
-            expiry_date: moment(expiry_date).format("YYYY-MM-DD"),
-            planned_minutes,
-            minutes,
-            id_palette: id_palette ? id_palette : 1,
         },
             "id=@id",
             { id });

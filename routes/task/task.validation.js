@@ -3,12 +3,8 @@ const Joi = require('joi');
 const createTask = {
     body: Joi.object().keys({
         name: Joi.string().max(40).required(),
-        desc: Joi.string().max(64).allow(null, "").required(),
-        expiry_date: Joi.date().allow(null, ""),
-        planned_minutes: Joi.number().integer().allow(null, ""),
         minutes: Joi.number().integer().allow(null, ""),
         id_goal: Joi.number().integer().required(),
-        id_palette: Joi.number().allow(null, "")
     })
 };
 
@@ -30,12 +26,7 @@ const updateTask = {
     }),
     body: Joi.object().keys({
         name: Joi.string().max(40).required(),
-        desc: Joi.string().max(64).allow(null, "").required(),
-        expiry_date: Joi.date().allow(null, ""),
-        planned_minutes: Joi.number().integer().allow(null, ""),
-        minutes: Joi.number().integer().allow(null, ""),
         id_goal: Joi.number().integer().required(),
-        id_palette: Joi.number().allow(null, "")
     })
 };
 
