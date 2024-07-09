@@ -87,7 +87,7 @@ const Stats = {
 
         return result;
     },
-    selectInfoStudyHistory: async ({idu, id_goal}) => {
+    selectInfoStudyHistory: async ({ idu, id_goal }) => {
         const mysql = `
                 SELECT SUM(a.minutes) / 60 as 'tot', MONTH(a.date) as 'month', YEAR(a.date) as 'year'
                 FROM task tk
@@ -99,6 +99,23 @@ const Stats = {
 
         const result = await connFunction.query(mysql, {
             id_goal,
+            idu
+        });
+
+        return result;
+    },
+    selectGradeGoal: async ({ idu }) => {
+        const mysql = `
+                SELECT g.name, g.grade as 'value', pc.primary_color, pc.secondary_color
+                FROM  user_goal ug 
+                inner join goal g on g.id=ug.id_goal and g.grade IS NOT NULL and g.finished = '1'
+                inner join palette_color pc on pc.id=g.id_palette 
+                where ug.id_user like @idu
+	                and g.expiry_date BETWEEN  DATE_SUB(NOW(), INTERVAL 365 DAY) AND NOW() 
+                ORDER BY g.expiry_date DESC; 
+            `;
+
+        const result = await connFunction.query(mysql, {
             idu
         });
 

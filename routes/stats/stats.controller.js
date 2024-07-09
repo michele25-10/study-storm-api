@@ -67,8 +67,7 @@ const getStudyInfo = asyncHandler(async (req, res) => {
 const getStudyInfoHistory = asyncHandler(async (req, res) => {
     const response = {};
     let result = await Stats.selectInfoStudyHistory({ idu: req.user.idu, id_goal: req.params.id_goal });
-    if (result.length == 0)
-    {
+    if (result.length == 0) {
         res.status(404);
         throw new Error();
     }
@@ -77,8 +76,7 @@ const getStudyInfoHistory = asyncHandler(async (req, res) => {
 
     response.chartData = [];
     for (const row of result) {
-        if (row.tot != 0)
-        {
+        if (row.tot != 0) {
             response.chartData.push({
                 value: row.tot,
                 name: row.name,
@@ -89,4 +87,13 @@ const getStudyInfoHistory = asyncHandler(async (req, res) => {
     res.status(200).send(response);
 });
 
-module.exports = { getStatsHourStudy, getLastSevenDaysStats, getLastThirtyDaysStats, getStudyInfo, getStudyInfoHistory }; 
+//@desc get delle informazioni come media ore di studio per ogni mese, distribuzione di frequenza, Andamento rispetto alla settimana precedente ancora
+//@route GET /api/stats/final-grade/year/:id
+//@access private
+const getStatsGradeYear = asyncHandler(async (req, res) => {
+    const response = await Stats.selectGradeGoal({ idu: req.user.idu });
+
+    res.status(200).send(response);
+});
+
+module.exports = { getStatsHourStudy, getLastSevenDaysStats, getLastThirtyDaysStats, getStudyInfo, getStudyInfoHistory, getStatsGradeYear }; 

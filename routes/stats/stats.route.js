@@ -11,4 +11,6 @@ router.get("/study/info/", statsController.getStudyInfo);
 router.get("/study/period/", validate(statsValidation.getStatsHourStudy), statsController.getStatsHourStudy);
 router.get("/study/info/:id_goal", validate(statsValidation.getStudyInfoHistory), statsController.getStudyInfoHistory);
 
+router.get("/final-grade/year/", statsController.getStatsGradeYear);
+
 module.exports = router;
