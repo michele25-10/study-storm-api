@@ -91,8 +91,11 @@ const getStudyInfoHistory = asyncHandler(async (req, res) => {
 //@route GET /api/stats/final-grade/year/:id
 //@access private
 const getStatsGradeYear = asyncHandler(async (req, res) => {
-    const response = await Stats.selectGradeGoal({ idu: req.user.idu });
-
+    let response = [];
+    response = await Stats.selectGradeGoal({ idu: req.user.idu });
+    for (const i in response) {
+        response[i].id = i;
+    }
     res.status(200).send(response);
 });
 
