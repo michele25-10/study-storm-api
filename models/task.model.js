@@ -8,7 +8,7 @@ const Task = {
         const mysql = `
             SELECT t.id, t.name, t.minutes, t.id_goal
             FROM ${TABLE} t
-            WHERE 1=1 ${id_goal ? ` AND t.id_goal=@id_goal ${finished ? " AND finished=1 " : ""} ` : ""}`;
+            WHERE 1=1 ${id_goal ? ` AND t.id_goal=@id_goal AND finished= ${finished ? "1 " : "0"} ` : ""}`;
         const result = await connFunction.query(mysql, { id_goal });
         return result;
     },
