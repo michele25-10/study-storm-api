@@ -112,7 +112,7 @@ const Stats = {
                 inner join palette_color pc on pc.id=g.id_palette 
                 where ug.id_user like @idu
 	                and g.expiry_date BETWEEN  DATE_SUB(NOW(), INTERVAL 365 DAY) AND NOW() 
-                ORDER BY g.expiry_date DESC; 
+                ORDER BY g.expiry_date ASC; 
             `;
 
         const result = await connFunction.query(mysql, {
