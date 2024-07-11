@@ -74,8 +74,8 @@ const getGoal = asyncHandler(async (req, res) => {
             const task = await Task.selectAllTasks({ id_goal: row.id, finished: false });
             row.active_tasks = task;
 
-            const finishdeTask = await Task.selectAllTasks({ id_goal: row.id, finished: true });
-            row.finished_tasks = finishdeTask;
+            const finishedTasks = await Task.selectAllTasks({ id_goal: row.id, finished: true });
+            row.finished_tasks = finishedTasks;
         }
     }
 
