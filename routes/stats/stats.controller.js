@@ -67,20 +67,17 @@ const getStudyInfo = asyncHandler(async (req, res) => {
 const getStudyInfoHistory = asyncHandler(async (req, res) => {
     const response = {};
     let result = await Stats.selectInfoStudyHistory({ idu: req.user.idu, id_goal: req.params.id_goal });
-    if (result.length == 0) {
-        res.status(404);
-        throw new Error();
-    }
+    if (result.length > 0) {
+        result = convertMonthSql(result);
 
-    result = convertMonthSql(result);
-
-    response.chartData = [];
-    for (const row of result) {
-        if (row.tot != 0) {
-            response.chartData.push({
-                value: row.tot,
-                name: row.name,
-            });
+        response.chartData = [];
+        for (const row of result) {
+            if (row.tot != 0) {
+                response.chartData.push({
+                    value: row.tot,
+                    name: row.name,
+                });
+            }
         }
     }
 
