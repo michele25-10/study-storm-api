@@ -68,10 +68,12 @@ const Goal = {
     },
     updateFinished: async ({
         finished,
+        grade,
         id
     }) => {
         const result = await connFunction.update(TABLE, {
-            finished
+            finished,
+            grade: grade ? grade : null
         },
             "id=@id",
             { id });

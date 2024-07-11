@@ -51,6 +51,7 @@ const updateFinished = {
     }),
     body: Joi.object().keys({
         finished: Joi.number().allow(0, 1).required(),
+        grade: Joi.number().integer(),
     })
 };
 
