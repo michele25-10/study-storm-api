@@ -90,6 +90,15 @@ const Agenda = {
         const result = await connFunction.query(mysql, { idu, days });
         return result;
     },
+    checkStatus: async ({idu, id_task}) => {
+        const mysql = `
+            SELECT * FROM task t
+            INNER JOIn user_task_agenda uta on t.id = uta.id_task
+            WHERE uta.id_user = @id_user AND id_task = @id_task AND finished = 0;
+        `;
+        const result = await connFunction.query(mysql, { idu, id_task });
+        return result;
+    }
 };
 
 module.exports = Agenda;

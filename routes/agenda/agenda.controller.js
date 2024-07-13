@@ -21,6 +21,12 @@ const addAgenda = asyncHandler(async (req, res) => {
     }
     const idGoal = check[0].idGoal;
 
+    check = await Agenda.checkStatus({idu: req.user.idu, id_task: req.body.id_task});
+    if (check.length != 1) {
+        res.status(400);
+        throw new Error("Task chiusa");
+    }
+
     //Un utente non deve poter inserire più agende nella stessa data 
     check = await Agenda.isExistedAgenda({ idu: req.user.idu, id_task: req.body.id_task, date: req.body.date });
     if (check.length != 0) {
