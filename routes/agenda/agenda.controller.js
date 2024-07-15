@@ -21,10 +21,11 @@ const addAgenda = asyncHandler(async (req, res) => {
     }
     const idGoal = check[0].idGoal;
 
-    check = await Agenda.checkStatus({idu: req.user.idu, id_task: req.body.id_task});
+    check = await Agenda.checkStatus({ idu: req.user.idu, id_task: req.body.id_task });
+    console.log(check);
     if (check.length != 1) {
         res.status(400);
-        throw new Error("Task chiusa");
+        throw new Error("Task chiusa o Goal chiuso");
     }
 
     //Un utente non deve poter inserire più agende nella stessa data 
@@ -78,7 +79,7 @@ const addAgenda = asyncHandler(async (req, res) => {
 });
 
 //@desc API modifica di una agenda 
-//@route PUT /api/feedback/:id
+//@route PUT /api/agenda/:id
 //@access private
 const putAgenda = asyncHandler(async (req, res) => {
     //Controllo se l'utente è associato all'obiettivo al quale cerca di aggiungere una agenda
@@ -88,6 +89,13 @@ const putAgenda = asyncHandler(async (req, res) => {
         throw new Error("Non hai i permessi per modificare questa agenda");
     }
     const idGoal = check[0].idGoal;
+
+    //Controllo che la task o il goal siano attivi
+    check = await Agenda.checkStatus({ idu: req.user.idu, id_task: req.body.id_task });
+    if (check.length != 1) {
+        res.status(400);
+        throw new Error("Task chiusa o Goal chiuso");
+    }
 
     //controllo che non ci siano doppioni in quella data
     check = await Agenda.isExistedAgenda({ idu: req.user.idu, id_task: req.body.id_task, date: req.body.date, id_agenda: req.params.id });
