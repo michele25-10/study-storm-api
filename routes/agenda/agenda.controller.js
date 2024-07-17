@@ -133,16 +133,36 @@ const putAgenda = asyncHandler(async (req, res) => {
 //@route DELETE /api/feedback/:id
 //@access private
 const deleteAgenda = asyncHandler(async (req, res) => {
-    response = await Agenda.selectSingleAgenda({ id: req.params.id, user: req.user.idu });
+    let response = await Agenda.selectSingleAgenda({ id: req.params.id, user: req.user.idu });
     if (response.length != 1) {
         res.status(403);
         throw new Error("Non hai i permessi");
     }
+    response = await Agenda.selectIdGoalAgendaETask({ id_agenda: req.params.id, idu: req.user.idu });
+    if (response.length != 1) {
+        res.status(500);
+        throw new Error("Internal server error");
+    }
+    const idGoal = response[0].id_goal;
+    const idTask = response[0].id_task;
 
-    const result = await Agenda.deleteAgenda({ id: req.params.id });
+    //Eliminazione record
+    let result = await Agenda.deleteAgenda({ id: req.params.id });
     if (result.affectedRows != 1) {
         res.status(500);
         throw new Error("Agenda non trovata");
+    }
+
+    //Aggiorno i minuti
+    result = await Task.updateMinutes({ id_task: idTask });
+    if (result.affectedRows != 1) {
+        res.status(500);
+        throw new Error("Errore inaspettato");
+    }
+    result = await Goal.updateMinutes({ id_goal: idGoal });
+    if (result.affectedRows != 1) {
+        res.status(500);
+        throw new Error("Errore inaspettato");
     }
 
     res.status(200).send({ message: "Agenda eliminata!" });

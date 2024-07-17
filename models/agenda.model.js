@@ -100,6 +100,17 @@ const Agenda = {
         `;
         const result = await connFunction.query(mysql, { idu, id_task });
         return result;
+    },
+    selectIdGoalAgendaETask: async ({ id_agenda, idu }) => {
+        const mysql = `
+        SELECT g.id as id_goal, t.id as id_task
+        from agenda a 
+        inner join user_task_agenda uta on uta.id_agenda = a.id 
+        inner join task t on t.id = uta.id_task 
+        inner join goal g on g.id=t.id_goal 
+        where a.id = @id_agenda AND uta.id_user LIKE @idu`;
+        const result = await connFunction.query(mysql, { idu, id_agenda });
+        return result;
     }
 };
 
