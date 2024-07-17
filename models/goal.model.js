@@ -113,7 +113,7 @@ const Goal = {
             FROM ${TABLE} g
             inner join palette_color pc on pc.id = g.id_palette
             INNER JOIN user_goal ug ON ug.id_goal = g.id
-            WHERE  (g.finished = 0 OR expiry_date > now()) AND ug.id_user LIKE @idu ;`;
+            WHERE  g.finished = 0 AND ug.id_user LIKE @idu;`;
         const result = await connFunction.query(mysql, { idu });
         return result;
     },
