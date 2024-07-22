@@ -6,23 +6,29 @@
     <title>Invito Condivisione</title>
 </head>
 <body>
-
-    <h1>! Condivisione "{{goal}}"</h1>
-    <p>Accetta o Rifiuta la condivisione da parte di {{user}}</p>
+  <h1 class="title" style="color: orange; font-size: 32px; font-weight: bold">
+    ! Condivisione "{{goal}}"
+  </h1>
+  <div
+      class="paragraph"
+      style="margin-top: 20px; margin-bottom: 20px; color: black"
+    >
+    <p>Accetta o Rifiuta la condivisione da parte di {{user}}<br></p>
     <!-- Bottone Invia -->
-    <a href="http://51.75.30.166:5010/api/invite-team?verification_key={{verification_key}}">
-        <button
-          style="
-            background-color: green;
-            border-radius: 5px;
-            color: white;
-            font-weight: bold;
-            width: maxcontent;
-            border-color: green;
-          "
-        >
-            Accetta
-        </button>
-    </a>
+      <a href="http://51.75.30.166:5010/api/invite-team?verification_key={{verification_key}}">
+          <button
+            style="
+              background-color: green;
+              border-radius: 5px;
+              color: white;
+              font-weight: bold;
+              width: maxcontent;
+              border-color: green;
+            "
+          >
+              Accetta
+          </button>
+      </a>
+    </div>
 </body>
 </html>
