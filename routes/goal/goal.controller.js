@@ -93,11 +93,6 @@ const updateGoal = asyncHandler(async (req, res) => {
         throw new Error("Non hai i permessi");
     }
 
-    if (req.body.expiry_date < new Date()) {
-        res.status(400);
-        throw new Error("La scadenza è già passata");
-    }
-
     result = await Goal.updateGoal({ ...req.body, id: req.params.id });
 
     if (result.affectedRows != 1) {
@@ -117,6 +112,14 @@ const updateFinished = asyncHandler(async (req, res) => {
     if (result.length != 1) {
         res.status(403);
         throw new Error("Non hai i permessi");
+    }
+
+    if (req.body.grade) {
+        let checkValueGrade = await Goal.checkValueGradeIsValid({ id_goal: req.params.id, grade: req.body.grade })
+        if (!checkValueGrade) {
+            res.status(404);
+            throw new Error("Il voto non rispecchia la scala");
+        }
     }
 
     result = await Goal.updateFinished({ ...req.body, id: req.params.id });

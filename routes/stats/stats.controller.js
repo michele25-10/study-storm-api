@@ -61,7 +61,7 @@ const getStudyInfo = asyncHandler(async (req, res) => {
     res.status(200).send(response[0]);
 });
 
-//@desc get delle informazioni come media ore di studio per ogni mese, distribuzione di frequenza, Andamento rispetto alla settimana precedente ancora
+//@desc get delle ore di studio distribuite per mese dello storico
 //@route GET /api/stats/study/info/:id
 //@access private
 const getStudyInfoHistory = asyncHandler(async (req, res) => {

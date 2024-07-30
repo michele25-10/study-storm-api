@@ -6,7 +6,7 @@ const TABLE = "goal";
 const Goal = {
     selectAllGoals: async ({ finished, idu }) => {
         const mysql = `
-            SELECT g.id, g.name, g.expiry_date, g.planned_minutes, g.minutes, g.expected_grade, g.grade, g.finished, pc.primary_color, pc.secondary_color
+            SELECT g.id, g.name, g.expiry_date, g.planned_minutes, g.minutes, g.expected_grade, g.grade, g.finished, g.flag_grade, g.max_grade, pc.primary_color, pc.secondary_color
             FROM ${TABLE} g
             inner join palette_color pc on pc.id = g.id_palette
             INNER JOIN user_goal ug ON ug.id_goal = g.id
@@ -21,22 +21,26 @@ const Goal = {
         minutes,
         expected_grade,
         grade,
-        id_palette
+        id_palette,
+        flag_grade,
+        max_grade,
     }) => {
         const result = await connFunction.insert(TABLE, {
             name,
             expiry_date: moment(expiry_date).format("YYYY-MM-DD"),
             planned_minutes,
             minutes,
-            expected_grade,
-            grade,
-            id_palette: id_palette ? id_palette : 1,
+            expected_grade: flag_grade ? expected_grade : NULL,
+            grade: flag_grade ? grade : NULL,
+            max_grade: flag_grade ? max_grade : NULL,
+            flag_grade: flag_grade ? 1 : 0,
+            id_palette: id_palette ? id_palette : 1
         });
         return result;
     },
     selectGoal: async ({ id, alsoFinished }) => {
         const mysql = `
-            SELECT g.id, g.name, g.expiry_date, g.planned_minutes, g.minutes, g.expected_grade, g.grade, g.finished, g.id_palette, pc.primary_color, pc.secondary_color
+            SELECT g.id, g.name, g.expiry_date, g.planned_minutes, g.minutes, g.expected_grade, g.grade, g.finished, g.flag_grade, g.id_palette, g.max_grade, pc.primary_color, pc.secondary_color
             FROM ${TABLE} g
             inner join palette_color pc on pc.id = g.id_palette
             WHERE ${alsoFinished ? " 1=1 " : " g.finished = 0 "} AND g.id=@id`;
@@ -52,14 +56,18 @@ const Goal = {
         grade,
         id,
         id_palette,
+        flag_grade,
+        max_grade,
     }) => {
         const result = await connFunction.update(TABLE, {
             name,
             expiry_date: moment(expiry_date).format("YYYY-MM-DD"),
             planned_minutes,
             minutes,
-            expected_grade,
-            grade,
+            expected_grade: flag_grade ? expected_grade : NULL,
+            grade: flag_grade ? grade : NULL,
+            max_grade: flag_grade ? max_grade : NULL,
+            flag_grade: flag_grade ? 1 : 0,
             id_palette: id_palette ? id_palette : 1
         },
             "id=@id",
@@ -117,6 +125,11 @@ const Goal = {
         const result = await connFunction.query(mysql, { idu });
         return result;
     },
+    checkValueGradeIsValid: async ({ id_goal, grade }) => {
+        const mysql = `select g.max_grade from goal g where g.id = @id_goal; `;
+        const result = await connFunction.query(mysql, { id_goal });
+        return grade <= result[0].max_grade ? true : false;
+    }
 
 }
 

@@ -106,11 +106,11 @@ const Stats = {
     },
     selectGradeGoal: async ({ idu }) => {
         const mysql = `
-                SELECT g.name, g.grade as 'value', pc.primary_color, pc.secondary_color
+                SELECT g.name, (g.grade/g.max_grade) as 'value', pc.primary_color, pc.secondary_color, concat(g.grade, "/", g.max_grade)
                 FROM  user_goal ug 
                 inner join goal g on g.id=ug.id_goal and g.grade IS NOT NULL and g.finished = '1'
                 inner join palette_color pc on pc.id=g.id_palette 
-                where ug.id_user like @idu
+                where ug.id_user like @idu and g.flag_grade = '1'
 	                and g.expiry_date BETWEEN  DATE_SUB(NOW(), INTERVAL 365 DAY) AND NOW() 
                 ORDER BY g.expiry_date ASC; 
             `;

@@ -13,8 +13,18 @@ const createGoal = {
         expiry_date: Joi.date().allow(null, ""),
         planned_minutes: Joi.number().integer().allow(null, ""),
         minutes: Joi.number().integer().allow(null, ""),
-        expected_grade: Joi.number().allow(null, ""),
+        flag_grade: Joi.number().integer().allow(0, 1).required(),
+        expected_grade: Joi.number().allow(null, '').when('flag_grade', {
+            is: 1,
+            then: Joi.required().not(null, ''), // required e non nullo quando flag_grade è 1
+            otherwise: Joi.optional()
+        }), grade: Joi.number().allow(null, ""),
         grade: Joi.number().allow(null, ""),
+        max_grade: Joi.number().allow(null, '').when('flag_grade', {
+            is: 1,
+            then: Joi.required().not(null, ''), // required e non nullo quando flag_grade è 1
+            otherwise: Joi.optional()
+        }),
         admin: Joi.number().integer(),
         id_palette: Joi.number().allow(null, "")
     })
@@ -39,9 +49,19 @@ const updateGoal = {
         expiry_date: Joi.date().allow(null, ""),
         planned_minutes: Joi.number().integer().allow(null, ""),
         minutes: Joi.number().integer().allow(null, ""),
-        expected_grade: Joi.number().allow(null, ""),
+        flag_grade: Joi.number().integer().allow(0, 1).required(),
+        expected_grade: Joi.number().allow(null, '').when('flag_grade', {
+            is: 1,
+            then: Joi.required().not(null, ''), // required e non nullo quando flag_grade è 1
+            otherwise: Joi.optional()
+        }), grade: Joi.number().allow(null, ""),
         grade: Joi.number().allow(null, ""),
-        id_palette: Joi.number().allow(null, "")
+        max_grade: Joi.number().allow(null, '').when('flag_grade', {
+            is: 1,
+            then: Joi.required().not(null, ''), // required e non nullo quando flag_grade è 1
+            otherwise: Joi.optional()
+        }),
+        id_palette: Joi.number().allow(null, ""),
     })
 };
 
@@ -51,7 +71,7 @@ const updateFinished = {
     }),
     body: Joi.object().keys({
         finished: Joi.number().allow(0, 1).required(),
-        grade: Joi.number().integer(),
+        grade: Joi.number().integer().allow(null),
     })
 };
 
