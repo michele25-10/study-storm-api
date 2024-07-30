@@ -34,8 +34,10 @@ CREATE TABLE `goal` (
   `expiry_date` date DEFAULT NULL,
   `planned_minutes` int DEFAULT NULL,
   `minutes` int DEFAULT NULL,
+  `flag_grade` tinyint(1) DEFAULT '0',
   `expected_grade` float DEFAULT NULL,
   `grade` float DEFAULT NULL,
+  `max_grade` int default null,
   `finished` tinyint(1) DEFAULT '0',
   `id_palette` int not null
 ) ; 
