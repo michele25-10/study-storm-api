@@ -106,7 +106,7 @@ const Stats = {
     },
     selectGradeGoal: async ({ idu }) => {
         const mysql = `
-                SELECT g.name, (g.grade/g.max_grade) as 'value', pc.primary_color, pc.secondary_color, concat(g.grade, "/", g.max_grade)
+                SELECT g.name, (g.grade/g.max_grade) as 'value', pc.primary_color, pc.secondary_color, concat(g.grade, "/", g.max_grade) as tooltip
                 FROM  user_goal ug 
                 inner join goal g on g.id=ug.id_goal and g.grade IS NOT NULL and g.finished = '1'
                 inner join palette_color pc on pc.id=g.id_palette 

@@ -27,6 +27,11 @@ const getAllGoals = asyncHandler(async (req, res) => {
 //@route POST /api/goal
 //@access private
 const createGoal = asyncHandler(async (req, res) => {
+    if (req.body.flag_grade && req.body.expected_grade > req.body.max_grade) {
+        res.status(400);
+        throw new Error("Voto aspettato supera voto massimo");
+    }
+
     if (req.body.expiry_date != null && req.body.expiry_date < new Date()) {
         res.status(400);
         throw new Error("Data di scadenza già superata");
@@ -86,6 +91,11 @@ const getGoal = asyncHandler(async (req, res) => {
 //@route PUT /api/goal/updateGoal
 //@access private
 const updateGoal = asyncHandler(async (req, res) => {
+    if (req.body.flag_grade && req.body.expected_grade > req.body.max_grade) {
+        res.status(400);
+        throw new Error("Voto aspettato supera voto massimo");
+    }
+
     let result = await UserGoal.filter({ id_user: req.user.idu, id_goal: req.params.id });
 
     if (result.length != 1) {
