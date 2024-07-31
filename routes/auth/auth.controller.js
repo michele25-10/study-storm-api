@@ -7,6 +7,7 @@ const sendMailer = require('../../utils/mail');
 const fs = require('fs');
 const handlebars = require('handlebars');
 const path = require('path')
+const moment = require('moment');
 
 //@desc accedere con un utente
 //@route POST /api/auth/login
@@ -55,6 +56,14 @@ const login = asyncHandler(async (req, res) => {
 //@route POST /api/auth/registration
 //@access public
 const registration = asyncHandler(async (req, res) => {
+    const birthDate = moment(req.body.birth_date);
+    const today = moment();
+    const checkAge = today.diff(birthDate, 'years');
+    if (checkAge < 16) {
+        res.status(400);
+        throw new Error("Per iscriversi occorre avere almeno 16 anni");
+    }
+
     const hashedPassword = hash(req.body.password);
     req.body.password = hashedPassword;
 
