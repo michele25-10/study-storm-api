@@ -9,6 +9,7 @@ router.use("/invite-team", require("./invite-team/invite-team.route"));
 router.use("/newsletter", require("./newsletter/newsletter.route"));
 router.use("/img-profile", require("./img-profile/img-profile.route"));
 router.use("/student-type", require("./student-type/student-type.route"));
+router.use("/crash", require("./crash/crash.route"));
 
 //Rotte con token
 router.all('*', validateToken);
